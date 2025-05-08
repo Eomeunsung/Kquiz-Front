@@ -1,0 +1,187 @@
+/* 기본 페이지 스타일 */
+.lobby-page {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fb; /* 따뜻한 회색 배경 */
+    color: #2e3b4e; /* 어두운 회색 글씨로 가독성 강화 */
+    padding: 30px;
+    margin: 0 auto;
+    max-width: 960px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #4e5b72; /* 더 세련된 회색-파랑 색상 */
+}
+
+h4 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #4e5b72;
+}
+
+p.room-code {
+    font-size: 18px;
+    color: #888;
+    font-weight: 600;
+    text-align: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.player-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2x2 고정 */
+    gap: 16px;
+    padding: 0;
+    list-style: none;
+    margin-top: 20px;
+}
+
+.player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    font-size: 1rem;
+}
+
+
+.player-list li {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;  /* 텍스트와 버튼을 수직 정렬 */
+    justify-content: space-between;  /* 텍스트와 버튼 사이 간격 추가 */
+    font-size: 18px;
+    text-align: center;
+    color: #4e5b72;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.player-list li:hover {
+    background-color: #f0f5ff;
+    transform: translateY(-5px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* 모바일 대응 (1열로 변경) */
+@media (max-width: 768px) {
+    .player-list {
+        grid-template-columns: 1fr; /* 1열로 표시 */
+    }
+}
+
+/* 메시지 목록 */
+.messages {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+}
+
+.messages li {
+    background-color: #eaf0f7;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #6a7c89;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.messages li:nth-child(odd) {
+    background-color: #d9e6f0;
+}
+
+.messages li:hover {
+    background-color: #c1d7f3;
+    color: #4e5b72;
+}
+
+/* 퀴즈 대기실 관련 기본 스타일 */
+h2:first-of-type {
+    font-size: 32px;
+    text-align: center;
+    color: #4e5b72;
+    margin-bottom: 20px;
+}
+
+h2:last-of-type {
+    font-size: 24px;
+    text-align: center;
+    color: #999;
+    margin-bottom: 30px;
+}
+
+button {
+    background-color: #5f4b8b;  /* 부드러운 보라색 */
+    color: #fff;
+    font-size: 18px;
+    padding: 15px 30px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #6c4b98;  /* 더 밝은 보라색 */
+}
+
+button:active {
+    background-color: #483d71;  /* 어두운 보라색 */
+}
+
+button.start-button {
+    background-color: #6a78d7;  /* 차분한 파란색 */
+}
+
+button.start-button:hover {
+    background-color: #7482e0;
+}
+
+button.start-button:active {
+    background-color: #4e5c91;
+}
+
+button.kick-button {
+    background-color: #e76f51;  /* 부드러운 주황색 */
+    color: white;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;  /* 닉네임과 버튼 사이 간격 추가 */
+    max-width: 90px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+button.kick-button:hover {
+    background-color: #f29b72;
+}
+
+button.kick-button:active {
+    background-color: #c7563c;
+}

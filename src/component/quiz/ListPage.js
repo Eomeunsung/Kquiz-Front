@@ -1,0 +1,82 @@
+import React, {useEffect, useState} from 'react';
+import "./../../css/ListPage.css"
+import {getQuizList} from "./../../api/QuizApi";
+import {useNavigate} from "react-router-dom";
+import GameCreateModal from "../gamePlay/GameCreateModal";
+
+function ListPage(props) {
+    let navigate = useNavigate();
+    const [quizzes, setQuizzes] = useState([]);
+    const [modalFlag, setModalFlag] = useState(false);
+    const [quizId, setQuizId] = useState(0);
+
+    useEffect(() => {
+        getQuizList()
+            .then((res)=>{
+                setQuizzes(res.data)
+            })
+            .catch((err)=>{
+
+            });
+    }, []);
+
+    const handleQuizClick = (quizId) => {
+        navigate("/quiz", {state: quizId});
+    }
+
+    const previewQuiz = (quizId) => {
+        navigate("/preview", {state: quizId});
+    }
+
+    const handleGameCreate = (quizId) => {
+        navigate("/lobby", {state: quizId});
+    }
+
+    const handleModal = () =>{
+        setModalFlag(!modalFlag);
+    }
+    const openModalQuizId = (id) => {
+        setQuizId(id);
+        setModalFlag(true);
+    };
+    return (
+        <div>
+            {
+                !modalFlag ? (
+                    <div className="list-page">
+                        <h2 className="list-title">퀴즈 목록</h2>
+                        {quizzes.length === 0 ? (
+                            <p className="no-quiz">퀴즈가 없습니다.</p>
+                        ) : (
+                            <ul className="quiz-list">
+                                {quizzes.map((quiz) => (
+                                    <li key={quiz.id} className="quiz-item">
+                                        <div className="quiz-info" onClick={() => handleQuizClick(quiz.id)}>
+                                            <h3 className="quiz-title">{quiz.title}</h3>
+                                            <p className="quiz-date">작성일: {new Date(quiz.updateAt).toLocaleDateString()}</p>
+                                            {quiz.thumbnail && (
+                                                <img
+                                                    className="quiz-thumbnail"
+                                                    src={quiz.thumbnail}
+                                                    alt="퀴즈 썸네일"
+                                                />
+                                            )}
+                                        </div>
+                                        <button className="preview-button" onClick={()=>{openModalQuizId(quiz.id)}}>방 만들기</button>
+                                        <button className="preview-button" onClick={()=>{previewQuiz(quiz.id)}}>미리 보기</button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                ):(
+                    <GameCreateModal quizId={quizId} modalFlag={handleModal}/>
+                )
+            }
+
+
+        </div>
+    );
+}
+
+export default ListPage;

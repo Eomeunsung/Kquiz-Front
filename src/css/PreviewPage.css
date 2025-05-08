@@ -1,0 +1,124 @@
+.preview-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.preview-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.question-preview {
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.question-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.question-number {
+    font-weight: bold;
+}
+
+.question-time, .question-score {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.question-content {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.choice-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 🔥 2개씩 가로 배치 */
+    gap: 1rem; /* 🔥 보기 사이 여백 */
+    margin-top: 1rem;
+    list-style-type: none;
+    padding: 0;
+}
+
+.choice-item {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.choice-item:hover {
+    background-color: #f1f5f9;
+}
+
+
+.start-button {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.start-button:hover {
+    background-color: #45a049;
+}
+
+.loading {
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 5rem;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.nav-button {
+    padding: 0.6rem 1.2rem;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #ccc;
+}
+
+.nav-button:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}

@@ -1,0 +1,55 @@
+/*html, body {*/
+/*  height: 100%;*/
+/*  margin: 0;*/
+/*  padding: 0;*/
+/*}*/
+.App {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: #B39DDB; /* 또는 #E6E6FA */
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  position: relative; /* 자식 요소들이 그 위에 겹칠 수 있도록 */
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  padding: 20px;
+  /* 필요한 여백이나 스타일 추가 */
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

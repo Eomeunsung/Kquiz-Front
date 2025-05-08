@@ -1,0 +1,76 @@
+/* 퀴즈 페이지 레이아웃 */
+.quiz-page {
+    display: flex;
+    height: 100vh;
+}
+
+/* 사이드바 */
+.quiz-nav-bar {
+    width: 250px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.quiz-nav-bar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.quiz-nav-bar li {
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+.quiz-nav-bar li:hover {
+    background-color: #45a049;
+}
+
+/* 콘텐츠 영역 */
+.quiz-content {
+    flex: 1;
+    padding: 20px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+/* 질문 추가 영역 */
+.add-question-container {
+    margin-top: 20px;
+}
+
+.add-question-container h2 {
+    font-size: 24px;
+}
+
+.add-question-container button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.add-question-container button:hover {
+    background-color: #45a049;
+}
+
+.question-item {
+    margin-top: 20px;
+}
+
+.question-item input {
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}

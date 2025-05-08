@@ -1,0 +1,141 @@
+.question-layout {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    font-family: 'Pretendard', sans-serif;
+    align-items: flex-start;
+}
+
+.question-main {
+    flex: 3;
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.question-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.question-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.quill-container {
+    height: 180px;
+    margin-top: 1rem;
+    margin-bottom: 2rem; /* 🔥 추가 */
+}
+
+.choice-container {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.choice-item {
+    margin-top: 3rem;
+    background-color: #f4f6f8;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.choice-input {
+    width: 90%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.choice-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.correct-answer-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.delete-button {
+    color: #ff4d4f;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.add-choice-button {
+    grid-column: span 2;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.option-item {
+    margin-bottom: 1.5rem;
+}
+
+.option-item label {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.option-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.option-control button {
+    padding: 0.4rem 0.8rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.option-control span {
+    font-size: 1rem;
+    min-width: 50px;
+    text-align: center;
+}
+
+.option-item input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.option-display {
+    padding: 0.5rem;
+    background-color: #eef1f5;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+}
+

@@ -1,0 +1,33 @@
+import './App.css';
+import Nav from "./component/Nav"
+import Main from "./component/Main";
+import {Route, Routes} from "react-router-dom";
+import ListPage from "./component/quiz/ListPage";
+import Quiz from "./component/quiz/Quiz";
+import QuizCreateModal from "./component/quiz/QuizCreateModal";
+import PreviewPage from "./component/quiz/previewPage";
+import Lobby from "./component/gamePlay/Lobby";
+import Participation from "./component/gamePlay/Participation";
+import HostLobby from "./component/gamePlay/HostLobby";
+function App() {
+  return (
+    <div className="App">
+        <Nav/>
+        <div className="main-content">
+            <Routes>
+                <Route path="/" element={<Main></Main>} />
+                <Route path="/list" element={<ListPage></ListPage>} />
+                <Route path="/quiz/modal" element={<QuizCreateModal></QuizCreateModal>} />
+                <Route path="/quiz" element={<Quiz></Quiz>}/>
+                <Route path="/preview" element={<PreviewPage></PreviewPage>} />
+                <Route path="/lobby" element={<Lobby></Lobby>} />
+                <Route path="/participation" element={<Participation></Participation>} />
+                <Route path="/hostLobby" element={<HostLobby></HostLobby>} />
+            </Routes>
+        </div>
+
+    </div>
+  );
+}
+
+export default App;

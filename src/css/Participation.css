@@ -1,0 +1,56 @@
+.participation-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 80px;
+}
+
+.participation-card {
+    width: 90%;
+    max-width: 400px;
+    padding: 30px 25px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    background-color: transparent;
+    text-align: center;
+}
+
+.participation-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.room-id-input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+}
+
+.join-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.join-button:hover {
+    background-color: #357ab8;
+}
+
+.error-message {
+    color: red;
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+}
