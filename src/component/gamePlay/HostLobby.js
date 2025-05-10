@@ -11,6 +11,7 @@ function HostLobby(props) {
     const [quizInfo, setQuizInfo] = useState({ title: "퀴즈 제목 예시" }); // 필요 시 API 연동
     const stompClient = useRef(null);
     const [userId, setUserId] = useState(null);
+    const [messages, setMessages] = useState("");
 
     useEffect(() => {
         if (!data.gameId) return;
@@ -33,16 +34,28 @@ function HostLobby(props) {
                     if (message.body) {
                         const body = JSON.parse(message.body);
                         console.log("📦 Parsed body:", body);
-                        setUserId(body.userId);
-                        const rawList = body.userList;
+                        console.log("메시지 타입 "+body.type);
+                        if(body.type === "KICK"){
+                            const rawList = body.userList;
+                            // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
+                            const updatedPlayers = Object.keys(rawList).map(key => ({
+                                id: key,
+                                name: rawList[key],
+                            }));
+                            setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
+                            setMessages(body.content);  // 강퇴 메시지 표시
+                        }else{
+                            setUserId(body.userId);
+                            const rawList = body.userList;
 
-                        // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
-                        const updatedPlayers = Object.keys(rawList).map(key => ({
-                            id: key,
-                            name: rawList[key],
-                        }));
-                        setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
-                        console.log("유저들 "+JSON.stringify(players));
+                            // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
+                            const updatedPlayers = Object.keys(rawList).map(key => ({
+                                id: key,
+                                name: rawList[key],
+                            }));
+                            setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
+                            console.log("유저들 "+JSON.stringify(players));
+                        }
                     } else {
                         console.log("❌ message.body 없음");
                     }
@@ -57,11 +70,24 @@ function HostLobby(props) {
         });
 
         stompClient.current.activate();
-
         return () => {
             stompClient.current.deactivate();
         };
     }, [data.gameId]);
+
+    const handleKick = (playerId) => {
+        console.log("강퇴할 id "+playerId);
+        if (stompClient.current && stompClient.current.connected) {
+            stompClient.current.publish({
+                destination: "/app/kick",
+                body: JSON.stringify({
+                    gameId: data.gameId,
+                    userId: playerId,
+                }),
+            });
+        }
+    }
+
 
     return (
         <div className="lobby-page">
@@ -74,10 +100,14 @@ function HostLobby(props) {
                 {players.slice(1).map((p, idx) => (
                     <li key={p.id} className="player-item">
                         <span>{idx + 1}. {p.name}</span>
-                        <button className="kick-button">강퇴</button>
+                        <button className="kick-button" onClick={() => handleKick(p.id)}>강퇴</button>
                     </li>
                 ))}
             </ul>
+            <h4>참여자 메시지</h4>
+            <div className="messages">
+                {messages}
+            </div>
 
             <button className="start-button">
                 게임 시작

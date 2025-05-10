@@ -1,25 +1,26 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./../../css/Lobby.css"
 import {gameCreate} from "../../api/GameApi"
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
 function Lobby(props) {
+    const navigate = useNavigate();
     const location = useLocation();
     const data = location.state;
     const [players, setPlayers] = useState([]);
     const [quizInfo, setQuizInfo] = useState({});
     const [gameId, setGameId] = useState(null);
-    const [isHost, setIsHost] = useState(true);
     const stompClient = useRef(null);
     const [messages, setMessages] = useState("");
     const [userName, setUserName] = useState("");
     const [userId, setUserId] = useState(null);
 
     useEffect(() => {
-        setGameId(data.gameId);
         setUserName(data.name);
+        localStorage.setItem("name", data.name);
+        setGameId(data.gameId);
 
     },[])
     useEffect(() => {
@@ -35,17 +36,34 @@ function Lobby(props) {
             },
             onConnect: () => {
                 console.log("연결 됨");
-                stompClient.current.subscribe(`/topic/chat/${gameId}`, (message)=>{
-                    if(message.body){
+                // ✅ 채팅 구독
+                stompClient.current.subscribe(`/topic/chat/${gameId}`, (message) => {
+                    if (message.body) {
                         const body = JSON.parse(message.body);
-                        console.log("📦 Parsed body:", body);
-                        setUserId(body.userId);
-                        const rawList = body.userList;
-                        setPlayers(Object.values(rawList));
-                        setMessages(body.content);
-                    }
+                        // ✅ 바로 받은 body.userId로 강퇴 구독 실행
+                        stompClient.current.subscribe(`/topic/kick/${body.userId}`, () => {
+                            alert("호스트에 의해 강퇴당했습니다.");
+                            stompClient.current.deactivate();
+                            navigate("/");
+                        });
 
+                        if(body.type === "KICK"){
+                            const rawList = body.userList;
+                            setPlayers(Object.values(rawList));  // 플레이어 배열 업데이트
+                            setMessages(body.content);  // 강퇴 메시지 표시
+                        }else{
+                            console.log("📦 Parsed body:", body);
+                            setUserId(body.userId);
+                            const rawList = body.userList;
+                            setPlayers(Object.values(rawList));
+                            setMessages(body.content);
+                            localStorage.setItem("name", body.name);
+                            localStorage.setItem("userId", body.userId);
+                            console.log("user아이디 " + body.userId);
+                        }
+                    }
                 });
+
             },
             onDisconnect: () => {
                 console.log("연결 해제됨");
@@ -60,6 +78,8 @@ function Lobby(props) {
             stompClient.current.deactivate();
         };
     },[gameId])
+
+
     return (
         <div className="lobby-page">
             <h2>퀴즈 {quizInfo.title}</h2>
