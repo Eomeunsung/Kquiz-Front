@@ -9,6 +9,7 @@ import PreviewPage from "./component/quiz/previewPage";
 import Lobby from "./component/gamePlay/Lobby";
 import Participation from "./component/gamePlay/Participation";
 import HostLobby from "./component/gamePlay/HostLobby";
+import GamePlayHost from "./component/gamePlay/GamePlayHost";
 function App() {
   return (
     <div className="App">
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/lobby" element={<Lobby></Lobby>} />
                 <Route path="/participation" element={<Participation></Participation>} />
                 <Route path="/hostLobby" element={<HostLobby></HostLobby>} />
+                <Route path="/gamePlay/Host" element={<GamePlayHost></GamePlayHost>}/>
             </Routes>
         </div>
 

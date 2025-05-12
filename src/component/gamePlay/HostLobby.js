@@ -88,6 +88,10 @@ function HostLobby(props) {
         }
     }
 
+    const handleGameStart = ()=>{
+        navigate("/gamePlay/Host", {state: data});
+    }
+
 
     return (
         <div className="lobby-page">
@@ -109,7 +113,7 @@ function HostLobby(props) {
                 {messages}
             </div>
 
-            <button className="start-button">
+            <button className="start-button" onClick={()=>{handleGameStart()}}>
                 게임 시작
             </button>
         </div>
