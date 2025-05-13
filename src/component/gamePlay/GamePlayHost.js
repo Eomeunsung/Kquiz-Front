@@ -12,11 +12,19 @@ function GamePlayHost(props) {
     const [remainingTime, setRemainingTime] = useState(0);  // 남은 시간
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
     const stompClient = useRef(null);
-    console.log()
+    // console.log("게임 시작 주소 "+location.state.gameId);
     useEffect(() => {
         const socket = new SockJS("http://localhost:8080/ws");
+
         stompClient.current = new Client({
             webSocketFactory: () => socket,
+            connectHeaders: {
+                userId: localStorage.getItem("userId"),
+                roomId: location.state.gameId,
+                name: localStorage.getItem("name"),
+                type:"GAME"
+            },
+
             onConnect: () => {
                 console.log("연결 완료 - 전체 문제 수신 대기");
                 // 전체 문제 목록 구독
@@ -43,7 +51,6 @@ function GamePlayHost(props) {
         // location.state로 전달된 퀴즈 정보가 있을 때, 이를 상태에 설정
         if (location.state && location.state.quizInfo) {
             setQuiz(location.state.quizInfo);
-
             // 첫 번째 문제의 타이머를 가져와서 설정
             const firstQuestion = location.state.quizInfo.questions[0];
             setRemainingTime(firstQuestion?.time || 10);  // 타이머 값 (없으면 기본 10초)

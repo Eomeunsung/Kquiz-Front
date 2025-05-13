@@ -12,7 +12,7 @@ function HostLobby(props) {
     const stompClient = useRef(null);
     const [userId, setUserId] = useState(null);
     const [messages, setMessages] = useState("");
-
+    console.log("호스트 로비 "+JSON.stringify(data))
     useEffect(() => {
         if (!data.gameId) return;
         console.log("게임 아이디 "+data.gameId)
@@ -25,6 +25,7 @@ function HostLobby(props) {
                 userId: userId,
                 roomId: data.gameId,
                 name: "HOST", // 호스트 이름 고정 또는 입력받기
+                type: "CHAT",
             },
             onConnect: () => {
                 console.log("웹소켓 연결됨 (호스트)");
@@ -34,7 +35,10 @@ function HostLobby(props) {
                     if (message.body) {
                         const body = JSON.parse(message.body);
                         console.log("📦 Parsed body:", body);
-                        console.log("메시지 타입 "+body.type);
+                        console.log("호스트 이름 아이디 "+body.name+" "+body.userId);
+                        console.log("CHAT 타입 "+body.type);
+                        localStorage.setItem("name", body.name);
+                        localStorage.setItem("userId", body.userId);
                         if(body.type === "KICK"){
                             const rawList = body.userList;
                             // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
@@ -44,6 +48,8 @@ function HostLobby(props) {
                             }));
                             setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
+                        }else if(body.type==="GAME"){
+                            navigate("/gamePlay/Host", { state: data });
                         }else{
                             setUserId(body.userId);
                             const rawList = body.userList;
@@ -60,8 +66,8 @@ function HostLobby(props) {
                         console.log("❌ message.body 없음");
                     }
                 });
-                // 구독 직후 초기 데이터 요청 보내기
-                stompClient.current.send("/app/init", {}, JSON.stringify({ gameId: data.gameId }));
+                // // 구독 직후 초기 데이터 요청 보내기
+                // stompClient.current.send("/app/init", {}, JSON.stringify({ gameId: data.gameId }));
             },
             onDisconnect: () => {
                 console.log("연결 종료됨 (호스트)");
@@ -75,6 +81,18 @@ function HostLobby(props) {
         };
     }, [data.gameId]);
 
+
+    const handleGameStart = ()=>{
+        if(stompClient.current && stompClient.current.connected) {
+            stompClient.current.publish({
+                destination: `/app/chat/${data.gameId}`,
+                body: JSON.stringify({
+                    content: "GAME"
+                }),
+            });
+        }
+    }
+
     const handleKick = (playerId) => {
         console.log("강퇴할 id "+playerId);
         if (stompClient.current && stompClient.current.connected) {
@@ -87,11 +105,6 @@ function HostLobby(props) {
             });
         }
     }
-
-    const handleGameStart = ()=>{
-        navigate("/gamePlay/Host", {state: data});
-    }
-
 
     return (
         <div className="lobby-page">
@@ -113,7 +126,7 @@ function HostLobby(props) {
                 {messages}
             </div>
 
-            <button className="start-button" onClick={()=>{handleGameStart()}}>
+            <button className="start-button" onClick={handleGameStart}>
                 게임 시작
             </button>
         </div>

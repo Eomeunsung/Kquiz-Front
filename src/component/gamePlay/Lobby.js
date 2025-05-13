@@ -17,6 +17,8 @@ function Lobby(props) {
     const [userName, setUserName] = useState("");
     const [userId, setUserId] = useState(null);
 
+    console.log("참여자 로비 "+JSON.stringify(data))
+
     useEffect(() => {
         setUserName(data.name);
         localStorage.setItem("name", data.name);
@@ -33,6 +35,7 @@ function Lobby(props) {
                 userId: userId,
                 roomId: gameId,
                 name: userName,
+                type: "CHAT",
             },
             onConnect: () => {
                 console.log("연결 됨");
@@ -52,6 +55,8 @@ function Lobby(props) {
                             const rawList = body.userList;
                             setPlayers(Object.values(rawList));  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
+                        }else if(body.type==="GAME") {
+                            navigate("/gamePlay/Host", {state: data});
                         }else{
                             console.log("📦 Parsed body:", body);
                             setUserId(body.userId);
