@@ -7,7 +7,10 @@ function GamePlayHost(props) {
     // useLocation 훅을 통해, URL에서 전달된 게임 정보 가져오기
     const location = useLocation();
     // 상태 변수들 초기화
-    const [quiz, setQuiz] = useState(null);  // 퀴즈 정보
+    const [message, setMessage] = useState("");
+    const [questionIds, setQuestionIds] = useState(null); //question 아이디 배열로 저장
+    const [question, setQuestion] = useState(null); //question 정보
+    const [quizTitle, setQuizTitle] = useState(null); //quizTitle
     const [questionIndex, setQuestionIndex] = useState(0);  // 현재 질문 번호
     const [remainingTime, setRemainingTime] = useState(0);  // 남은 시간
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
@@ -29,7 +32,28 @@ function GamePlayHost(props) {
                 console.log("연결 완료 - 전체 문제 수신 대기");
                 // 전체 문제 목록 구독
                 stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
-                   console.log("구독 성공 "+JSON.stringify(message.body));
+                   // console.log("구독 성공 "+JSON.stringify(message.body));
+                   const data = JSON.parse(message.body);
+                   setMessage(data.content);
+                });
+                stompClient.current.subscribe(`/topic/quiz/${location.state.gameId}`, (message) => {
+                    // console.log("quiz가져오기 성공 "+message.body);
+                    const quizData = JSON.parse(message.body);
+                    if(quizData.type==="QUESTION"){
+                        // console.log("question가져오기 성공 "+message.body);
+                        setQuestion(quizData.question);
+                    }else{
+                        // setQuiz(JSON.parse(message.body));
+                        setQuestionIds(quizData.questionId);
+                        setQuizTitle(quizData.title);
+                        setQuestionIndex(quizData.questionId[0])
+                        setQuestionIds(prevIds => {
+                            const newIds = [...prevIds];  // 기존 배열을 복사한 후
+                            newIds.shift();  // 맨 앞 아이템 제거
+                            return newIds;  // 새로운 배열 반환
+                        });
+                    }
+
                 });
             },
         });
@@ -39,54 +63,63 @@ function GamePlayHost(props) {
             stompClient.current.deactivate();
         };
     }, [location.state.gameId]);
-    // 서버로 게임 시작 요청 전송
-    const startGame = () => {
-        if (stompClient.current && stompClient.current.connected) {
-            stompClient.current.send(`/app/game/${location.state.gameId}`, {}, {});
-            console.log("🚀 게임 시작 요청 전송");
-        }
-    };
-    // console.log("받아온 데이터 "+JSON.stringify(location.state.quizInfo.questions[0]));
-    useEffect(() => {
-        // location.state로 전달된 퀴즈 정보가 있을 때, 이를 상태에 설정
-        if (location.state && location.state.quizInfo) {
-            setQuiz(location.state.quizInfo);
-            // 첫 번째 문제의 타이머를 가져와서 설정
-            const firstQuestion = location.state.quizInfo.questions[0];
-            setRemainingTime(firstQuestion?.time || 10);  // 타이머 값 (없으면 기본 10초)
-        }
-    }, [location.state]);
 
+    // useEffect(() => {
+    //     if(!quiz) return
+    //     // 첫 번째 문제의 타이머를 가져와서 설정
+    //     const firstQuestion = quiz.questions[0];
+    //     // console.log("퀘스천 1 "+JSON.stringify(quiz.questions[0].options.time));
+    //     setRemainingTime(firstQuestion?.option.time || 10);  // 타이머 값 (없으면 기본 10초)
+    //
+    // }, [quiz]);
+    //
     useEffect(() => {
-        // console.log("퀴즈 "+JSON.stringify(quiz))
-        // quiz나 quiz.questions이 없으면 렌더링하지 않도록 처리
-        if (!quiz || !quiz.questions) return;
-        // 남은 시간이 0 이하가 되면 다음 문제로 넘어가거나 게임 종료 처리
+        if (!question) return;
+
+        // 처음에 타이머를 설정할 때, `question.option.time` 값이 존재하는지 확인
         if (remainingTime <= 0) {
-            // 아직 문제 목록이 남아있으면 다음 문제로 넘어감
-            if (questionIndex < quiz.questions.length - 1) {
-                setQuestionIndex(prevIndex => prevIndex + 1);  // 문제 번호 증가
-                const nextQuestion = quiz.questions[questionIndex + 1];
-                setRemainingTime(nextQuestion?.time || 10);  // 다음 문제 타이머 설정
+            if (questionIds.length > 0) {
+                setQuestionIndex(prevIndex => {
+                    const nextIndex = questionIds[0];
+                    setQuestionIds(prevIds => prevIds.slice(1)); // Remove first item
+                    return nextIndex;
+                });
+                // `question.option.time`이 없으면 기본 10초를 설정, 있으면 해당 시간으로 설정
+                const nextQuestionTime = question?.option?.time || 10;
+                setRemainingTime(nextQuestionTime);  // 다음 문제 타이머 설정
             } else {
-                setIsGameOver(true);  // 모든 문제가 끝났으면 게임 종료 처리
+                setIsGameOver(true);  // 게임 종료
             }
         } else {
-            // 타이머를 매 초마다 1초씩 감소시킴
+            // 타이머가 0초 이하가 되면 다시 1초씩 감소하도록 설정
             const timer = setInterval(() => {
                 setRemainingTime(prev => prev - 1);  // 1초씩 남은 시간 감소
             }, 1000);
 
-            // 컴포넌트가 unmount되거나 remainingTime이 변경되면 타이머를 clear
             return () => clearInterval(timer);
         }
-    }, [remainingTime, questionIndex, quiz]);  // 타이머가 변경될 때마다 실행
+    }, [remainingTime, questionIndex, questionIds, question]);
 
+
+    useEffect(() => {
+        if(questionIndex===0)return
+        console.log("퀘스천 인덱스 "+questionIndex)
+        if (stompClient.current && stompClient.current.connected) {
+            stompClient.current.publish({
+                destination: `/app/quiz/${location.state.gameId}`, // ✅ 여기 수정!
+                body: JSON.stringify({
+                    questionId: questionIndex
+                }),
+            });
+        }
+    }, [questionIndex]);
     // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
-    if (!quiz) return <div className="loading">로딩 중...</div>;
+    if (!question) return <div className="loading">{message}</div>;
 
-    // 현재 문제 정보 가져오기
-    const question = quiz.questions[questionIndex];
+    if(question) console.log("question 저장 "+JSON.stringify(question))
+
+    // // 현재 문제 정보 가져오기
+    // const question = quiz.questions[questionIndex];
     return (
         <div className="game-host-wrapper">
             {isGameOver ? (
@@ -98,8 +131,9 @@ function GamePlayHost(props) {
             ) : (
                 // 퀴즈 문제 화면
                 <div className="game-box">
+                    <h2>{quizTitle}</h2>
                     <div className="game-header">
-                        <div className="game-info">문제 {questionIndex + 1} / {quiz.questions.length}</div>
+                        {/*<div className="game-info">문제 {questionIndex + 1} / {quiz.questions.length}</div>*/}
                         <div className="timer-box">{remainingTime}초</div>
                     </div>
                     <div className="question-text">{question.content}</div>

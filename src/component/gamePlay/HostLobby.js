@@ -34,9 +34,9 @@ function HostLobby(props) {
                 stompClient.current.subscribe(`/topic/chat/${data.gameId}`, (message) => {
                     if (message.body) {
                         const body = JSON.parse(message.body);
-                        console.log("📦 Parsed body:", body);
-                        console.log("호스트 이름 아이디 "+body.name+" "+body.userId);
-                        console.log("CHAT 타입 "+body.type);
+                        // console.log("📦 Parsed body:", body);
+                        // console.log("호스트 이름 아이디 "+body.name+" "+body.userId);
+                        // console.log("CHAT 타입 "+body.type);
                         localStorage.setItem("name", body.name);
                         localStorage.setItem("userId", body.userId);
                         if(body.type === "KICK"){
@@ -105,6 +105,7 @@ function HostLobby(props) {
             });
         }
     }
+
 
     return (
         <div className="lobby-page">
