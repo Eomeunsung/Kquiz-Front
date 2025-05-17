@@ -12,6 +12,7 @@ function HostLobby(props) {
     const stompClient = useRef(null);
     const [userId, setUserId] = useState(null);
     const [messages, setMessages] = useState("");
+    const [role,setRole] = useState("HOST");
     console.log("호스트 로비 "+JSON.stringify(data))
     useEffect(() => {
         if (!data.gameId) return;
@@ -49,7 +50,12 @@ function HostLobby(props) {
                             setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
                         }else if(body.type==="GAME"){
-                            navigate("/gamePlay/Host", { state: data });
+                            if(role==="HOST"){
+                                navigate("/gamePlay/Host", { state: data });
+                            }else if(role==="PLAYER"){
+                                navigate("/gamePlay", { state: data });
+                            }
+
                         }else{
                             setUserId(body.userId);
                             const rawList = body.userList;

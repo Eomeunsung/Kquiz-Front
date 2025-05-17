@@ -15,8 +15,13 @@ function GamePlayHost(props) {
     const [remainingTime, setRemainingTime] = useState(0);  // 남은 시간
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
     const stompClient = useRef(null);
+
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
     const [readyTime, setReadyTime] = useState(10); // 10초 준비 시간
+
+    const [selectedChoiceId, setSelectedChoiceId] = useState(null); //선택지 id
+    const [hasSubmitted, setHasSubmitted] = useState(false); // 중복 제출 방지
+
     const [rank, setRank] = useState(null);
 
     // console.log("게임 시작 주소 "+location.state.gameId);
@@ -34,22 +39,22 @@ function GamePlayHost(props) {
 
             onConnect: () => {
                 console.log("연결 완료 - 전체 문제 수신 대기");
-                // 전체 문제 목록 구독 | 게임 스코어 및 스코어 반환
+                // 전체 문제 목록 구독
                 stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
-                   console.log("구독 성공 "+JSON.stringify(message.body));
-                   const data = JSON.parse(message.body);
-                   if(data.type==="SCORE"){
-                       setRank(data.scores);
-                   }
-                   // setMessage(data.content);
+                    console.log("구독 성공 "+JSON.stringify(message.body));
+                    const data = JSON.parse(message.body);
+                    if(data.type==="SCORE"){
+                        setRank(data.scores);
+                    }
+                    // setMessage(data.content);
                 });
-                // Question 받아오기
                 stompClient.current.subscribe(`/topic/quiz/${location.state.gameId}`, (message) => {
                     // console.log("quiz가져오기 성공 "+message.body);
                     const quizData = JSON.parse(message.body);
                     if(quizData.type==="QUESTION"){
                         console.log("question가져오기 성공 "+message.body);
                         setQuestion(quizData.question);
+                        setHasSubmitted(false);
                     }else{
                         // setQuiz(JSON.parse(message.body));
                         setQuestionIds(quizData.questionId);
@@ -67,6 +72,14 @@ function GamePlayHost(props) {
                 //timer 계산기 timer는  /topic/quiz에서 받음
                 stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
                     const timerData = JSON.parse(message.body);
+                    if(timerData.type==="READER"){
+                        setReadyTime(timerData.time);
+                        setIsReady(timerData.flag);
+                    }else if(timerData.type==="START"){
+                        setIsReady(timerData.flag);
+                    }else if(timerData.type==="TIMER"){
+                        setRemainingTime(timerData.time);
+                    }
                 })
             },
         });
@@ -77,56 +90,9 @@ function GamePlayHost(props) {
         };
     }, [location.state.gameId]);
 
-    useEffect(() => {
-        if (!question || isReady) return;
-        // 처음에 타이머를 설정할 때, `question.option.time` 값이 존재하는지 확인
-        if (remainingTime <= 0) {
-            if (questionIds.length > 0) {
-                setQuestionIndex(prevIndex => {
-                    const nextIndex = questionIds[0];
-                    setQuestionIds(prevIds => prevIds.slice(1)); // Remove first item
-                    return nextIndex;
-                });
-                // `question.option.time`이 없으면 기본 10초를 설정, 있으면 해당 시간으로 설정
-                const nextQuestionTime = question?.option?.time || 10;
-                setRemainingTime(nextQuestionTime);  // 다음 문제 타이머 설정
-            } else {
-                setIsGameOver(true);  // 게임 종료
-                if (stompClient.current && stompClient.current.connected) {
-                    stompClient.current.publish({
-                        destination: `/app/game/${location.state.gameId}`,
-                        body: JSON.stringify({
-                            type:"SCORE"
-                        }),
-                    });
-                }
 
-            }
-        } else {
-            // 타이머가 0초 이하가 되면 다시 1초씩 감소하도록 설정
-            const timer = setInterval(() => {
-                setRemainingTime(prev => {
-                    const newTime = prev - 1;
-                    if(stompClient.current && stompClient.current.connected) {
-                        stompClient.current.publish({
-                            destination: `/app/timer/${location.state.gameId}`,
-                            body: JSON.stringify({
-                                type:"TIMER",
-                                time:newTime,
-                                flag: isReady
-                            })
-                        });
-                    }
-                    return newTime;
-                });  // 1초씩 남은 시간 감소
 
-            }, 1000);
 
-            return () => clearInterval(timer);
-        }
-    }, [remainingTime, questionIndex, questionIds, question, isReady]);
-
-    //새로운 question 받아오기
     useEffect(() => {
         if(questionIndex===0 || isReady)return
         console.log("퀘스천 인덱스 "+questionIndex)
@@ -138,55 +104,34 @@ function GamePlayHost(props) {
                 }),
             });
         }
-    }, [questionIndex, isReady]);
+    }, [questionIndex]);
 
-    //플레이 시작 전 10초 카운터
-    useEffect(() => {
-        if (!isReady) return;
 
-        if (readyTime > 0) {
-            const readyTimer = setInterval(() => {
-                setReadyTime(prev => {
-                    const newTime = prev - 1;
-                    if(stompClient.current && stompClient.current.connected) {
-                        stompClient.current.publish({
-                            destination: `/app/timer/${location.state.gameId}`,
-                            body: JSON.stringify({
-                                type:"READER",
-                                time:newTime,
-                                flag: isReady
-                            })
-                        });
-                    }
-                    return newTime;
-                });
-            }, 1000);
+    //초이스 보내기
+    const handleChoiceId = (id) =>{
+        setHasSubmitted(true);
+        console.log("초이스 "+question.choices)
 
-            return () => clearInterval(readyTimer);
-        } else {
-            setIsReady(prev => {
-                if(stompClient.current && stompClient.current.connected) {
+        const selectedChoice = question.choices.find((choice) => choice.id === id);
+        if(selectedChoice){
+            const isCorrect = selectedChoice.isCorrect;
+            console.log("선택한 선택지 ID:", id);
+            console.log("정답 여부:", isCorrect);
+            console.log("배점 "+question.option.score)
+            if(isCorrect){
+                if (stompClient.current && stompClient.current.connected) {
                     stompClient.current.publish({
-                        destination: `/app/timer/${location.state.gameId}`,
+                        destination: `/app/game/${location.state.gameId}`,
                         body: JSON.stringify({
-                            type:"START",
-                            flag: false
-                        })
+                            score: question.option.score,
+                            userId: localStorage.getItem("userId"),
+                            type:"SCORE"
+                        }),
                     });
                 }
-                return false;
-            }); // 준비 끝 -> 문제 시작
+            }
         }
-    }, [readyTime, isReady]);
-
-
-    //점수 정렬
-    // useEffect(() => {
-    //     if (rank && Array.isArray(rank)) {
-    //         const sortedRank = [...rank].sort((a, b) => b.score - a.score);
-    //         setRank(sortedRank);
-    //     }
-    // }, [rank]);
+    }
 
     // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
     if (!question || isReady) return <div className="loading">{isReady ? (<div>{readyTime} 초 후 시작</div>):<div>{message}</div> }</div>;
@@ -220,7 +165,9 @@ function GamePlayHost(props) {
                     <div className="question-content" dangerouslySetInnerHTML={{__html: question.content}}></div>
                     <div className="choices-container">
                         {question.choices.map((choice, idx) => (
-                            <div className="choice-card" key={choice.id}>
+                            <div className="choice-card" key={choice.id}
+                                 onClick={() => !hasSubmitted && handleChoiceId(choice.id)} // 이미 제출했다면 클릭 불가
+                            >
                                 <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
                                 {choice.content}
                             </div>

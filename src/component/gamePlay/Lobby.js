@@ -16,6 +16,7 @@ function Lobby(props) {
     const [messages, setMessages] = useState("");
     const [userName, setUserName] = useState("");
     const [userId, setUserId] = useState(null);
+    const [role, setRole] = useState("PLAYER");
 
     console.log("참여자 로비 "+JSON.stringify(data))
 
@@ -56,7 +57,11 @@ function Lobby(props) {
                             setPlayers(Object.values(rawList));  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
                         }else if(body.type==="GAME") {
-                            navigate("/gamePlay/Host", {state: data});
+                            if(role==="HOST"){
+                                navigate("/gamePlay/Host", { state: data });
+                            }else if(role==="PLAYER"){
+                                navigate("/gamePlay", { state: data });
+                            }
                         }else{
                             console.log("📦 Parsed body:", body);
                             setUserId(body.userId);
