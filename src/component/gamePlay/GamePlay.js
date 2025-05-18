@@ -8,10 +8,7 @@ function GamePlayHost(props) {
     const location = useLocation();
     // 상태 변수들 초기화
     const [message, setMessage] = useState("");
-    const [questionIds, setQuestionIds] = useState(null); //question 아이디 배열로 저장
     const [question, setQuestion] = useState(null); //question 정보
-    const [quizTitle, setQuizTitle] = useState(null); //quizTitle
-    const [questionIndex, setQuestionIndex] = useState(0);  // 현재 질문 번호
     const [remainingTime, setRemainingTime] = useState(0);  // 남은 시간
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
     const stompClient = useRef(null);
@@ -43,8 +40,9 @@ function GamePlayHost(props) {
                 stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
                     console.log("구독 성공 "+JSON.stringify(message.body));
                     const data = JSON.parse(message.body);
-                    if(data.type==="SCORE"){
+                    if(data.type==="SCORE") {
                         setRank(data.scores);
+                        setIsGameOver(true)
                     }
                     // setMessage(data.content);
                 });
@@ -55,28 +53,20 @@ function GamePlayHost(props) {
                         console.log("question가져오기 성공 "+message.body);
                         setQuestion(quizData.question);
                         setHasSubmitted(false);
-                    }else{
-                        // setQuiz(JSON.parse(message.body));
-                        setQuestionIds(quizData.questionId);
-                        setQuizTitle(quizData.title);
-                        setQuestionIndex(quizData.questionId[0])
-                        setQuestionIds(prevIds => {
-                            const newIds = [...prevIds];  // 기존 배열을 복사한 후
-                            newIds.shift();  // 맨 앞 아이템 제거
-                            return newIds;  // 새로운 배열 반환
-                        });
+                        setIsReady(false)
                     }
-
                 });
 
-                //timer 계산기 timer는  /topic/quiz에서 받음
+                //timer 계산
                 stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
                     const timerData = JSON.parse(message.body);
+                    console.log(JSON.stringify(timerData))
                     if(timerData.type==="READER"){
                         setReadyTime(timerData.time);
                         setIsReady(timerData.flag);
                     }else if(timerData.type==="START"){
                         setIsReady(timerData.flag);
+                        setRemainingTime(timerData.time);
                     }else if(timerData.type==="TIMER"){
                         setRemainingTime(timerData.time);
                     }
@@ -90,21 +80,6 @@ function GamePlayHost(props) {
         };
     }, [location.state.gameId]);
 
-
-
-
-    useEffect(() => {
-        if(questionIndex===0 || isReady)return
-        console.log("퀘스천 인덱스 "+questionIndex)
-        if (stompClient.current && stompClient.current.connected) {
-            stompClient.current.publish({
-                destination: `/app/quiz/${location.state.gameId}`, // ✅ 여기 수정!
-                body: JSON.stringify({
-                    questionId: questionIndex
-                }),
-            });
-        }
-    }, [questionIndex]);
 
 
     //초이스 보내기
@@ -133,9 +108,16 @@ function GamePlayHost(props) {
         }
     }
 
-    // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
-    if (!question || isReady) return <div className="loading">{isReady ? (<div>{readyTime} 초 후 시작</div>):<div>{message}</div> }</div>;
+    // useEffect(()=>{
+    //     if(remainingTime<=0){
+    //
+    //         setIsReady(false)
+    //     }
+    // },[readyTime])
 
+    // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
+    if (isReady) return <div className="loading">{isReady ? (<div>{readyTime} 초 후 시작</div>):<div>{message}</div> }</div>;
+    if(!question) return <div>퀴즈가 없음</div>
     return (
         <div className="game-host-wrapper">
             {isGameOver ? (

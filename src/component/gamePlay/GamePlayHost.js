@@ -8,7 +8,7 @@ function GamePlayHost(props) {
     const location = useLocation();
     // 상태 변수들 초기화
     const [message, setMessage] = useState("");
-    const [questionIds, setQuestionIds] = useState(null); //question 아이디 배열로 저장
+    const [questionIds, setQuestionIds] = useState([]); //question 아이디 배열로 저장
     const [question, setQuestion] = useState(null); //question 정보
     const [quizTitle, setQuizTitle] = useState(null); //quizTitle
     const [questionIndex, setQuestionIndex] = useState(0);  // 현재 질문 번호
@@ -16,7 +16,7 @@ function GamePlayHost(props) {
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
     const stompClient = useRef(null);
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
-    const [readyTime, setReadyTime] = useState(10); // 10초 준비 시간
+    const [readyTime, setReadyTime] = useState(3); // 10초 준비 시간
     const [rank, setRank] = useState(null);
 
     // console.log("게임 시작 주소 "+location.state.gameId);
@@ -50,6 +50,7 @@ function GamePlayHost(props) {
                     if(quizData.type==="QUESTION"){
                         console.log("question가져오기 성공 "+message.body);
                         setQuestion(quizData.question);
+                        setRemainingTime(quizData.question.option.time);
                     }else{
                         // setQuiz(JSON.parse(message.body));
                         setQuestionIds(quizData.questionId);
@@ -79,24 +80,23 @@ function GamePlayHost(props) {
 
     useEffect(() => {
         if (!question || isReady) return;
+        console.log("remining타이머 "+remainingTime)
         // 처음에 타이머를 설정할 때, `question.option.time` 값이 존재하는지 확인
         if (remainingTime <= 0) {
             if (questionIds.length > 0) {
-                setQuestionIndex(prevIndex => {
-                    const nextIndex = questionIds[0];
-                    setQuestionIds(prevIds => prevIds.slice(1)); // Remove first item
-                    return nextIndex;
-                });
+                const [nextId, ...rest] = questionIds;
+                setQuestionIndex(nextId);
+                setQuestionIds(rest);
                 // `question.option.time`이 없으면 기본 10초를 설정, 있으면 해당 시간으로 설정
-                const nextQuestionTime = question?.option?.time || 10;
-                setRemainingTime(nextQuestionTime);  // 다음 문제 타이머 설정
+                // const nextQuestionTime = question?.option?.time || 10;
+                // setRemainingTime(nextQuestionTime);  // 다음 문제 타이머 설정
             } else {
                 setIsGameOver(true);  // 게임 종료
                 if (stompClient.current && stompClient.current.connected) {
                     stompClient.current.publish({
                         destination: `/app/game/${location.state.gameId}`,
                         body: JSON.stringify({
-                            type:"SCORE"
+                            type:"END"
                         }),
                     });
                 }
@@ -140,7 +140,7 @@ function GamePlayHost(props) {
         }
     }, [questionIndex, isReady]);
 
-    //플레이 시작 전 10초 카운터
+    //게임 플레이 시작 전  카운터 다운
     useEffect(() => {
         if (!isReady) return;
 
