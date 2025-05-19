@@ -11,7 +11,7 @@ function GamePlayHost(props) {
     const [questionIds, setQuestionIds] = useState([]); //question 아이디 배열로 저장
     const [question, setQuestion] = useState(null); //question 정보
     const [quizTitle, setQuizTitle] = useState(null); //quizTitle
-    const [questionIndex, setQuestionIndex] = useState(0);  // 현재 질문 번호
+    const [questionIndex, setQuestionIndex] = useState(null);  // 현재 질문 번호
     const [remainingTime, setRemainingTime] = useState(0);  // 남은 시간
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
     const stompClient = useRef(null);
@@ -47,22 +47,16 @@ function GamePlayHost(props) {
                 stompClient.current.subscribe(`/topic/quiz/${location.state.gameId}`, (message) => {
                     // console.log("quiz가져오기 성공 "+message.body);
                     const quizData = JSON.parse(message.body);
+                    console.log("퀘스천 웹 소켓 "+JSON.stringify(quizData));
                     if(quizData.type==="QUESTION"){
                         console.log("question가져오기 성공 "+message.body);
                         setQuestion(quizData.question);
                         setRemainingTime(quizData.question.option.time);
                     }else{
-                        // setQuiz(JSON.parse(message.body));
+                        //퀴즈 정보들 받아오기
                         setQuestionIds(quizData.questionId);
                         setQuizTitle(quizData.title);
-                        setQuestionIndex(quizData.questionId[0])
-                        setQuestionIds(prevIds => {
-                            const newIds = [...prevIds];  // 기존 배열을 복사한 후
-                            newIds.shift();  // 맨 앞 아이템 제거
-                            return newIds;  // 새로운 배열 반환
-                        });
                     }
-
                 });
 
                 //timer 계산기 timer는  /topic/quiz에서 받음
@@ -78,72 +72,78 @@ function GamePlayHost(props) {
         };
     }, [location.state.gameId]);
 
+// 1. 타이머 작동: 1초마다 감소
     useEffect(() => {
-        if (!question || isReady) return;
-        console.log("remining타이머 "+remainingTime)
-        // 처음에 타이머를 설정할 때, `question.option.time` 값이 존재하는지 확인
-        if (remainingTime <= 0) {
-            if (questionIds.length > 0) {
-                const [nextId, ...rest] = questionIds;
-                setQuestionIndex(nextId);
-                setQuestionIds(rest);
-                // `question.option.time`이 없으면 기본 10초를 설정, 있으면 해당 시간으로 설정
-                // const nextQuestionTime = question?.option?.time || 10;
-                // setRemainingTime(nextQuestionTime);  // 다음 문제 타이머 설정
-            } else {
-                setIsGameOver(true);  // 게임 종료
-                if (stompClient.current && stompClient.current.connected) {
+        if (isReady || question===null) return;
+
+        const timer = setInterval(() => {
+            setRemainingTime(prevTime => {
+                const newTime = prevTime - 1;
+
+                if (stompClient.current?.connected) {
                     stompClient.current.publish({
-                        destination: `/app/game/${location.state.gameId}`,
+                        destination: `/app/timer/${location.state.gameId}`,
                         body: JSON.stringify({
-                            type:"END"
+                            type: "TIMER",
+                            time: newTime,
+                            flag: isReady
                         }),
                     });
                 }
 
-            }
-        } else {
-            // 타이머가 0초 이하가 되면 다시 1초씩 감소하도록 설정
-            const timer = setInterval(() => {
-                setRemainingTime(prev => {
-                    const newTime = prev - 1;
-                    if(stompClient.current && stompClient.current.connected) {
-                        stompClient.current.publish({
-                            destination: `/app/timer/${location.state.gameId}`,
-                            body: JSON.stringify({
-                                type:"TIMER",
-                                time:newTime,
-                                flag: isReady
-                            })
-                        });
-                    }
-                    return newTime;
-                });  // 1초씩 남은 시간 감소
+                return newTime;
+            });
+        }, 1000);
 
-            }, 1000);
+        return () => clearInterval(timer);
+    }, [isReady, question, isGameOver]);
 
-            return () => clearInterval(timer);
-        }
-    }, [remainingTime, questionIndex, questionIds, question, isReady]);
-
-    //새로운 question 받아오기
+// 2. 타이머가 0일 때 문제 넘기기
     useEffect(() => {
-        if(questionIndex===0 || isReady)return
-        console.log("퀘스천 인덱스 "+questionIndex)
-        if (stompClient.current && stompClient.current.connected) {
+        if (isReady || isGameOver || remainingTime > 0) return;
+
+        if (questionIds.length > 0) {
+            const [nextId, ...rest] = questionIds;
+            setQuestionIndex(nextId);
+            setQuestionIds(rest);
+        } else {
+            setIsGameOver(true);
+            if (stompClient.current?.connected) {
+                stompClient.current.publish({
+                    destination: `/app/game/${location.state.gameId}`,
+                    body: JSON.stringify({ type: "END" }),
+                });
+            }
+        }
+    }, [remainingTime, isReady, isGameOver, questionIds]);
+
+// 3. questionIndex가 변경되면 새 퀘스천 요청 및 타이머 초기화
+    useEffect(() => {
+        if (isReady || questionIndex ===null) return;
+
+        // 새 문제 요청
+        if (stompClient.current?.connected) {
             stompClient.current.publish({
-                destination: `/app/quiz/${location.state.gameId}`, // ✅ 여기 수정!
-                body: JSON.stringify({
-                    questionId: questionIndex
-                }),
+                destination: `/app/quiz/${location.state.gameId}`,
+                body: JSON.stringify({ questionId: questionIndex }),
             });
         }
+
     }, [questionIndex, isReady]);
+
+    useEffect(() => {
+        if (questionIds.length > 0 && questionIndex === null) {
+            const [firstId, ...rest] = questionIds;
+            setQuestionIndex(firstId);
+            setQuestionIds(rest);
+        }
+    }, [questionIds]);
+
+
 
     //게임 플레이 시작 전  카운터 다운
     useEffect(() => {
         if (!isReady) return;
-
         if (readyTime > 0) {
             const readyTimer = setInterval(() => {
                 setReadyTime(prev => {
@@ -164,6 +164,7 @@ function GamePlayHost(props) {
 
             return () => clearInterval(readyTimer);
         } else {
+            //카운터 다운 끝나면 플레이어들에게 보냄
             setIsReady(prev => {
                 if(stompClient.current && stompClient.current.connected) {
                     stompClient.current.publish({
@@ -180,13 +181,6 @@ function GamePlayHost(props) {
     }, [readyTime, isReady]);
 
 
-    //점수 정렬
-    // useEffect(() => {
-    //     if (rank && Array.isArray(rank)) {
-    //         const sortedRank = [...rank].sort((a, b) => b.score - a.score);
-    //         setRank(sortedRank);
-    //     }
-    // }, [rank]);
 
     // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
     if (!question || isReady) return <div className="loading">{isReady ? (<div>{readyTime} 초 후 시작</div>):<div>{message}</div> }</div>;
