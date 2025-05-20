@@ -114,6 +114,7 @@ function Quiz(props) {
             </div>
 
             <div className="quiz-content">
+                <div>퀴즈 제목 {quizTitle}</div>
                 {questionGet ? (
                     <Question questionGet={questionGet} updateQuestion={updateQuestion} />
                 ) : (

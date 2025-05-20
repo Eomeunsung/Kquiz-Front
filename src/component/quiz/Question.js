@@ -6,6 +6,8 @@ import { BiXCircle } from "react-icons/bi";
 import { CiCirclePlus } from "react-icons/ci";
 import {choiceCreate} from "./../../api/ChoiceApi";
 import {questionUpdate} from "./../../api/QuestionApi";
+import {modules} from "../../config/quill/QuillModules";
+import {formats} from "../../config/quill/ToobarOption"
 
 function Question({questionGet, updateQuestion}) {
     console.log(questionGet);
@@ -104,6 +106,8 @@ function Question({questionGet, updateQuestion}) {
                     />
                 </h3>
                 <ReactQuill className="quill-container" theme="snow"
+                            modules={modules}
+                            format={formats}
                             value={question.content}
                             onChange={(content)=>{setQuestion(prev => ({ ...prev, content }))}} />
 
