@@ -61,7 +61,7 @@ function GamePlayHost(props) {
                 stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
                     const timerData = JSON.parse(message.body);
                     console.log(JSON.stringify(timerData))
-                    if(timerData.type==="READER"){
+                    if(timerData.type==="READY"){
                         setReadyTime(timerData.time);
                         setIsReady(timerData.flag);
                     }else if(timerData.type==="START"){
@@ -73,7 +73,6 @@ function GamePlayHost(props) {
                 })
             },
         });
-
         stompClient.current.activate();
         return () => {
             stompClient.current.deactivate();

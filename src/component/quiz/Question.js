@@ -41,6 +41,20 @@ function Question({questionGet, updateQuestion}) {
         }).catch((err) => {})
     }
 
+    useEffect(() => {
+        if(!question || !choices || !option){
+            return
+        }
+        const update = {
+            question,
+            choices,
+            option,
+        }
+        updateQuestion(update)
+    }, [question, choices, option]);
+
+
+
     // 선택지 입력 값 수정 핸들러
     const handleChoiceChange = (index, newText) => {
         const updatedChoices = [...choices];

@@ -1,132 +1,160 @@
-/* 전체 배경 */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-}
-
-/* 로딩 상태 */
-.loading {
-    color: white;
-    text-align: center;
-    margin-top: 100px;
-    font-size: 24px;
-}
-
-/* 게임 박스 */
 .game-host-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1e1e2f; /* 짙은 배경 */
+    color: #f0f0f0; /* 연한 글자 */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loading {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-}
-
-.game-box {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 800px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* 상단 정보 */
-.game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.game-info {
-    font-weight: bold;
-    font-size: 18px;
-    color: #333;
-}
-
-.timer-box {
-    background: #ff5252;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-}
-
-/* 문제 텍스트 */
-.question-text {
+    height: 100vh; /* 전체 화면 세로 중앙 정렬 */
+    background-color: #f5f5f5;
+    font-family: 'Segoe UI', sans-serif;
     font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    color: #222;
-    text-align: center;
-}
-
-/* 보기 카드 */
-.choices-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.choice-card {
-    background: #f1f1f1;
-    border-radius: 16px;
-    padding: 20px;
-    font-size: 18px;
     color: #333;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s, background-color 0.3s;
-}
-
-.choice-card:hover {
-    background-color: #e0e0ff;
-    transform: translateY(-3px);
-}
-
-.choice-label {
-    background-color: #2575fc;
-    color: white;
-    border-radius: 50%;
-    padding: 6px 12px;
     font-weight: bold;
-    font-size: 16px;
+    text-align: center;
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.loading {
+    font-size: 2rem;
+    color: #fff; /* 혹은 원하는 색상 */
+    text-align: center;
+    margin-top: 2rem;
+    background: none; /* 흰 배경 제거 */
+    padding: 0; /* 여백 제거 */
+    border-radius: 0;
+}
+
+/* 부드러운 등장 효과 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .game-over {
-    background-color: #f4f4f4;  /* 배경색을 밝은 회색으로 */
-    color: #333;  /* 텍스트 색은 진한 회색 */
     text-align: center;
-    padding: 50px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 40px;
 }
 
 .game-over h2 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #2c3e50;  /* 타이틀 색상 */
+    font-size: 36px;
     margin-bottom: 20px;
+    color: #ff6b6b;
 }
 
 .game-over p {
-    font-size: 1.2rem;
-    color: #7f8c8d;  /* 설명 색상 */
+    font-size: 18px;
+    margin-bottom: 30px;
 }
 
-.game-over button {
-    background-color: #3498db;  /* 파란색 버튼 */
-    color: white;
-    font-size: 1.1rem;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.game-over > div {
+    background-color: #2f2f3d;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 12px 0;
+    box-shadow: inset 0 0 5px #ff6b6b;
+}
+
+.game-over > div div {
+    margin: 6px 0;
+}
+
+.game-box h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #4db6ac;
+    text-align: center;
+}
+
+.game-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.timer-box {
+    background-color: #4db6ac;
+    color: #fff;
+    font-weight: 700;
+    padding: 12px 25px;
+    font-size: 20px;
+    border-radius: 30px;
+    box-shadow: 0 0 8px #4db6ac;
+    min-width: 100px;
+    text-align: center;
+}
+
+.question-content {
+    background-color: #2f2f3d;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    color: #e0e0e0;
+    min-height: 120px;
+    overflow-y: auto;
+}
+
+.choices-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.choice-card {
+    background-color: #3a3a52;
+    padding: 15px 20px;
+    border-radius: 12px;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     transition: background-color 0.3s ease;
 }
 
-.game-over button:hover {
-    background-color: #2980b9;  /* 버튼 색상 호버 효과 */
+.choice-card:hover {
+    background-color: #4db6ac;
+    color: #fff;
+}
+
+.choice-label {
+    background-color: #4db6ac;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 18px;
+    user-select: none;
+    box-shadow: 0 0 8px #4db6ac;
 }

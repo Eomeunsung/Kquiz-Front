@@ -18,7 +18,14 @@ function GamePlayHost(props) {
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
     const [readyTime, setReadyTime] = useState(3); // 10초 준비 시간
     const [rank, setRank] = useState(null);
+    const [quizInfo, setQuizInfo] = useState({});
+    const index = useRef(0)
 
+    useEffect(()=>{
+        setQuizInfo(location.state.quizInfo.questions);
+    },[location.state.quizInfo])
+    //
+    // console.log(quizInfo)
     // console.log("게임 시작 주소 "+location.state.gameId);
     useEffect(() => {
         const socket = new SockJS("http://localhost:8080/ws");
@@ -49,9 +56,9 @@ function GamePlayHost(props) {
                     const quizData = JSON.parse(message.body);
                     console.log("퀘스천 웹 소켓 "+JSON.stringify(quizData));
                     if(quizData.type==="QUESTION"){
-                        console.log("question가져오기 성공 "+message.body);
-                        setQuestion(quizData.question);
-                        setRemainingTime(quizData.question.option.time);
+                        // console.log("question가져오기 성공 "+message.body);
+                        // setQuestion(quizData.question);
+                        // setRemainingTime(quizData.question.option.time);
                     }else{
                         //퀴즈 정보들 받아오기
                         setQuestionIds(quizData.questionId);
@@ -59,10 +66,10 @@ function GamePlayHost(props) {
                     }
                 });
 
-                //timer 계산기 timer는  /topic/quiz에서 받음
-                stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
-                    const timerData = JSON.parse(message.body);
-                })
+                // //timer 계산기 timer는  /topic/quiz에서 받음
+                // stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
+                //     const timerData = JSON.parse(message.body);
+                // })
             },
         });
 
@@ -75,11 +82,9 @@ function GamePlayHost(props) {
 // 1. 타이머 작동: 1초마다 감소
     useEffect(() => {
         if (isReady || question===null) return;
-
         const timer = setInterval(() => {
             setRemainingTime(prevTime => {
                 const newTime = prevTime - 1;
-
                 if (stompClient.current?.connected) {
                     stompClient.current.publish({
                         destination: `/app/timer/${location.state.gameId}`,
@@ -102,10 +107,16 @@ function GamePlayHost(props) {
     useEffect(() => {
         if (isReady || isGameOver || remainingTime > 0) return;
 
-        if (questionIds.length > 0) {
-            const [nextId, ...rest] = questionIds;
-            setQuestionIndex(nextId);
-            setQuestionIds(rest);
+        if (index.current<quizInfo.length) {
+            setQuestion(quizInfo[index.current])
+            setRemainingTime(quizInfo[index.current].option.time)
+            if (stompClient.current?.connected) {
+                stompClient.current.publish({
+                    destination: `/app/quiz/${location.state.gameId}`,
+                    body: JSON.stringify(quizInfo[index.current] ),
+                });
+            }
+            index.current += 1;
         } else {
             setIsGameOver(true);
             if (stompClient.current?.connected) {
@@ -117,29 +128,18 @@ function GamePlayHost(props) {
         }
     }, [remainingTime, isReady, isGameOver, questionIds]);
 
-// 3. questionIndex가 변경되면 새 퀘스천 요청 및 타이머 초기화
+    // 3. question 플레이어들에게 보냐기
     useEffect(() => {
         if (isReady || questionIndex ===null) return;
-
-        // 새 문제 요청
+        // 새 문제 플레이어들에게 보내기
         if (stompClient.current?.connected) {
             stompClient.current.publish({
                 destination: `/app/quiz/${location.state.gameId}`,
-                body: JSON.stringify({ questionId: questionIndex }),
+                body: JSON.stringify({ question: question }),
             });
         }
 
-    }, [questionIndex, isReady]);
-
-    useEffect(() => {
-        if (questionIds.length > 0 && questionIndex === null) {
-            const [firstId, ...rest] = questionIds;
-            setQuestionIndex(firstId);
-            setQuestionIds(rest);
-        }
-    }, [questionIds]);
-
-
+    }, [question]);
 
     //게임 플레이 시작 전  카운터 다운
     useEffect(() => {
@@ -152,7 +152,7 @@ function GamePlayHost(props) {
                         stompClient.current.publish({
                             destination: `/app/timer/${location.state.gameId}`,
                             body: JSON.stringify({
-                                type:"READER",
+                                type:"READY",
                                 time:newTime,
                                 flag: isReady
                             })

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./../../css/ListPage.css"
-import {getQuizList} from "./../../api/QuizApi";
+import {getQuizList, quizDelete} from "./../../api/QuizApi";
 import {useNavigate} from "react-router-dom";
 import GameCreateModal from "../gamePlay/GameCreateModal";
 
@@ -39,6 +39,21 @@ function ListPage(props) {
         setQuizId(id);
         setModalFlag(true);
     };
+
+    const handleDelete = (id) => {
+        quizDelete(id)
+            .then((res)=>{
+                getQuizList()
+                    .then((res)=>{
+                        setQuizzes(res.data)
+                    })
+                    .catch((err)=>{
+
+                    });
+            }).catch((err)=>{
+
+        })
+    }
     return (
         <div>
             {
@@ -64,6 +79,7 @@ function ListPage(props) {
                                         </div>
                                         <button className="preview-button" onClick={()=>{openModalQuizId(quiz.id)}}>방 만들기</button>
                                         <button className="preview-button" onClick={()=>{previewQuiz(quiz.id)}}>미리 보기</button>
+                                        <button className="preview-button" onClick={()=>{handleDelete(quiz.id)}}>삭제</button>
                                     </li>
                                 ))}
                             </ul>
