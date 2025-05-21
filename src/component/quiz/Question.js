@@ -8,17 +8,20 @@ import {choiceCreate} from "./../../api/ChoiceApi";
 import {questionUpdate} from "./../../api/QuestionApi";
 import {modules} from "../../config/quill/QuillModules";
 import {formats} from "../../config/quill/ToobarOption"
+import {changeImg} from "./../../config/ChangeImg"
+import {fileUpload} from "./../../api/FileApi"
 
 function Question({questionGet, updateQuestion}) {
-    console.log(questionGet);
+    console.log("받은 퀘스천 페이지 "+JSON.stringify(questionGet));
     const [question, setQuestion] = useState(null);
     const [choices, setChoices] = useState([]);
     const [option, setOption] = useState(null);
+    const formData = new FormData();
+    const [imgFlag, setImgFlag] = useState(false);
 
     useEffect(() => {
-        if(question && choices && option){
-            saveQuestion()
-        }
+        console.log("퀘스천 바뀜")
+        if (!questionGet || !questionGet.choices || !questionGet.option) return;
         const questionData = {
             id: questionGet.id,
             title: questionGet.title,
@@ -27,21 +30,45 @@ function Question({questionGet, updateQuestion}) {
         setQuestion(questionData);
         setChoices(questionGet.choices);
         setOption(questionGet.option);
-    },[questionGet.id])
+    },[questionGet])
 
-    const saveQuestion = () => {
-        const data = {
-            id: question.id,
-            title: question.title,
-            content: question.content,
-            choices: choices,
-            option: option,
-        }
-        questionUpdate(data)
-            .then((result) => {
-                updateQuestion(result.data)
-        }).catch((err) => {})
-    }
+    // const saveQuestion = () => {
+    //     const data = {
+    //         id: question.id,
+    //         title: question.title,
+    //         content: question.content,
+    //         choices: choices,
+    //         option: option,
+    //     }
+    //
+    //     const { updatedContent, newUrlimgList, newNameimg } = changeImg(question.content)
+    //     if(!newUrlimgList){
+    //         return
+    //     }
+    //     if(newUrlimgList.length > 0){
+    //         newUrlimgList.forEach((file) => {
+    //             formData.append("files", file); // 여러 개의 파일 추가
+    //         });
+    //         setImgFlag(true)
+    //     }
+    //
+    //     if(imgFlag){
+    //         data.content = updatedContent
+    //         fileUpload(formData)
+    //             .then((res)=>{
+    //
+    //                 questionUpdate(data)
+    //                     .then((result) => {
+    //                         updateQuestion(result.data)
+    //                     }).catch((err) => {})
+    //             })
+    //             .catch((err)=>{
+    //                 console.log("이미지 업로드 에러 "+err)
+    //             })
+    //     }
+    //
+    //
+    // }
 
     useEffect(() => {
         if(!question || !choices || !option){
@@ -89,10 +116,10 @@ function Question({questionGet, updateQuestion}) {
         setChoices([...choices, { content: '', isCorrect: false }]);
     };
 
-    if(!question || choices===null){
+    if(!question || !choices || !option) {
         return <div>로딩 중...</div>
     }
-
+    console.log("퀘스천 질문 "+question.content)
     return (
         <div className="question-layout">
             <div className="question-main">
@@ -100,7 +127,7 @@ function Question({questionGet, updateQuestion}) {
                     질문
                     <input
                         className="question-input"
-                        value={question?.title || ""}  // question이 null이면 빈 문자열을 사용
+                        value={question?.title}  // question이 null이면 빈 문자열을 사용
                         onChange={(e) => {setQuestion({ ...question, title: e.target.value })}}
                         placeholder="질문을 입력하세요"
                     />
@@ -108,6 +135,7 @@ function Question({questionGet, updateQuestion}) {
                 <ReactQuill className="quill-container" theme="snow"
                             modules={modules}
                             format={formats}
+                            key={question.id}   // question.id가 바뀌면 에디터도 새로 렌더링됨
                             value={question.content}
                             onChange={(content)=>{setQuestion(prev => ({ ...prev, content }))}} />
 
