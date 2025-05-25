@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const fileUpload = async (formData) =>{
-    console.log("보내기 전 API "+formData.getAll("files"));
+    console.log("이미지 보내기 전 "+formData.getAll("files"));
     try{
         const res = await axios.post(`${process.env.REACT_APP_URL}/upload`, formData, {
             headers: {

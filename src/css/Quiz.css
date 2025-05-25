@@ -1,7 +1,7 @@
 /* 퀴즈 페이지 레이아웃 */
 .quiz-page {
     display: flex;
-    height: 100vh;
+    height: 150vh;
 }
 
 /* 사이드바 */

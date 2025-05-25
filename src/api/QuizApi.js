@@ -67,7 +67,7 @@ export const quizUpdate = async (data) => {
                 "Content-Type": "application/json"
             }
         })
-        console.log("퀴즈 업데이트 성공 "+res.data);
+        console.log("퀴즈 업데이트 성공 "+JSON.stringify(res.data));
         return res.data;
     }catch (err){
         console.log(err);

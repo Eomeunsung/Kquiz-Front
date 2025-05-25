@@ -11,6 +11,8 @@ import 'react-quill/dist/quill.snow.css';
 import { CiCirclePlus } from "react-icons/ci";
 import { BiXCircle } from "react-icons/bi";
 import { choiceCreate } from "../../api/ChoiceApi";
+import {changeImg} from "./../../config/ChangeImg"
+import {fileUpload} from "./../../api/FileApi"
 
 function Quiz() {
     const location = useLocation();
@@ -47,12 +49,8 @@ function Quiz() {
             });
     }, [quizId]);
 
-// 필요 시 question 변경 시에 대한 처리 추가용 (현재는 비어 있음)
-    useEffect(() => {
 
-    }, [question]);
-
-// 새로운 질문 추가
+    // 새로운 질문 추가
     const addQuestion = () => {
         questionCreate(quizId) // 새로운 질문 생성 API 호출
             .then((res) => {
@@ -62,7 +60,7 @@ function Quiz() {
             });
     };
 
-// 질문 삭제
+    // 질문 삭제
     const deleteQuestion = (id) => {
         if (questionList.length === 1) {
             alert("퀴즈가 하나 남아서 삭제 안됩니다.");
@@ -81,20 +79,60 @@ function Quiz() {
             .catch(() => alert("다시 시도해 주시기 바랍니다."));
     };
 
-// 퀴즈 전체 저장 (모든 질문 포함)
-    const handleSave = () => {
-        const updatedList = questionList.map(q =>
-            q.id === question.id ? question : q // 현재 선택된 질문은 최신 값으로 대체
-        );
+    // 퀴즈 전체 저장 (모든 질문 포함)
+    const handleSave = (questions) =>{
+        const formData = new FormData();
+        const updateList = questions.map((question, index)=>{
+            const { updatedContent, newUrlimgList, newNameimg } = changeImg(question.content);
+            if(newUrlimgList){
+                newUrlimgList.forEach((file)=>{
+                    formData.append("files", file);
+                })
+            }
+            return {
+                ...question,               // 기존 question의 모든 속성을 그대로 복사
+                content: updatedContent,   // content만 이미지가 반영된 새로운 값으로 덮어씀
+            }
+
+        })
         const data = {
             id: quizId,
             title: quizTitle,
-            questions: updatedList, // 전체 질문 리스트 포함
+            questions: updateList, // 전체 질문 리스트 포함
         };
-        quizUpdate(data).then(() => alert("저장되었습니다.")); // 서버에 업데이트 요청
+
+        if(formData.getAll("files").length > 0){
+            fileUpload(formData)
+                .then((res)=>{
+                    quizUpdate(data).then(() => alert("저장되었습니다.")); // 서버에 업데이트 요청
+                })
+                .catch((err)=>{
+                    alert("저장 실패했습니다. 다시 시도해주시기바랍니다.")
+                })
+        }else{
+            quizUpdate(data).then(() => alert("저장되었습니다.")); // 서버에 업데이트 요청
+        }
+    }
+    //현재 선택된 퀘스천 저장
+    const handleQuestionSave = () => {
+        const idxData = {
+            id: selectedQuestionId,
+            title: questionTitle,
+            content: content,
+            choices: choice,
+            option: option
+        };
+
+        // 현재 선택된 질문이 반영된 새로운 리스트 생성해서 저장 함수에 전달
+        const updatedList = questionList.map(q =>
+            q.id === idxData.id ? idxData : q
+        );
+
+        handleSave(updatedList);
+
     };
 
-// 선택지 내용 변경 핸들러
+    // 선택지 내용 변경 핸들러
     const handleChoiceChange = (index, newText) => {
         const updatedChoices = choice.map((c, i) =>
             i === index ? { ...c, content: newText } : c // 해당 index의 선택지 내용 변경
@@ -102,7 +140,7 @@ function Quiz() {
         setChoice(updatedChoices); // 상태 업데이트
     };
 
-// 정답 체크박스 토글 핸들러
+    // 정답 체크박스 토글 핸들러
     const handleCheckboxChange = (index) => {
         const updatedChoices = choice.map((c, i) =>
             i === index ? { ...c, isCorrect: !c.isCorrect } : c // 해당 선택지의 정답 여부 토글
@@ -111,14 +149,14 @@ function Quiz() {
         setQuestion(prev => ({ ...prev, choices: updatedChoices })); // 선택지 수정 사항을 question에도 반영 (옵션에 따라 필요할 수도 있음)
     };
 
-// 선택지 삭제
+    // 선택지 삭제
     const handleDeleteChoice = (index) => {
         const updatedChoices = choice.filter((_, i) => i !== index); // 해당 index의 선택지를 제거
         setChoice(updatedChoices); // 상태 업데이트
         setQuestion(prev => ({ ...prev, choices: updatedChoices })); // question에도 반영 (옵션)
     };
 
-// 새로운 선택지 추가
+    // 새로운 선택지 추가
     const handleAddChoice = () => {
         choiceCreate(question.id) // 새로운 선택지 생성 API 호출
             .then((res) => {
@@ -128,7 +166,7 @@ function Quiz() {
             });
     };
 
-// 현재 질문 저장 (질문 리스트에 반영)
+    // 현재 질문 저장 (질문 리스트에 반영)
     const handleSaveQuestion = (currentQuestion) => {
         console.log("세이브 퀘스천 " + JSON.stringify(currentQuestion));
         setQuestionList(prev => prev.map(q =>
@@ -137,7 +175,7 @@ function Quiz() {
         console.log("전체 question 리스트 " + JSON.stringify(questionList));
     };
 
-// 질문 선택 시 호출
+    // 질문 선택 시 호출
     const handleChangeQuestion = (updateQuestion) => {
         const data = {
             id: selectedQuestionId,
@@ -155,9 +193,6 @@ function Quiz() {
         setOption(updateQuestion.option); // 옵션 변경
     };
 
-    const handleSaveQuestion= () => {
-
-    }
 
     // useEffect(() => {
     //     localStorage.setItem("questionList", JSON.stringify(questionList));
@@ -170,7 +205,7 @@ function Quiz() {
             <div className="quiz-nav-bar">
                 <ul>
                     <li onClick={addQuestion}>질문 추가</li>
-                    <li style={{ color: 'blue', cursor: 'pointer' }} onClick={handleSave}>💾 저장하기</li>
+                    <li style={{ color: 'blue', cursor: 'pointer' }} onClick={handleQuestionSave}>💾 저장하기</li>
                     {questionList.map((q, idx) => (
                         <li
                             key={q.id}
