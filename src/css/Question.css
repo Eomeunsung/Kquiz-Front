@@ -34,6 +34,12 @@
     margin-bottom: 2rem; /* 🔥 추가 */
 }
 
+/* 나중에 지울거 이미지 클릭 불가능하게 한느거 */
+/*.ql-editor img {*/
+/*    pointer-events: none; !* 이미지에 마우스 클릭 불가능 *!*/
+/*    user-select: none; !* 이미지 선택 방지 *!*/
+/*}*/
+
 .choice-container {
     margin-top: 2rem;
     display: grid;

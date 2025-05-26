@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import "./../../css/Quiz.css";
 import "./../../css/Question.css";
@@ -11,8 +11,8 @@ import 'react-quill/dist/quill.snow.css';
 import { CiCirclePlus } from "react-icons/ci";
 import { BiXCircle } from "react-icons/bi";
 import { choiceCreate } from "../../api/ChoiceApi";
-import {changeImg} from "./../../config/ChangeImg"
-import {fileUpload} from "./../../api/FileApi"
+import {changeImg, extractImgUrls} from "./../../config/ChangeImg"
+import {fileUpload, changeImgApi} from "./../../api/FileApi"
 
 function Quiz() {
     const location = useLocation();
@@ -26,6 +26,7 @@ function Quiz() {
     const [content, setContent] = useState('');
     const [option, setOption] = useState(null);
     const [choice, setChoice] = useState([]);
+    const [imgUrls, setImgUrls] = useState([]);
 
 // 퀴즈 ID가 변경될 때마다 퀴즈 데이터를 서버에서 불러옴
     useEffect(() => {
@@ -95,6 +96,15 @@ function Quiz() {
             }
 
         })
+
+        // 위 예시 기준으로:
+        // allImgs === ["img1.png", "img2.png", "img3.png"]
+        const allImgs = updateList.flatMap(question => extractImgUrls(question.content));
+        console.log("퀘스천 내용 이미지 "+allImgs);
+        const changeImgs ={
+            id: quizId,
+            img: allImgs,
+        }
         const data = {
             id: quizId,
             title: quizTitle,
@@ -102,15 +112,33 @@ function Quiz() {
         };
 
         if(formData.getAll("files").length > 0){
-            fileUpload(formData)
+            fileUpload(formData, quizId)
                 .then((res)=>{
                     quizUpdate(data).then(() => alert("저장되었습니다.")); // 서버에 업데이트 요청
+                    if(changeImgs){
+                        changeImgApi(changeImgs)
+                            .then((res)=>{
+
+                            })
+                            .catch((err)=>{
+
+                            })
+                    }
                 })
                 .catch((err)=>{
                     alert("저장 실패했습니다. 다시 시도해주시기바랍니다.")
                 })
         }else{
             quizUpdate(data).then(() => alert("저장되었습니다.")); // 서버에 업데이트 요청
+            if(changeImgs){
+                changeImgApi(changeImgs)
+                    .then((res)=>{
+
+                    })
+                    .catch((err)=>{
+
+                    })
+            }
         }
     }
     //현재 선택된 퀘스천 저장
@@ -131,6 +159,8 @@ function Quiz() {
         handleSave(updatedList);
 
     };
+
+
 
     // 선택지 내용 변경 핸들러
     const handleChoiceChange = (index, newText) => {
@@ -198,6 +228,15 @@ function Quiz() {
     //     localStorage.setItem("questionList", JSON.stringify(questionList));
     // }, [questionList]);
 
+    const quillRef = useRef(null);
+
+    // (디버깅) 확인용
+    useEffect(() => {
+        const editor = quillRef.current?.getEditor();
+        console.log('Loaded modules:', editor?.options.modules);
+        console.log('Has imageResize module?', !!editor?.getModule('imageResize'));
+    }, []);
+
     if (!question) return (<div>로딩중...</div>);
 
     return (
@@ -244,12 +283,18 @@ function Quiz() {
                                 </h3>
 
                                 <ReactQuill
+                                    ref={quillRef}
                                     className="quill-container"
                                     theme="snow"
                                     modules={modules}
-                                    format={formats}
+                                    formats={formats}
                                     value={content || ''}
-                                    onChange={(value) => setContent(value)}
+                                    onChange={(value) => {
+                                        if (value !== null && value !== undefined) {
+                                            setContent(value);
+                                        }
+                                        // null or undefined면 그냥 무시
+                                    }}
                                 />
 
                                 <div className="choice-container">

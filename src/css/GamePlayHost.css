@@ -111,6 +111,7 @@
 
 .question-content {
     background-color: #2f2f3d;
+    height: 500px;
     padding: 20px;
     border-radius: 10px;
     font-size: 18px;

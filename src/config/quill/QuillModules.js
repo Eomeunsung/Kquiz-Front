@@ -3,6 +3,7 @@ import {toolbarOptions} from "./ToobarOption"
 
 export const modules = {
     toolbar: toolbarOptions.toolbar,
-    imageActions: toolbarOptions.imageActions,
-    imageFormats: toolbarOptions.imageFormats
+    imageResize: toolbarOptions.imageResize,  // 여기에 반드시 imageResize 포함
+    // imageActions: toolbarOptions.imageActions,
+    // imageFormats: toolbarOptions.imageFormats
 };
