@@ -13,6 +13,7 @@ import { BiXCircle } from "react-icons/bi";
 import { choiceCreate } from "../../api/ChoiceApi";
 import {changeImg, extractImgUrls} from "./../../config/ChangeImg"
 import {fileUpload, changeImgApi} from "./../../api/FileApi"
+import {gemini} from "./../../config/Gemini";
 
 function Quiz() {
     const location = useLocation();
@@ -42,6 +43,7 @@ function Quiz() {
                     setContent(data.questions[0].content); // 현재 질문의 본문 설정
                     setChoice(data.questions[0].choices); // 현재 질문의 선택지 목록 설정
                     setOption(data.questions[0].option); // 현재 질문의 옵션 설정
+                    console.log("AI 체크 "+data.questions[0].option.useAiFeedBack);
                 }
             })
             .catch(() => {
@@ -223,19 +225,46 @@ function Quiz() {
         setOption(updateQuestion.option); // 옵션 변경
     };
 
+    //Ai 선택
+    useEffect(() => {
+        if (option.useAiFeedBack === false && option.aiQuestion !== "ai 피드백") {
+            // AI 힌트 껐다가 다시 켰을 때 초기화
+            setOption(prev => ({
+                ...prev,
+                aiQuestion: "ai 피드백",
+            }));
+            return;
+        }
+
+        if (!option) {
+            return;
+        }
+        if (option.aiQuestion!=="ai 피드백") {
+            // 이미 AI 힌트가 있으면 호출하지 않음
+            return;
+        }
+
+        const data = {
+            title: questionTitle,
+            content: content,
+        }
+        gemini(data)
+            .then((res) => {
+                setOption(prev => ({
+                    ...prev,
+                    aiQuestion: res,
+                }));
+            })
+            .catch((err) => {
+                alert("AI 힌트 다시 시도해 주시기 바랍니다.");
+            });
+    }, [option?.useAiFeedBack]);
+
 
     // useEffect(() => {
     //     localStorage.setItem("questionList", JSON.stringify(questionList));
     // }, [questionList]);
 
-    const quillRef = useRef(null);
-
-    // (디버깅) 확인용
-    useEffect(() => {
-        const editor = quillRef.current?.getEditor();
-        console.log('Loaded modules:', editor?.options.modules);
-        console.log('Has imageResize module?', !!editor?.getModule('imageResize'));
-    }, []);
 
     if (!question) return (<div>로딩중...</div>);
 
@@ -269,7 +298,10 @@ function Quiz() {
                     <div>로딩중..</div>
                 ):(
                     <div>
-                        <div>퀴즈 제목: {quizTitle}</div>
+                        <div className="quiz-title-container">
+                            <h1 className="quiz-title">{quizTitle}</h1>
+                        </div>
+
 
                         <div className="question-layout">
                             <div className="question-main">
@@ -283,7 +315,6 @@ function Quiz() {
                                 </h3>
 
                                 <ReactQuill
-                                    ref={quillRef}
                                     className="quill-container"
                                     theme="snow"
                                     modules={modules}

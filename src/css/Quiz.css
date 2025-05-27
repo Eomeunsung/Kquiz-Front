@@ -7,7 +7,7 @@
 /* 사이드바 */
 .quiz-nav-bar {
     width: 250px;
-    background-color: #4CAF50;
+    background-color: #357ABD; /* 진한 파랑으로 변경 */
     color: white;
     padding: 20px;
     box-sizing: border-box;
@@ -27,8 +27,9 @@
     transition: background-color 0.3s;
 }
 
+
 .quiz-nav-bar li:hover {
-    background-color: #45a049;
+    background-color: #2C5AA0; /* 진한 파랑보다 조금 더 어두운색 */
 }
 
 /* 콘텐츠 영역 */
@@ -48,9 +49,10 @@
     font-size: 24px;
 }
 
+/* 질문 추가 버튼 */
 .add-question-container button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #357ABD; /* 버튼도 동일하게 */
     color: white;
     border: none;
     font-size: 16px;
@@ -60,7 +62,7 @@
 }
 
 .add-question-container button:hover {
-    background-color: #45a049;
+    background-color: #2C5AA0;
 }
 
 .question-item {
@@ -74,3 +76,21 @@
     border-radius: 5px;
     border: 1px solid #ccc;
 }
+
+.quiz-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.quiz-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-bottom: 3px solid #4a90e2;
+    color: #2c3e50;
+}
+
+

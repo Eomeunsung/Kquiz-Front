@@ -31,7 +31,7 @@
 .quill-container {
     height: 500px;
     margin-top: 1rem;
-    margin-bottom: 2rem; /* 🔥 추가 */
+    margin-bottom: 5rem; /* 🔥 추가 */
 }
 
 /* 나중에 지울거 이미지 클릭 불가능하게 한느거 */
@@ -41,14 +41,14 @@
 /*}*/
 
 .choice-container {
-    margin-top: 2rem;
+    /*margin-top: 2rem;*/
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
 }
 
 .choice-item {
-    margin-top: 3rem;
+    margin-top: 0.5rem; /* 3rem → 1.5rem 으로 줄임 */
     background-color: #f4f6f8;
     padding: 1rem;
     border-radius: 0.75rem;
@@ -143,5 +143,11 @@
     background-color: #eef1f5;
     border-radius: 0.5rem;
     margin-top: 0.5rem;
+
+    width: 100%;       /* 부모 요소 너비에 맞게 가로 고정 */
+    max-width: 300px;  /* 최대 가로 길이 제한 */
+    white-space: normal; /* 줄바꿈 허용 (기본값) */
+    word-wrap: break-word; /* 긴 단어도 자동 줄바꿈 */
 }
+
 
