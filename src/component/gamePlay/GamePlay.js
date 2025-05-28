@@ -1,11 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import "./../../css/GamePlayHost.css"
 function GamePlayHost(props) {
     // useLocation 훅을 통해, URL에서 전달된 게임 정보 가져오기
     const location = useLocation();
+    const navigate = useNavigate();
+
     // 상태 변수들 초기화
     const [message, setMessage] = useState("");
     const [question, setQuestion] = useState(null); //question 정보
@@ -20,9 +22,18 @@ function GamePlayHost(props) {
     const [hasSubmitted, setHasSubmitted] = useState(false); // 중복 제출 방지
 
     const [rank, setRank] = useState(null);
+    useEffect(() => {
+        if (!location.state || !location.state.gameId) {
+            // 렌더링 전에 조건 처리
+            console.log("게임 끊김")
+            alert("네트워크가 끊겼습니다.");
+            navigate("/");
+        }
+    }, [location.state, navigate]);
 
     // console.log("게임 시작 주소 "+location.state.gameId);
     useEffect(() => {
+        if (!location.state || !location.state.gameId) return;
         const socket = new SockJS("http://localhost:8080/ws");
 
         stompClient.current = new Client({
@@ -77,7 +88,7 @@ function GamePlayHost(props) {
         return () => {
             stompClient.current.deactivate();
         };
-    }, [location.state.gameId]);
+    }, [location.state]);
 
 
 
@@ -118,42 +129,50 @@ function GamePlayHost(props) {
     if (isReady) return <div className="loading">{isReady ? (<div>{readyTime} 초 후 시작</div>):<div>{message}</div> }</div>;
     if(!question) return <div>퀴즈가 없음</div>
     return (
-        <div className="game-host-wrapper">
-            {isGameOver ? (
-                <div className="game-over">
-                    <h2>게임 종료!</h2>
-                    <p>모든 문제가 종료되었습니다. 결과를 확인해주세요!</p>
-                    {
-                        rank ? (
-                            rank.map((item, index) => (
-                                <div key={index}>
-                                    <div>순위 {index+1}</div>
-                                    <div>이름: {item.username}</div>
-                                    <div>점수: {item.score}</div>
+        <div className="game-host-layout">
+            <div className="game-main">
+                {isGameOver ? (
+                    <div className="game-over">
+                        {
+                            rank ? (
+                                rank.map((item, index) => (
+                                    <div key={index}>
+                                        <div>순위 {index + 1}</div>
+                                        <div>이름: {item.username}</div>
+                                        <div>점수: {item.score}</div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div>로딩중...</div>
+                            )
+                        }
+                    </div>
+                ) : (
+                    <div className="game-box">
+                        <h2>{question.title}</h2>
+                        <div className="game-header">
+                            <div className="timer-box">{remainingTime}초</div>
+                        </div>
+                        <div
+                            className="question-content"
+                            dangerouslySetInnerHTML={{__html: question.content}}
+                        ></div>
+                        <div className="choices-container">
+                            {question.choices.map((choice, idx) => (
+                                <div className="choice-card" key={choice.id}>
+                                    <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
+                                    {choice.content}
                                 </div>
-                            ))
-                        ):(
-                            <div>로딩중...</div>
-                        )
-                    }
-                </div>
-            ) : (
-                <div className="game-box">
-                    <h2>{question.title}</h2>
-                    <div className="game-header">
-                        <div className="timer-box">{remainingTime}초</div>
+                            ))}
+                        </div>
                     </div>
-                    <div className="question-content" dangerouslySetInnerHTML={{__html: question.content}}></div>
-                    <div className="choices-container">
-                        {question.choices.map((choice, idx) => (
-                            <div className="choice-card" key={choice.id}
-                                 onClick={() => !hasSubmitted && handleChoiceId(choice.id)} // 이미 제출했다면 클릭 불가
-                            >
-                                <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
-                                {choice.content}
-                            </div>
-                        ))}
-                    </div>
+                )}
+            </div>
+
+            {question.option.useAiFeedBack && (
+                <div className="hint-sidebar">
+                    <h3>힌트</h3>
+                    <p>{question.option.aiQuestion}</p>
                 </div>
             )}
         </div>

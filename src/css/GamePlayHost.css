@@ -1,87 +1,22 @@
-.game-host-wrapper {
-    max-width: 800px;
+.game-host-layout {
+    max-width: 900px;
     margin: 40px auto;
     padding: 20px;
-    background: #1e1e2f; /* 짙은 배경 */
-    color: #f0f0f0; /* 연한 글자 */
+    background: #1e1e2f;
+    color: #f0f0f0;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 
-.loading {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* 전체 화면 세로 중앙 정렬 */
-    background-color: #f5f5f5;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 24px;
-    color: #333;
-    font-weight: bold;
-    text-align: center;
-    animation: fadeIn 0.6s ease-in-out;
+    gap: 24px;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.loading {
-    font-size: 2rem;
-    color: #fff; /* 혹은 원하는 색상 */
-    text-align: center;
-    margin-top: 2rem;
-    background: none; /* 흰 배경 제거 */
-    padding: 0; /* 여백 제거 */
-    border-radius: 0;
-}
-
-/* 부드러운 등장 효과 */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.game-over {
-    text-align: center;
-    padding: 40px;
-}
-
-.game-over h2 {
-    font-size: 36px;
-    margin-bottom: 20px;
-    color: #ff6b6b;
-}
-
-.game-over p {
-    font-size: 18px;
-    margin-bottom: 30px;
-}
-
-.game-over > div {
-    background-color: #2f2f3d;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 12px 0;
-    box-shadow: inset 0 0 5px #ff6b6b;
-}
-
-.game-over > div div {
-    margin: 6px 0;
+/* 왼쪽 메인 영역 (질문 + 선택지) */
+.game-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .game-box h2 {
@@ -111,7 +46,6 @@
 
 .question-content {
     background-color: #2f2f3d;
-    height: 500px;
     padding: 20px;
     border-radius: 10px;
     font-size: 18px;
@@ -119,43 +53,180 @@
     margin-bottom: 25px;
     color: #e0e0e0;
     min-height: 120px;
+    max-height: 500px;
     overflow-y: auto;
 }
 
+/* 선택지 그리드 */
 .choices-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
 }
 
 .choice-card {
-    background-color: #3a3a52;
-    padding: 15px 20px;
-    border-radius: 12px;
-    cursor: default;
+    background-color: #3f3f5e;
+    padding: 18px 20px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
-    font-size: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    transition: background-color 0.3s ease;
+    font-size: 17px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-height: 60px;
+    user-select: none;
 }
 
 .choice-card:hover {
     background-color: #4db6ac;
     color: #fff;
+    transform: translateY(-2px);
 }
 
 .choice-label {
     background-color: #4db6ac;
     color: #fff;
-    font-weight: 700;
+    font-weight: bold;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 18px;
+    box-shadow: 0 0 14px rgba(77, 182, 172, 0.7);
+}
+
+/* 오른쪽 힌트 사이드바 */
+.hint-sidebar {
+    width: 260px;
+    background-color: #ffffffee;
+    border-left: 5px solid #4db6ac;
+    padding: 20px 18px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #222;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(77, 182, 172, 0.3);
+    user-select: text;
+}
+
+.hint-sidebar h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #00796b;
+}
+
+.hint-sidebar p {
+    margin: 0;
+}
+
+.game-over {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    padding: 40px 0;
+    flex-wrap: wrap;
+}
+
+.game-over > div {
+    background: linear-gradient(135deg, #ff8a80, #ff5252);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 8px 15px rgba(255, 82, 82, 0.4);
+    padding: 20px 30px;
+    width: 140px;
+    text-align: center;
+    position: relative;
+    font-weight: 700;
+    cursor: default;
+    transition: transform 0.3s ease;
     user-select: none;
-    box-shadow: 0 0 8px #4db6ac;
+}
+
+/* 1등은 제일 크고 중앙에 */
+.game-over > div:nth-child(1) {
+    background: linear-gradient(135deg, #ffd54f, #ffb300);
+    box-shadow: 0 12px 24px rgba(255, 179, 0, 0.7);
+    transform: translateY(-30px) scale(1.15);
+    z-index: 3;
+    width: 160px;
+    border-radius: 16px 16px 0 0;
+}
+
+/* 2등, 3등은 약간 작고 위치 조정 */
+.game-over > div:nth-child(2) {
+    background: linear-gradient(135deg, #90caf9, #42a5f5);
+    box-shadow: 0 10px 20px rgba(66, 165, 245, 0.5);
+    transform: translateY(-15px) scale(1.05);
+    z-index: 2;
+    width: 150px;
+}
+
+.game-over > div:nth-child(3) {
+    background: linear-gradient(135deg, #a5d6a7, #66bb6a);
+    box-shadow: 0 8px 16px rgba(102, 187, 106, 0.5);
+    transform: translateY(-10px) scale(1.02);
+    z-index: 1;
+    width: 140px;
+}
+
+/* 나머지 순위들은 기본 스타일 */
+.game-over > div:nth-child(n+4) {
+    background: #4a4a6a;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    color: #ddd;
+    transform: translateY(0) scale(1);
+    width: 130px;
+}
+
+/* 각 단상 위에 작은 삼각형 추가 */
+.game-over > div::before {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid;
+    border-top-color: inherit;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 화면 전체 높이 */
+    background-color: #1e1e2f; /* 어두운 배경 */
+    color: #4db6ac; /* 청록색 계열 텍스트 */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    text-shadow:
+            0 0 10px #4db6ac,
+            0 0 20px #4db6ac,
+            0 0 30px #1de9b6;
+    animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from {
+        text-shadow:
+                0 0 10px #4db6ac,
+                0 0 20px #4db6ac,
+                0 0 30px #1de9b6;
+        color: #4db6ac;
+    }
+    to {
+        text-shadow:
+                0 0 20px #1de9b6,
+                0 0 30px #1de9b6,
+                0 0 40px #1de9b6;
+        color: #1de9b6;
+    }
 }

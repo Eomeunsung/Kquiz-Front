@@ -227,6 +227,10 @@ function Quiz() {
 
     //Ai 선택
     useEffect(() => {
+        if (!option) {
+            return;
+        }
+        
         if (option.useAiFeedBack === false && option.aiQuestion !== "ai 피드백") {
             // AI 힌트 껐다가 다시 켰을 때 초기화
             setOption(prev => ({
@@ -236,9 +240,6 @@ function Quiz() {
             return;
         }
 
-        if (!option) {
-            return;
-        }
         if (option.aiQuestion!=="ai 피드백") {
             // 이미 AI 힌트가 있으면 호출하지 않음
             return;
