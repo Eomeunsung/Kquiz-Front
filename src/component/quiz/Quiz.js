@@ -29,6 +29,53 @@ function Quiz() {
     const [choice, setChoice] = useState([]);
     const [imgUrls, setImgUrls] = useState([]);
 
+    const latestDataRef = useRef({
+        questionTitle,
+        content,
+        choice,
+        option,
+        selectedQuestionId,
+        questionList
+    });
+
+    // 상태가 바뀔 때마다 ref도 업데이트
+    useEffect(() => {
+        latestDataRef.current = {
+            questionTitle,
+            content,
+            choice,
+            option,
+            selectedQuestionId,
+            questionList,
+        };
+    }, [questionTitle, content, choice, option, selectedQuestionId, questionList]);
+
+    //페이지 새로고침 되거나 페이지 나가게 될때 동작되는 곳
+    useEffect(() => {
+        // 브라우저가 페이지를 떠나려 할 때 실행되는 이벤트 핸들러
+        const handleBeforeUnload = (e) => {
+            // 현재 질문을 저장하는 함수 호출 (예: 서버 전송 또는 localStorage 저장)
+            handleQuestionSave(); // ← 이 함수는 반드시 **동기적으로 빠르게 실행**돼야 함
+
+            // 일부 브라우저에서는 아래 두 줄이 있어야 경고 창이 뜸
+            e.preventDefault();        // 표준은 아니지만 일부 브라우저에 필요
+            e.returnValue = "";        // 경고창을 띄우기 위한 트리거 역할
+        };
+        // 뒤로가기/앞으로가기 감지용 핸들러 (경고창 없이 자동 저장만)
+        const handlePopState = () => {
+            handleQuestionSave();
+        };
+        // 컴포넌트가 마운트될 때 beforeunload 이벤트 등록
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        window.addEventListener("popstate", handlePopState);
+
+        // 컴포넌트가 언마운트될 때 이벤트 제거 (메모리 누수 방지)
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            window.removeEventListener("popstate", handlePopState);
+        };
+    }, [question]); // 빈 배열이므로 컴포넌트가 처음 마운트될 때만 실행됨
+
 // 퀴즈 ID가 변경될 때마다 퀴즈 데이터를 서버에서 불러옴
     useEffect(() => {
         quizGet(quizId) // 서버에서 퀴즈 데이터 가져오기
@@ -69,17 +116,35 @@ function Quiz() {
             alert("퀴즈가 하나 남아서 삭제 안됩니다.");
             return;
         }
-        questionDelete(id) // 서버에서 질문 삭제
+        // 삭제할 질문의 인덱스를 찾음
+        const indexToDelete = questionList.findIndex(q => q.id === id);
+
+        // 서버에 삭제 요청
+        questionDelete(id)
             .then(() => {
-                setQuestionList(prev => prev.filter(q => q.id !== id)); // 리스트에서 해당 질문 제거
-                if (selectedQuestionId === id) {
-                    // 삭제한 질문이 현재 선택된 질문이면, 다른 질문으로 전환
-                    const next = questionList.find(q => q.id !== id);
-                    setQuestion(next || null);
-                    setSelectedQuestionId(next?.id || null);
-                }
+                // 삭제된 질문을 제외한 새 질문 목록 생성
+                const updatedList = questionList.filter(q => q.id !== id);
+                setQuestionList(updatedList);
+
+                // 삭제한 인덱스가 0이면 → 다음 질문(index 그대로)을 보여줌
+                // 그 외엔 → 바로 위 질문(index - 1)을 보여줌
+                const newIndex = indexToDelete === 0 ? 0 : indexToDelete - 1;
+
+                // 다음으로 보여줄 질문 객체
+                const nextQuestion = updatedList[newIndex];
+
+                // 선택된 질문 상태 업데이트
+                setQuestion(nextQuestion); // 현재 질문 전체 객체 설정
+                setSelectedQuestionId(nextQuestion.id); // 선택된 질문 ID 설정
+                setQuestionTitle(nextQuestion.title); // 제목 설정
+                setContent(nextQuestion.content); // 내용 설정
+                setChoice(nextQuestion.choices); // 선택지 목록 설정
+                setOption(nextQuestion.option); // 정답 옵션 설정
             })
-            .catch(() => alert("다시 시도해 주시기 바랍니다."));
+            .catch(() => {
+                // 서버 요청 실패 시 사용자에게 알림
+                alert("다시 시도해 주시기 바랍니다.");
+            });
     };
 
     // 퀴즈 전체 저장 (모든 질문 포함)
@@ -145,21 +210,28 @@ function Quiz() {
     }
     //현재 선택된 퀘스천 저장
     const handleQuestionSave = () => {
+        const {
+            questionTitle,
+            content,
+            choice,
+            option,
+            selectedQuestionId,
+            questionList,
+        } = latestDataRef.current;
+
         const idxData = {
             id: selectedQuestionId,
             title: questionTitle,
             content: content,
             choices: choice,
-            option: option
+            option: option,
         };
 
         // 현재 선택된 질문이 반영된 새로운 리스트 생성해서 저장 함수에 전달
         const updatedList = questionList.map(q =>
             q.id === idxData.id ? idxData : q
         );
-
         handleSave(updatedList);
-
     };
 
 
@@ -262,9 +334,6 @@ function Quiz() {
     }, [option?.useAiFeedBack]);
 
 
-    // useEffect(() => {
-    //     localStorage.setItem("questionList", JSON.stringify(questionList));
-    // }, [questionList]);
 
 
     if (!question) return (<div>로딩중...</div>);
@@ -282,7 +351,9 @@ function Quiz() {
                             onClick={() => { handleChangeQuestion(q); console.log("선택된 question "+JSON.stringify(q))}}
 
                         >
-                            질문 {idx + 1}
+                            {
+                                q.title ? (<div>{q.title}</div>):(<div>질문 제목</div>)
+                            }
                             <button onClick={(e) => {
                                 e.stopPropagation();
                                 deleteQuestion(q.id);
