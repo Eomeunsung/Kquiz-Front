@@ -347,12 +347,12 @@ function Quiz() {
                     {questionList.map((q, idx) => (
                         <li
                             key={q.id}
-                            className={`quiz-nav-item ${selectedQuestionId === q.id ? 'active' : ''}`}
-                            onClick={() => { handleChangeQuestion(q); console.log("선택된 question "+JSON.stringify(q))}}
+                            className={selectedQuestionId === q.id ? "selected" : ""}
+                            onClick={() => { handleChangeQuestion(q);}}
 
                         >
                             {
-                                q.title ? (<div>{q.title}</div>):(<div>질문 제목</div>)
+                                q.title ? (<div>{q.title}</div>):(<div>Question</div>)
                             }
                             <button onClick={(e) => {
                                 e.stopPropagation();

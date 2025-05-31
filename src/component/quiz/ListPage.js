@@ -90,7 +90,6 @@ function ListPage(props) {
                 )
             }
 
-
         </div>
     );
 }
