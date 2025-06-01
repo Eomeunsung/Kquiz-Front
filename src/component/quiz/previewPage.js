@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "../../css/PreviewPage.css";
+import "./../../css/GamePlayHost.css"
 import { quizGet } from "../../api/QuizApi";
 
 function PreviewPage() {
@@ -43,23 +44,49 @@ function PreviewPage() {
             <div className="question-preview">
                 <div className="question-header">
                     <span className="question-number">Q{currentIndex + 1}</span>
-                    <span className="question-time">⏱ {currentQuestion.option?.time || 30}초</span>
-                    <span className="question-score">📊 {currentQuestion.option?.score || 100}점</span>
+                    <span className="question-time">⏱ 시간 {currentQuestion.option?.time}초</span>
+                    <span className="question-score">📊 점수 {currentQuestion.option?.score}점</span>
                 </div>
-                <div className="question-content" dangerouslySetInnerHTML={{__html: currentQuestion.content}}></div>
-                <ul className="choice-list">
-                    {currentQuestion.choices.map((choice, idx) => (
-                        <li key={idx} className="choice-item">
-                            {choice.content}
-                        </li>
-                    ))}
-                </ul>
+
+                <div className="game-box">
+                    <div className="game-box-inner">
+                        {currentQuestion.option.useCommentary && (
+                            <div className="commentary-box">
+                                <h3>사용자 힌트</h3>
+                                <p>{currentQuestion.option.commentary}</p>
+                            </div>
+                        )}
+
+                        <div className="question-main">
+                            <h2>{currentQuestion.title}</h2>
+                            <div className="question-content"
+                                 dangerouslySetInnerHTML={{ __html: currentQuestion.content }}></div>
+
+                            <ul className="choices-container">
+                                {currentQuestion.choices.map((choice, idx) => (
+                                    <li className="choice-card" key={choice.id}>
+                                        <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
+                                        {choice.content}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {currentQuestion.option.useAiFeedBack && (
+                            <div className="hint-sidebar">
+                                <h3>AI 힌트</h3>
+                                <p>{currentQuestion.option.aiQuestion}</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
 
                 <div className="navigation-buttons">
                     <button className="nav-button" onClick={handlePrev} disabled={currentIndex === 0}>
                         ← 이전
                     </button>
-                    <button className="nav-button" onClick={handleNext} disabled={currentIndex === quiz.questions.length - 1}>
+                    <button className="nav-button" onClick={handleNext}
+                            disabled={currentIndex === quiz.questions.length - 1}>
                         다음 →
                     </button>
                 </div>
@@ -70,6 +97,7 @@ function PreviewPage() {
             </button>
         </div>
     );
+
 }
 
 export default PreviewPage;

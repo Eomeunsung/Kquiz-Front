@@ -1,77 +1,161 @@
 .preview-page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: 'Pretendard', sans-serif;
+    max-width: 1200px;        /* 게임 호스트 레이아웃과 동일하게 */
+    margin: 40px auto;
+    padding: 30px 40px;
+    background: var(--bg-dark);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    color: var(--text-light);
+    font-family: var(--font-main);
 }
 
 .preview-title {
-    font-size: 2rem;
+    font-size: 32px;
     font-weight: bold;
-    margin-bottom: 2rem;
+    color: var(--accent);
+    margin-bottom: 30px;
     text-align: center;
 }
 
-.question-list {
+.question-preview {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-}
-
-.question-preview {
-    background-color: #f9fafb;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    gap: 20px;
 }
 
 .question-header {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
-    color: #4CAF50;
-    font-weight: bold;
+    justify-content: center;
+    gap: 30px;
+    font-size: 18px;
+    color: var(--accent-light);
+    margin-bottom: 15px;
 }
 
-.question-number {
-    font-weight: bold;
+.question-header span {
+    font-weight: 600;
 }
 
-.question-time, .question-score {
-    font-size: 0.9rem;
-    color: #666;
+.game-box {
+    background-color: var(--bg-box);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+}
+
+.game-box-inner {
+    display: flex;
+    gap: 20px;
+}
+
+.commentary-box,
+.hint-sidebar {
+    width: 200px;
+    background-color: var(--gray-bg);
+    color: #333;
+    padding: 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    border: 1px solid var(--gray-light);
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.question-main {
+    flex: 2;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.question-main > h2 {
+    font-size: 26px;
+    color: var(--accent);
+    margin-bottom: 15px;
+    text-align: center;
 }
 
 .question-content {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    background-color: var(--bg-dark);
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: var(--text-light);
+    min-height: 120px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
 }
 
-.choice-list {
+.choices-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 🔥 2개씩 가로 배치 */
-    gap: 1rem; /* 🔥 보기 사이 여백 */
-    margin-top: 1rem;
-    list-style-type: none;
-    padding: 0;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
 }
 
-.choice-item {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
+.choice-card {
+    background-color: #39395a;
+    padding: 18px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: default;
+    min-height: 60px;
+    user-select: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease;
+}
+
+.choice-card:hover {
+    background-color: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.choice-label {
+    background-color: var(--accent);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    box-shadow: 0 0 10px rgba(0, 191, 165, 0.6);
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.nav-button {
+    padding: 0.6rem 1.2rem;
+    background-color: #e0e0e0;
+    color: black;
+    border: none;
     border-radius: 8px;
-    padding: 0.75rem 1rem;
     font-size: 1rem;
-    text-align: center;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.choice-item:hover {
-    background-color: #f1f5f9;
+.nav-button:hover {
+    background-color: #ccc;
 }
 
+.nav-button:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
 
 .start-button {
     margin-top: 2rem;
@@ -89,36 +173,4 @@
 
 .start-button:hover {
     background-color: #45a049;
-}
-
-.loading {
-    text-align: center;
-    font-size: 1.5rem;
-    padding: 5rem;
-}
-
-.navigation-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.nav-button {
-    padding: 0.6rem 1.2rem;
-    background-color: #e0e0e0;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.nav-button:hover {
-    background-color: #ccc;
-}
-
-.nav-button:disabled {
-    background-color: #f0f0f0;
-    cursor: not-allowed;
 }

@@ -303,7 +303,7 @@ function Quiz() {
             return;
         }
         
-        if (option.useAiFeedBack === false && option.aiQuestion !== "ai 피드백") {
+        if (option.useAiFeedBack === false || option.aiQuestion !== "ai 피드백") {
             // AI 힌트 껐다가 다시 켰을 때 초기화
             setOption(prev => ({
                 ...prev,
@@ -461,8 +461,19 @@ function Quiz() {
                                 </div>
 
                                 <div className="option-item">
-                                    <label>🧠 AI 힌트 답변</label>
+                                    <label>🤖 AI 힌트 답변</label>
                                     <div className="option-display">{option.aiQuestion}</div>
+                                </div>
+
+                                <div className="option-item">
+                                    <label>💡 힌트 사용</label>
+                                    <input
+                                        type="checkbox"
+                                        checked={option.useCommentary}
+                                        onChange={(e) =>
+                                            setOption(prev => ({...prev, useCommentary: e.target.checked}))
+                                        }
+                                    />
                                 </div>
 
                                 <div className="option-item">

@@ -1,18 +1,44 @@
-.game-host-layout {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #1e1e2f;
-    color: #f0f0f0;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-    display: flex;
-    gap: 24px;
+:root {
+    --bg-dark: #1e1e2f;
+    --bg-box: #2b2b40;
+    --accent: #00bfa5;
+    --accent-light: #4db6ac;
+    --text-light: #f0f0f0;
+    --gray-light: #cccccc;
+    --gray-bg: #f5f5f5;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 왼쪽 메인 영역 (질문 + 선택지) */
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    font-family: var(--font-main);
+    margin: 0;
+    padding: 0;
+}
+
+.game-host-layout {
+    max-width: 1200px;       /* 기존 1000px → 1200px */
+    margin: 40px auto;
+    padding: 30px 40px;      /* 패딩 좀 더 크게 */
+    background: var(--bg-dark);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;         /* 화면 작아질 때 줄바꿈 가능 */
+}
+
+/* 반응형: 900px 이하에서 패딩과 max-width 조절 */
+@media (max-width: 900px) {
+    .game-host-layout {
+        max-width: 90vw;
+        padding: 20px 20px;
+        gap: 20px;
+    }
+}
+
+/* 왼쪽 메인 영역 */
 .game-main {
     flex: 1;
     display: flex;
@@ -20,9 +46,9 @@
 }
 
 .game-box h2 {
-    font-size: 28px;
+    font-size: 26px;
     margin-bottom: 15px;
-    color: #4db6ac;
+    color: var(--accent);
     text-align: center;
 }
 
@@ -33,27 +59,26 @@
 }
 
 .timer-box {
-    background-color: #4db6ac;
+    background-color: var(--accent);
     color: #fff;
-    font-weight: 700;
+    font-weight: bold;
     padding: 12px 25px;
     font-size: 20px;
     border-radius: 30px;
-    box-shadow: 0 0 8px #4db6ac;
-    min-width: 100px;
+    box-shadow: 0 0 8px var(--accent);
     text-align: center;
+    min-width: 100px;
 }
 
 .question-content {
-    background-color: #2f2f3d;
+    background-color: var(--bg-box);
     padding: 20px;
     border-radius: 10px;
     font-size: 18px;
-    line-height: 1.5;
     margin-bottom: 25px;
-    color: #e0e0e0;
+    color: var(--text-light);
     min-height: 120px;
-    max-height: 500px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
@@ -65,27 +90,27 @@
 }
 
 .choice-card {
-    background-color: #3f3f5e;
+    background-color: #39395a;
     padding: 18px 20px;
-    border-radius: 14px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    font-size: 17px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    font-size: 16px;
     transition: all 0.3s ease;
     cursor: pointer;
     min-height: 60px;
     user-select: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .choice-card:hover {
-    background-color: #4db6ac;
+    background-color: var(--accent);
     color: #fff;
     transform: translateY(-2px);
 }
 
 .choice-label {
-    background-color: #4db6ac;
+    background-color: var(--accent);
     color: #fff;
     font-weight: bold;
     border-radius: 50%;
@@ -94,35 +119,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 18px;
-    box-shadow: 0 0 14px rgba(77, 182, 172, 0.7);
+    margin-right: 15px;
+    box-shadow: 0 0 10px rgba(0, 191, 165, 0.6);
 }
 
-/* 오른쪽 힌트 사이드바 */
-.hint-sidebar {
-    width: 260px;
-    background-color: #ffffffee;
-    border-left: 5px solid #4db6ac;
-    padding: 20px 18px;
-    box-sizing: border-box;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #222;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(77, 182, 172, 0.3);
-    user-select: text;
-}
-
-.hint-sidebar h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #00796b;
-}
-
-.hint-sidebar p {
-    margin: 0;
-}
-
+/* 게임 종료 결과 */
 .game-over {
     display: flex;
     justify-content: center;
@@ -133,57 +134,17 @@
 }
 
 .game-over > div {
-    background: linear-gradient(135deg, #ff8a80, #ff5252);
-    color: white;
+    background: linear-gradient(135deg, #555, #333);
+    color: #eee;
     border-radius: 12px 12px 0 0;
-    box-shadow: 0 8px 15px rgba(255, 82, 82, 0.4);
     padding: 20px 30px;
-    width: 140px;
-    text-align: center;
-    position: relative;
-    font-weight: 700;
-    cursor: default;
-    transition: transform 0.3s ease;
-    user-select: none;
-}
-
-/* 1등은 제일 크고 중앙에 */
-.game-over > div:nth-child(1) {
-    background: linear-gradient(135deg, #ffd54f, #ffb300);
-    box-shadow: 0 12px 24px rgba(255, 179, 0, 0.7);
-    transform: translateY(-30px) scale(1.15);
-    z-index: 3;
-    width: 160px;
-    border-radius: 16px 16px 0 0;
-}
-
-/* 2등, 3등은 약간 작고 위치 조정 */
-.game-over > div:nth-child(2) {
-    background: linear-gradient(135deg, #90caf9, #42a5f5);
-    box-shadow: 0 10px 20px rgba(66, 165, 245, 0.5);
-    transform: translateY(-15px) scale(1.05);
-    z-index: 2;
-    width: 150px;
-}
-
-.game-over > div:nth-child(3) {
-    background: linear-gradient(135deg, #a5d6a7, #66bb6a);
-    box-shadow: 0 8px 16px rgba(102, 187, 106, 0.5);
-    transform: translateY(-10px) scale(1.02);
-    z-index: 1;
-    width: 140px;
-}
-
-/* 나머지 순위들은 기본 스타일 */
-.game-over > div:nth-child(n+4) {
-    background: #4a4a6a;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    color: #ddd;
-    transform: translateY(0) scale(1);
     width: 130px;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    transition: transform 0.3s ease;
 }
 
-/* 각 단상 위에 작은 삼각형 추가 */
 .game-over > div::before {
     content: "";
     position: absolute;
@@ -197,36 +158,98 @@
     filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
 }
 
+/* 순위별 색상 강조 */
+.game-over > div:nth-child(1) {
+    background: linear-gradient(135deg, #ffeb3b, #ffc107);
+    box-shadow: 0 12px 24px rgba(255, 193, 7, 0.5);
+    transform: translateY(-30px) scale(1.15);
+    width: 160px;
+    z-index: 3;
+}
+
+.game-over > div:nth-child(2) {
+    background: linear-gradient(135deg, #90caf9, #42a5f5);
+    transform: translateY(-15px) scale(1.05);
+    width: 150px;
+    z-index: 2;
+}
+
+.game-over > div:nth-child(3) {
+    background: linear-gradient(135deg, #a5d6a7, #66bb6a);
+    transform: translateY(-10px) scale(1.02);
+    width: 140px;
+    z-index: 1;
+}
+
 .loading {
+    position: fixed;        /* 화면 기준 고정 */
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, var(--accent-light) 50%, var(--bg-box) 90%);
+    box-shadow:
+            0 0 15px var(--accent),
+            inset 0 0 10px var(--accent-light);
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--text-light);
+    user-select: none;
+    animation: pulseScale 1s ease-in-out infinite;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* 화면 전체 높이 */
-    background-color: #1e1e2f; /* 어두운 배경 */
-    color: #4db6ac; /* 청록색 계열 텍스트 */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 3rem;
-    font-weight: 900;
-    text-shadow:
-            0 0 10px #4db6ac,
-            0 0 20px #4db6ac,
-            0 0 30px #1de9b6;
-    animation: pulseGlow 1.5s infinite alternate;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    z-index: 9999;          /* 다른 요소 위에 뜨도록 */
 }
+
+
+
+
+@keyframes pulseScale {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+    }
+}
+
 
 @keyframes pulseGlow {
     from {
-        text-shadow:
-                0 0 10px #4db6ac,
-                0 0 20px #4db6ac,
-                0 0 30px #1de9b6;
-        color: #4db6ac;
+        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 30px #1de9b6;
     }
     to {
-        text-shadow:
-                0 0 20px #1de9b6,
-                0 0 30px #1de9b6,
-                0 0 40px #1de9b6;
-        color: #1de9b6;
+        text-shadow: 0 0 20px #1de9b6, 0 0 30px #1de9b6, 0 0 40px #1de9b6;
     }
+}
+
+/* 문제, 힌트 3분할 */
+.game-box-inner {
+    display: flex;
+    gap: 20px;
+}
+
+/* 왼쪽 유저 힌트 */
+.commentary-box,
+.hint-sidebar {
+    width: 200px;
+    background-color: var(--gray-bg);
+    color: #333;
+    padding: 12px;
+    border: 1px solid var(--gray-light);
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.question-main {
+    flex: 2; /* 기존 1에서 2로 키워서 더 넓게 */
+    min-width: 0; /* overflow 방지용 */
 }

@@ -79,10 +79,6 @@ function GamePlayHost(props) {
                     }
                 });
 
-                // //timer 계산기 timer는  /topic/quiz에서 받음
-                // stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
-                //     const timerData = JSON.parse(message.body);
-                // })
             },
         });
 
@@ -196,7 +192,16 @@ function GamePlayHost(props) {
 
 
     // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
-    if (!question || isReady) return <div className="loading">{isReady ? (<div>{readyTime} 초 후 시작</div>):<div>{message}</div> }</div>;
+    if (!question || isReady)
+        return (
+            <div className="loading">
+                {isReady ? (
+                    <div>{readyTime}</div>
+                ) : (
+                    <div>{message}</div>
+                )}
+            </div>
+        );
 
     return (
         <div className="game-host-layout">
@@ -218,33 +223,50 @@ function GamePlayHost(props) {
                         }
                     </div>
                 ) : (
+
                     <div className="game-box">
-                        <h2>{question.title}</h2>
-                        <div className="game-header">
-                            <div className="timer-box">{remainingTime}초</div>
-                        </div>
-                        <div
-                            className="question-content"
-                            dangerouslySetInnerHTML={{__html: question.content}}
-                        ></div>
-                        <div className="choices-container">
-                            {question.choices.map((choice, idx) => (
-                                <div className="choice-card" key={choice.id}>
-                                    <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
-                                    {choice.content}
+                        <div className="game-box-inner">
+                            {/* 왼쪽 사용자 힌트 */}
+                            {question.option.useCommentary && (
+                                <div className="commentary-box">
+                                    <h3>사용자 힌트</h3>
+                                    <p>{question.option.commentary}</p>
                                 </div>
-                            ))}
+                            )}
+
+                            {/* 가운데 문제 내용 */}
+                            <div className="question-main">
+                                <h2>{question.title}</h2>
+                                <div className="game-header">
+                                    <div className="timer-box">{remainingTime}초</div>
+                                </div>
+                                <div
+                                    className="question-content"
+                                    dangerouslySetInnerHTML={{__html: question.content}}
+                                ></div>
+                                <div className="choices-container">
+                                    {question.choices.map((choice, idx) => (
+                                        <div className="choice-card" key={choice.id}>
+                                            <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
+                                            {choice.content}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* 오른쪽 AI 힌트 */}
+                            {question.option.useAiFeedBack && (
+                                <div className="hint-sidebar">
+                                    <h3>AI 힌트</h3>
+                                    <p>{question.option.aiQuestion}</p>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
             </div>
 
-            {question.option.useAiFeedBack && (
-                <div className="hint-sidebar">
-                    <h3>힌트</h3>
-                    <p>{question.option.aiQuestion}</p>
-                </div>
-            )}
+
         </div>
     );
 }
