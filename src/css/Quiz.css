@@ -2,13 +2,13 @@
 .quiz-page {
     display: flex;
     height: 150vh;
+    color: black;
 }
 
 /* 사이드바 */
 .quiz-nav-bar {
     width: 250px;
-    background-color: #357ABD; /* 진한 파랑으로 변경 */
-    color: white;
+    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
     padding: 20px;
     box-sizing: border-box;
 }
@@ -27,9 +27,8 @@
     transition: background-color 0.3s;
 }
 
-
 .quiz-nav-bar li:hover {
-    background-color: #2C5AA0; /* 진한 파랑보다 조금 더 어두운색 */
+    background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);
 }
 
 /* 콘텐츠 영역 */
@@ -52,8 +51,7 @@
 /* 질문 추가 버튼 */
 .add-question-container button {
     padding: 10px 20px;
-    background-color: #357ABD; /* 버튼도 동일하게 */
-    color: white;
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
     border: none;
     font-size: 16px;
     cursor: pointer;
@@ -81,7 +79,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .quiz-title {
@@ -90,14 +87,10 @@
     text-align: center;
     padding: 0.5rem 1rem;
     border-bottom: 3px solid #4a90e2;
-    color: #2c3e50;
 }
 
 .quiz-nav-bar li.selected {
-    background-color: #1F3F70;  /* 훨씬 어두운 파랑으로 강조 */
-    border-left: 5px solid #ffffff;  /* 강조선 추가 */
-    padding-left: 15px;  /* 왼쪽 공간 살짝 늘리기 */
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    border-left: 5px solid #ffffff;
+    padding-left: 15px;
 }
-
-
-
