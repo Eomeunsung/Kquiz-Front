@@ -1,0 +1,83 @@
+/* 회원가입 페이지 전체 */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+/* 회원가입 폼 스타일 */
+.signup-form {
+    width: 400px;
+    padding: 40px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 회원가입 제목 스타일 */
+.signup-form h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #6c63ff; /* 타이틀 색상 */
+    margin-bottom: 30px;
+}
+
+/* 입력 필드 스타일 */
+.input-field {
+    width: 100%;
+    margin-bottom: 20px;
+
+}
+
+.input-field label {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+.input-field input:focus {
+    border-color: #6c63ff; /* 포커스 시 테두리 색상 */
+}
+
+/* 에러 메시지 */
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* 회원가입 버튼 스타일 */
+.signup-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6c63ff;
+    color: white;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+    background-color: #ff6584; /* 버튼 호버 색상 */
+}
+
+.signup-button:active {
+    background-color: #5a54e1; /* 클릭 시 색상 */
+}

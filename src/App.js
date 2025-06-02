@@ -11,6 +11,8 @@ import Participation from "./component/gamePlay/Participation";
 import HostLobby from "./component/gamePlay/HostLobby";
 import GamePlayHost from "./component/gamePlay/GamePlayHost";
 import GamePlay from "./component/gamePlay/GamePlay";
+import SignUp from "./component/user/SignUp";
+import SignIn from "./component/user/SignIn";
 function App() {
   return (
     <div className="App">
@@ -27,6 +29,8 @@ function App() {
                 <Route path="/hostLobby" element={<HostLobby></HostLobby>} />
                 <Route path="/gamePlay/Host" element={<GamePlayHost></GamePlayHost>}/>
                 <Route path="/gamePlay" element={<GamePlay></GamePlay>}/>
+                <Route path="/signUp" element={<SignUp></SignUp>} />
+                <Route path="/signIn" element={<SignIn></SignIn>} />
             </Routes>
         </div>
 
