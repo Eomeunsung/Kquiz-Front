@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "../../css/PreviewPage.css";
 import "./../../css/GamePlayHost.css"
-import { quizGet } from "../../api/QuizApi";
+import { quizGet } from "../../api/quiz/QuizApi";
 
 function PreviewPage() {
     const location = useLocation();

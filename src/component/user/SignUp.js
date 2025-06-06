@@ -1,12 +1,16 @@
 import React, {useState} from 'react';
 import "./../../css/user/SignUp.css"
+import {signUp} from "./../../api/user/UserApi"
+import {useNavigate} from "react-router-dom";
+
 // 초기값 설정
 const initSignUp = {
     email: '',
-    name: '',
+    nickName: '',
     password: '',
 };
 function SignUp(props) {
+    const navigate = useNavigate();
     const [signUpData, setSignUpData] = useState(initSignUp);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -22,10 +26,10 @@ function SignUp(props) {
 
     // 회원가입 처리
     const handleSignUp = () => {
-        const { email, name, password } = signUpData;
+        const { email, nickName, password } = signUpData;
 
         // 모든 필드가 채워졌는지 확인
-        if (name && email && password && confirmPassword) {
+        if (nickName && email && password && confirmPassword) {
             if (password !== confirmPassword) {
                 setError('비밀번호가 일치하지 않습니다.');
                 return;
@@ -33,6 +37,15 @@ function SignUp(props) {
 
             // 회원가입 데이터 콘솔 로그
             console.log("회원가입 데이터:", signUpData);
+            signUp(signUpData)
+                .then((res)=>{
+                    alert("회원 가입 완료 했습니다.")
+                    navigate("/signIn");
+                })
+                .catch((err)=>{
+                    console.log("회원 가입 에러")
+                    setError(err.message);
+                })
 
 
         } else {
@@ -58,8 +71,8 @@ function SignUp(props) {
                     <label htmlFor="nickname">닉네임</label>
                     <input
                         type="text"
-                        id="name"
-                        value={signUpData.name}
+                        id="nickName"
+                        value={signUpData.nickName}
                         onChange={handleInputChange}
                         required
                     />

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import "./../../css/Participation.css"
-import {participation} from "./../../api/ParticipationApi"
+import {participation} from "../../api/game/ParticipationApi"
 function Participation(props) {
     const navigate = useNavigate();
     const [gameId, setGameId] = useState('');

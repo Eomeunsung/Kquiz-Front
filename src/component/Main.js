@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "./../css/Main.css"
 import GameCreateModal from "./gamePlay/GameCreateModal";
 import {useNavigate} from "react-router-dom";
-import {getQuizList, quizDelete} from "../api/QuizApi";
+import {getQuizList, quizDelete} from "../api/quiz/QuizApi";
 
 function Main(props) {
     const navigate = useNavigate();

@@ -2,17 +2,17 @@ import React, {useEffect, useRef, useState} from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import "./../../css/Quiz.css";
 import "./../../css/Question.css";
-import { quizGet, quizUpdate } from "./../../api/QuizApi";
-import { questionDelete, questionCreate, questionGet } from "./../../api/QuestionApi";
+import { quizGet, quizUpdate } from "../../api/quiz/QuizApi";
+import { questionDelete, questionCreate, questionGet } from "../../api/quiz/QuestionApi";
 import ReactQuill from "react-quill";
 import { modules } from "../../config/quill/QuillModules";
 import { formats } from "../../config/quill/ToobarOption";
 import 'react-quill/dist/quill.snow.css';
 import { CiCirclePlus } from "react-icons/ci";
 import { BiXCircle } from "react-icons/bi";
-import { choiceCreate } from "../../api/ChoiceApi";
+import { choiceCreate } from "../../api/quiz/ChoiceApi";
 import {changeImg, extractImgUrls} from "./../../config/ChangeImg"
-import {fileUpload, changeImgApi} from "./../../api/FileApi"
+import {fileUpload, changeImgApi} from "../../api/file/FileApi"
 import {gemini} from "./../../config/Gemini";
 
 function Quiz() {

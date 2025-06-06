@@ -4,12 +4,12 @@ import 'react-quill/dist/quill.snow.css'
 import "../../css/Question.css"
 import { BiXCircle } from "react-icons/bi";
 import { CiCirclePlus } from "react-icons/ci";
-import {choiceCreate} from "./../../api/ChoiceApi";
-import {questionUpdate} from "./../../api/QuestionApi";
+import {choiceCreate} from "../../api/quiz/ChoiceApi";
+import {questionUpdate} from "../../api/quiz/QuestionApi";
 import {modules} from "../../config/quill/QuillModules";
 import {formats} from "../../config/quill/ToobarOption"
 import {changeImg} from "./../../config/ChangeImg"
-import {fileUpload} from "./../../api/FileApi"
+import {fileUpload} from "../../api/file/FileApi"
 
 function Question({questionGet, updateQuestion}) {
     console.log("받은 퀘스천 페이지 "+JSON.stringify(questionGet));

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "./../../css/Lobby.css"
-import {gameCreate} from "../../api/GameApi"
+import {gameCreate} from "../../api/game/GameApi"
 import {useLocation, useNavigate} from "react-router-dom";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";

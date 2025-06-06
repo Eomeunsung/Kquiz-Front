@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "./../../css/QuizCreateModal.css"
 import {useNavigate} from "react-router-dom";
-import {quizCreate} from "./../../api/QuizApi"
+import {quizCreate} from "../../api/quiz/QuizApi"
 
 function QuizCreateModal({onClose}) {
     const [title, setTitle] = useState("");

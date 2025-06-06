@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./../../css/ListPage.css"
-import {getQuizList, quizDelete} from "./../../api/QuizApi";
+import {getQuizList, quizDelete} from "../../api/quiz/QuizApi";
 import {useNavigate} from "react-router-dom";
 import GameCreateModal from "../gamePlay/GameCreateModal";
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "./../../css/GameCreateModal.css"
-import {gameCreate} from "../../api/GameApi"
+import {gameCreate} from "../../api/game/GameApi"
 import {useNavigate} from "react-router-dom";
 
 function GameCreateModal({quizId, modalFlag}) {
