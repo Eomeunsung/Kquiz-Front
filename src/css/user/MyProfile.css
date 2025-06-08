@@ -1,0 +1,60 @@
+.profile-container {
+    border: 1px solid #ccc;
+    padding: 24px;
+    width: 600px;
+    border-radius: 12px;
+    text-align: left;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fafafa;
+    margin: 40px auto;
+    color:black;
+}
+
+.profile-name {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.profile-email {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.profile-bio {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 16px;
+}
+
+h3 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* 퀴즈 리스트를 grid 형식으로 */
+.quiz-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.quiz-item {
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quiz-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.quiz-item p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+}

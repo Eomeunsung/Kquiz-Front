@@ -13,6 +13,7 @@ import GamePlayHost from "./component/gamePlay/GamePlayHost";
 import GamePlay from "./component/gamePlay/GamePlay";
 import SignUp from "./component/user/SignUp";
 import SignIn from "./component/user/SignIn";
+import Myprofile from "./component/user/Myprofile";
 function App() {
   return (
     <div className="App">
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/gamePlay" element={<GamePlay></GamePlay>}/>
                 <Route path="/signUp" element={<SignUp></SignUp>} />
                 <Route path="/signIn" element={<SignIn></SignIn>} />
+                <Route path="/myProfile" element={<Myprofile></Myprofile>}/>
             </Routes>
         </div>
 

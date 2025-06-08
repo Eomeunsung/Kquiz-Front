@@ -22,6 +22,10 @@ function Nav(props) {
         localStorage.removeItem("nickName");
         setIsLoggedIn(!isLoggedIn);
     }
+
+    const hnadleMyprofile = () => {
+        navigate("/myProfile")
+    }
     return (
         <div>
             <div className="nav-bar">
@@ -53,7 +57,7 @@ function Nav(props) {
                             </>
                         ) : (
                             <>
-                                <li className="nav-item" onClick={handleLogout}>
+                                <li className="nav-item" onClick={hnadleMyprofile}>
                                     {nickName}
                                 </li>
                                 <li className="nav-item" onClick={handleLogout}>
