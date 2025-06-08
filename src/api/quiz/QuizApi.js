@@ -1,11 +1,13 @@
 import axios from "axios";
-
+import axiosInstance from "./../axiosInstance"
 
 export const quizCreate = async (data) => {
     try{
-        const res = await axios.post(`${process.env.REACT_APP_URL}/quiz/create`, data,{
+        // console.log("jwt 토큰 값 "+localStorage.getItem("token"))
+        const res = await axiosInstance.post(`${process.env.REACT_APP_URL}/quiz/create`, data,{
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                // Authorization: "Bearer "+localStorage.getItem("token"),
             }
         })
         console.log(res.data);
@@ -47,9 +49,10 @@ export const quizGet = async (id) =>{
 
 export const quizDelete = async (id) =>{
     try{
-        const res = await axios.delete(`${process.env.REACT_APP_URL}/quiz/delete/${id}`,{
+        const res = await axiosInstance.delete(`${process.env.REACT_APP_URL}/quiz/delete/${id}`,{
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                // Authorization: "Bearer "+localStorage.getItem("token"),
             }
         })
         console.log(res.data);
@@ -62,9 +65,10 @@ export const quizDelete = async (id) =>{
 export const quizUpdate = async (data) => {
     console.log("업데이트 데이터 "+JSON.stringify(data));
     try{
-        const res = await axios.put(`${process.env.REACT_APP_URL}/quiz/update`,data,{
+        const res = await axiosInstance.put(`${process.env.REACT_APP_URL}/quiz/update`,data,{
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                // Authorization: "Bearer "+localStorage.getItem("token"),
             }
         })
         console.log("퀴즈 업데이트 성공 "+JSON.stringify(res.data));

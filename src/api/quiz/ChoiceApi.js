@@ -1,8 +1,8 @@
 import axios from "axios";
-
+import axiosInstance from "./../axiosInstance"
 export const choiceCreate = async (id) =>{
     try{
-        const res = await axios.get(`${process.env.REACT_APP_URL}/choice/create/${id}`,{
+        const res = await axiosInstance.get(`${process.env.REACT_APP_URL}/choice/create/${id}`,{
             headers: {
                 "Content-Type": "application/json"
             }

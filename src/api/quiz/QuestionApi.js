@@ -1,8 +1,8 @@
 import axios from "axios";
-
+import axiosInstance from "./../axiosInstance"
 export const questionCreate = async (id) => {
     try{
-        const res = await axios.get(`${process.env.REACT_APP_URL}/question/create/${id}`,{
+        const res = await axiosInstance.get(`${process.env.REACT_APP_URL}/question/create/${id}`,{
             headers: {
                 "Content-Type": "application/json",
             }
@@ -18,7 +18,7 @@ export const questionCreate = async (id) => {
 
 export const questionUpdate = async (data) => {
     try{
-        const res = await axios.put(`${process.env.REACT_APP_URL}/question/update`,data,{
+        const res = await axiosInstance.put(`${process.env.REACT_APP_URL}/question/update`,data,{
             headers: {
                 "Content-Type": "application/json",
             }
@@ -33,7 +33,7 @@ export const questionUpdate = async (data) => {
 
 export const questionGet = async (id) => {
     try{
-        const res = await axios.get(`${process.env.REACT_APP_URL}/question/get/${id}`,{
+        const res = await axiosInstance.get(`${process.env.REACT_APP_URL}/question/get/${id}`,{
             headers: {
                 "Content-Type": "application/json",
             }
@@ -47,7 +47,7 @@ export const questionGet = async (id) => {
 }
 export const questionDelete=async (id)=>{
     try{
-        const res = await axios.delete(`${process.env.REACT_APP_URL}/question/delete/${id}`,{
+        const res = await axiosInstance.delete(`${process.env.REACT_APP_URL}/question/delete/${id}`,{
             headers: {
                 "Content-Type": "application/json"
             }

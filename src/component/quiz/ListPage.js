@@ -21,7 +21,7 @@ function ListPage(props) {
     }, []);
 
     const handleQuizClick = (quizId) => {
-        navigate("/quiz", {state: quizId});
+        navigate("/preview", {state: quizId});
     }
 
     const previewQuiz = (quizId) => {
@@ -69,17 +69,18 @@ function ListPage(props) {
                                         <div className="quiz-info" onClick={() => handleQuizClick(quiz.id)}>
                                             <h3 className="quiz-title">{quiz.title}</h3>
                                             <p className="quiz-date">작성일: {new Date(quiz.updateAt).toLocaleDateString()}</p>
-                                            {quiz.thumbnail && (
-                                                <img
-                                                    className="quiz-thumbnail"
-                                                    src={quiz.thumbnail}
-                                                    alt="퀴즈 썸네일"
-                                                />
-                                            )}
+                                            <p className="quiz-date">민든이 </p>
+                                            {/*{quiz.thumbnail && (*/}
+                                            {/*    <img*/}
+                                            {/*        className="quiz-thumbnail"*/}
+                                            {/*        src={quiz.thumbnail}*/}
+                                            {/*        alt="퀴즈 썸네일"*/}
+                                            {/*    />*/}
+                                            {/*)}*/}
                                         </div>
                                         <button className="preview-button" onClick={()=>{openModalQuizId(quiz.id)}}>방 만들기</button>
-                                        <button className="preview-button" onClick={()=>{previewQuiz(quiz.id)}}>미리 보기</button>
-                                        <button className="preview-button" onClick={()=>{handleDelete(quiz.id)}}>삭제</button>
+                                        {/*<button className="preview-button" onClick={()=>{previewQuiz(quiz.id)}}>미리 보기</button>*/}
+                                        {/*<button className="preview-button" onClick={()=>{handleDelete(quiz.id)}}>삭제</button>*/}
                                     </li>
                                 ))}
                             </ul>

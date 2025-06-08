@@ -5,7 +5,8 @@ export const fileUpload = async (formData, quizId) =>{
     try{
         const res = await axios.post(`${process.env.REACT_APP_URL}/upload/${quizId}`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                Authorization: "Bearer "+localStorage.getItem("token"),
             }
         })
         console.log("이미ㅣㅈ 업로드"+JSON.stringify(res.data));
@@ -19,7 +20,8 @@ export const changeImgApi = async (data) => {
     try{
         const res = await axios.post(`${process.env.REACT_APP_URL}/img/change`,data,{
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: "Bearer "+localStorage.getItem("token"),
             }
         })
         console.log("이미지 바꾸기 "+res.data);
