@@ -253,3 +253,19 @@ body {
     flex: 2; /* 기존 1에서 2로 키워서 더 넓게 */
     min-width: 0; /* overflow 방지용 */
 }
+
+.choice-submit {
+    margin-top: 24px;
+    background-color: #4f46e5;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.choice-submit:hover {
+    background-color: #3730a3;
+}

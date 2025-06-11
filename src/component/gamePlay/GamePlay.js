@@ -165,6 +165,7 @@ function GamePlayHost(props) {
                                 </div>
                             ))}
                         </div>
+                        <div className="choice-submit">제출하기</div>
                     </div>
                 )}
             </div>
