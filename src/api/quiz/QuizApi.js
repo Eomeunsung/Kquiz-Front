@@ -77,5 +77,18 @@ export const quizUpdate = async (data) => {
         console.log(err);
         throw err;
     }
+}
 
+export const titleUpdate = async (data) => {
+    try{
+        const res = await axiosInstance.put(`${process.env.REACT_APP_URL}/quiz/update/title`,data,{
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        return res.data;
+    }catch (err){
+        console.log("타이틀 오류 "+err);
+        throw err;
+    }
 }

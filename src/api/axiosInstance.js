@@ -40,18 +40,15 @@ axiosInstance.interceptors.response.use(
     },
     (err)=>{
         console.log("응답 오류 "+JSON.stringify(err));
-        if (err.response && err.response.status === 401) {
+        if (err.response.status === 401 || err.response.status === 403) {
             localStorage.removeItem("token");
             localStorage.removeItem("name");
             localStorage.removeItem("email");
-            alert("세션이 만료되어 다시 로그인 해주세요.");
-            window.location.href = "/login";
+            window.location.href = "/signIn";
+        }else if (err.response.status === 403) {
+            alert("권한이 없습니다.")
         }
 
-        if(err.response && err.response.status === 401){
-            alert("로그인 후 이용 가능합니다.")
-            window.location.href = "/login";
-        }
         throw err
     }
 )

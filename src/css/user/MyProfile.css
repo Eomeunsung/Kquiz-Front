@@ -58,3 +58,57 @@ h3 {
     margin: 4px 0;
     font-size: 0.95rem;
 }
+
+.quiz-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+
+
+.my-quiz-info {
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px; /* 둥근 모서리 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* 은은한 그림자 */
+    padding: 16px; /* 내부 여백 */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.my-quiz-info:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px); /* 살짝 떠오르는 느낌 */
+}
+
+.my-quiz-title {
+    font-size: 20px;
+    margin: 8px 0;
+    color: #333;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2열 */
+    gap: 12px; /* 버튼 사이 간격 */
+    max-width: 300px; /* 너비 제한 (선택사항) */
+    margin-top: 16px;
+}
+
+.my-preview-button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4a90e2;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.my-preview-button:hover {
+    background-color: #357ab8;
+}
+

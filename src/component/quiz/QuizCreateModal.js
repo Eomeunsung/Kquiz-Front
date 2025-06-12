@@ -22,11 +22,11 @@ function QuizCreateModal({onClose}) {
             })
             .catch((err) => {
                 console.log("에러 "+JSON.stringify(err))
-                if(err.response.status === 403) {
-                    alert("로그인이 만료 되어 다시 로그인 바랍니다.")
-                }else if(err.response.status === 401) {
-                    alert("로그인 후 이용 가능 합니다.");
-                }
+                // if(err.response.status === 403) {
+                //     alert("로그인이 만료 되어 다시 로그인 바랍니다.")
+                // }else if(err.response.status === 401) {
+                //     alert("로그인 후 이용 가능 합니다.");
+                // }
             })
     };
     return (
