@@ -20,17 +20,11 @@ function ListPage(props) {
             });
     }, []);
 
-    const handleQuizClick = (quizId) => {
-        navigate("/preview", {state: quizId});
-    }
 
     const previewQuiz = (quizId) => {
         navigate("/preview", {state: quizId});
     }
 
-    const handleGameCreate = (quizId) => {
-        navigate("/lobby", {state: quizId});
-    }
 
     const handleModal = () =>{
         setModalFlag(!modalFlag);
@@ -66,7 +60,7 @@ function ListPage(props) {
                             <ul className="quiz-list">
                                 {quizzes.map((quiz) => (
                                     <li key={quiz.id} className="quiz-item">
-                                        <div className="quiz-info" onClick={() => handleQuizClick(quiz.id)}>
+                                        <div className="quiz-info" onClick={() => previewQuiz(quiz.id)}>
                                             <h3 className="quiz-title">{quiz.title}</h3>
                                             <p className="quiz-date">작성일: {new Date(quiz.updateAt).toLocaleDateString()}</p>
                                             <p className="quiz-date">민든이 </p>

@@ -64,7 +64,7 @@ function PreviewPage() {
 
                             <ul className="choices-container">
                                 {currentQuestion.choices.map((choice, idx) => (
-                                    <li className="choice-card" key={choice.id}>
+                                    <li className={`choice-card ${choice.isCorrect ? 'correct-choice':''}`} key={choice.id}>
                                         <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
                                         {choice.content}
                                     </li>

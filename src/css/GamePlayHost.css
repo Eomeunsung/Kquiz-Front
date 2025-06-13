@@ -269,3 +269,22 @@ body {
 .choice-submit:hover {
     background-color: #3730a3;
 }
+
+.choice-card.selected {
+    background-color: #5c7cfa; /* 연한 보라색 (또는 원하는 색) */
+    color: white;
+    border: 2px solid #364fc7; /* 진한 보라색 테두리 */
+    transform: scale(1.02);
+}
+
+.text-submit {
+    margin-top: 24px;
+    background-color: #4f46e5;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

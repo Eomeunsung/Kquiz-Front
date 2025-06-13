@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./../../css/user/MyProfile.css"
 import {myProfile} from "./../../api/user/UserApi"
 import {titleUpdate, quizDelete} from "./../../api/quiz/QuizApi"
 import {useNavigate} from "react-router-dom";
 import QuizTitleEditor from "../quiz/QuizTitleEditor";
+import GameCreateModal from "../gamePlay/GameCreateModal";
 function Myprofile(props) {
     const navigate = useNavigate();
     const [profile, setProfile] = React.useState(null);
@@ -11,7 +12,8 @@ function Myprofile(props) {
     const [titleFlag, setTitleFlag] = React.useState(false);
     const [title, setTitle] = React.useState("");
     const [titleId, setTitleId] = React.useState(0);
-
+    const [gameFlag, setGameFlag] = useState(false);
+    const [quizId, setQuizId] = useState(0);
 
     useEffect(()=>{
         myProfile()
@@ -77,6 +79,20 @@ function Myprofile(props) {
         }
     }
 
+    //게임 방 만들기
+    const openGameModal = (id) => {
+        setQuizId(id);
+        setGameFlag(!gameFlag);
+    };
+    const closeGameModal = () =>{
+        setGameFlag(!gameFlag);
+    }
+
+    //게임 미리보기
+    const previewQuiz = (quizId) => {
+        navigate("/preview", {state: quizId});
+    }
+
 
     if(!profile) return <div>Loading...</div>;
     return (
@@ -104,8 +120,8 @@ function Myprofile(props) {
                             {/*)}*/}
                             <div className="button-grid">
                                 <button className="preview-button" onClick={(e)=>{ e.stopPropagation(); handleChangeTitle(quiz)}}>제목 수정</button>
-                                <button className="preview-button">방 만들기</button>
-                                <button className="preview-button">미리 보기</button>
+                                <button className="preview-button" onClick={(e)=>{e.stopPropagation(); openGameModal(quiz.id)}}>방 만들기</button>
+                                <button className="preview-button" onClick={(e)=>{e.stopPropagation(); previewQuiz(quiz.id)}}>미리 보기</button>
                                 <button className="preview-button" onClick={(e)=>{ e.stopPropagation(); handleQuizDelete(quiz.id)}}>삭제</button>
                             </div>
                         </div>
@@ -119,6 +135,12 @@ function Myprofile(props) {
                 titleFlag ? (
                      <QuizTitleEditor title={title} close={handleCloseTitle} save={handleSaveTitle}></QuizTitleEditor>
                 ):(<></>)
+            }
+            {
+                gameFlag ? (
+                    <GameCreateModal quizId={quizId} modalFlag={closeGameModal}/>
+                ):
+                    (<></>)
             }
 
         </div>

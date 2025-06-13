@@ -18,7 +18,7 @@ function GamePlayHost(props) {
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
     const [readyTime, setReadyTime] = useState(10); // 10초 준비 시간
 
-    const [selectedChoiceId, setSelectedChoiceId] = useState(null); //선택지 id
+    const [selectedChoiceId, setSelectedChoiceId] = useState([]); //선택지 id
     const [hasSubmitted, setHasSubmitted] = useState(false); // 중복 제출 방지
 
     const [rank, setRank] = useState(null);
@@ -61,7 +61,7 @@ function GamePlayHost(props) {
                     // console.log("quiz가져오기 성공 "+message.body);
                     const quizData = JSON.parse(message.body);
                     if(quizData.type==="QUESTION"){
-                        console.log("question가져오기 성공 "+message.body);
+                        setSelectedChoiceId([]);
                         setQuestion(quizData.question);
                         setHasSubmitted(false);
                         setIsReady(false)
@@ -118,15 +118,36 @@ function GamePlayHost(props) {
         }
     }
 
-    // useEffect(()=>{
-    //     if(remainingTime<=0){
-    //
-    //         setIsReady(false)
-    //     }
-    // },[readyTime])
+    //includes 이미 ID가 배열에 있을 경우 filter로 그 ID 해제 아니면 추가
+    const toggleChoice = (choiceId) => {
+        if(hasSubmitted){return}
+        setSelectedChoiceId((prev)=>
+            prev.includes(choiceId) ? prev.filter((id)=> id !== choiceId)
+                : [...prev, choiceId]
+        );
+    }
+
+    const handeChoiceSubmit = (choice) => {
+        setHasSubmitted(true)
+        const isCorrect = question.choices.filter(choice => choice.isCorrect).map(choice => choice.id);
+        if(isCorrect){
+            if (stompClient.current && stompClient.current.connected) {
+                stompClient.current.publish({
+                    destination: `/app/game/${location.state.gameId}`,
+                    body: JSON.stringify({
+                        score: question.option.score,
+                        userId: localStorage.getItem("userId"),
+                        type:"SCORE"
+                    }),
+                });
+            }
+        }
+
+
+    }
 
     // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
-    if (isReady) return <div className="loading">{isReady ? (<div>{readyTime} 초 후 시작</div>):<div>{message}</div> }</div>;
+    if (isReady) return <div className="loading">{isReady ? (<div>{readyTime}</div>):<div>{message}</div> }</div>;
     if(!question) return <div>퀴즈가 없음</div>
     return (
         <div className="game-host-layout">
@@ -159,20 +180,28 @@ function GamePlayHost(props) {
                         ></div>
                         <div className="choices-container">
                             {question.choices.map((choice, idx) => (
-                                <div className="choice-card" key={choice.id}>
+                                <div className={`choice-card ${selectedChoiceId.includes(choice.id) ? 'selected' : ''}`}
+                                     key={choice.id} onClick={() => toggleChoice(choice.id)}>
                                     <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
                                     {choice.content}
                                 </div>
                             ))}
                         </div>
-                        <div className="choice-submit">제출하기</div>
+                        {
+                            hasSubmitted ?
+                                (<div className="text-submit"> 제출 되었습니다.</div>)
+                                : (<button className="choice-submit" onClick={handeChoiceSubmit
+                                }>제출하기
+                                </button>)
+                        }
+
                     </div>
                 )}
             </div>
 
             {question.option.useAiFeedBack && (
                 <div className="hint-sidebar">
-                    <h3>힌트</h3>
+                <h3>힌트</h3>
                     <p>{question.option.aiQuestion}</p>
                 </div>
             )}

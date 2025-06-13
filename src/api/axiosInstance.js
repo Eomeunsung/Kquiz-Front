@@ -39,8 +39,7 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (err)=>{
-        console.log("응답 오류 "+JSON.stringify(err));
-        if (err.response.status === 401 || err.response.status === 403) {
+        if (err.response.status === 401 ) {
             localStorage.removeItem("token");
             localStorage.removeItem("name");
             localStorage.removeItem("email");
@@ -49,7 +48,6 @@ axiosInstance.interceptors.response.use(
             alert("권한이 없습니다.")
         }
 
-        throw err
     }
 )
 

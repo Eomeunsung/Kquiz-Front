@@ -94,6 +94,7 @@
     padding-left: 0;
     list-style: none;
     margin: 0;
+    border: 2px solid transparent;
 }
 
 .choice-card {
@@ -108,6 +109,18 @@
     user-select: none;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: background-color 0.3s ease;
+}
+
+.choice-card.correct-choice {
+    background-color: #6f42c1; /* 밝은 파랑 */
+    color: black;
+    border: 2px solid #1b5e20;
+    font-weight: bold;
+}
+
+.choice-card.correct-choice:hover {
+    background-color: #2e7d32;
+    transform: none;
 }
 
 .choice-card:hover {
@@ -174,3 +187,4 @@
 .start-button:hover {
     background-color: #45a049;
 }
+
