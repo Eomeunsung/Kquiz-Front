@@ -5,16 +5,18 @@ const axiosInstance = axios.create({
     headers:{'Content-Type':'application/json'},
 });
 
-const refreshToken = (token) =>{
+const refreshToken = async (token) =>{
 
     try{
-        const res = axios.post(`${process.env.REACT_APP_URL}/refreshToken`,{token},{
+        const res = await axios.post(`${process.env.REACT_APP_URL}/refreshToken`,{token},{
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer "+localStorage.getItem("token"),
             }
         })
-        console.log("리프레쉬 토큰 "+res)
+        if(res.data.code==="T200"){
+            localStorage.setItem("token",res.data.data)
+        }
     }catch (err){
         console.log(err);
     }
@@ -35,7 +37,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     (response)=>{
-        console.log("응답 "+JSON.stringify(response));
         return response;
     },
     (err)=>{
