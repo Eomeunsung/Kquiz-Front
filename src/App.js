@@ -14,6 +14,7 @@ import GamePlay from "./component/gamePlay/GamePlay";
 import SignUp from "./component/user/SignUp";
 import SignIn from "./component/user/SignIn";
 import Myprofile from "./component/user/Myprofile";
+import AdminQuizList from "./component/admin/AdminQuizList";
 function App() {
   return (
     <div className="App">
@@ -33,6 +34,7 @@ function App() {
                 <Route path="/signUp" element={<SignUp></SignUp>} />
                 <Route path="/signIn" element={<SignIn></SignIn>} />
                 <Route path="/myProfile" element={<Myprofile></Myprofile>}/>
+                <Route path="/admin/list" element={<AdminQuizList></AdminQuizList>}/>
             </Routes>
         </div>
 
