@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import GameCreateModal from "../gamePlay/GameCreateModal";
 import {useNavigate} from "react-router-dom";
-import {quizList, quizDelete} from "./../../api/admin/adminApi"
+import {quizList, quizDelete} from "../../api/admin/AdminApi"
 function AdminQuizList(props) {
     let navigate = useNavigate();
     const [quizzes, setQuizzes] = useState([]);

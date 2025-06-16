@@ -15,6 +15,8 @@ import SignUp from "./component/user/SignUp";
 import SignIn from "./component/user/SignIn";
 import Myprofile from "./component/user/Myprofile";
 import AdminQuizList from "./component/admin/AdminQuizList";
+import AdminDashboard from "./component/admin/AdminDashboard";
+import AdminUserList from "./component/admin/AdminUserList";
 function App() {
   return (
     <div className="App">
@@ -34,7 +36,9 @@ function App() {
                 <Route path="/signUp" element={<SignUp></SignUp>} />
                 <Route path="/signIn" element={<SignIn></SignIn>} />
                 <Route path="/myProfile" element={<Myprofile></Myprofile>}/>
-                <Route path="/admin/list" element={<AdminQuizList></AdminQuizList>}/>
+                <Route path="/admin/quiz/list" element={<AdminQuizList></AdminQuizList>}/>
+                <Route path="/admin/user/list" element={<AdminUserList></AdminUserList>}/>
+                <Route path="/admin/dashboard" element={<AdminDashboard></AdminDashboard>}/>
             </Routes>
         </div>
 

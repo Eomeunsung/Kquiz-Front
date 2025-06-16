@@ -1,0 +1,15 @@
+.admin-layout {
+    display: flex;
+}
+
+.container {
+    /*padding: 40px;*/
+    /*max-width: 800px;*/
+    /*margin: 0 auto;*/
+    /* ✅ 완전한 가운데 정렬 (화면 정중앙) */
+    /*position: absolute;*/
+    /*top: 15%;*/
+    /*left: 25%;*/
+    /*transform: translate(-50%, -50%);*/
+    /*font-family: 'Segoe UI', sans-serif;*/
+}

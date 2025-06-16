@@ -29,3 +29,18 @@ export const quizDelete = async (id) =>{
         throw err;
     }
 }
+
+export const userList = async () =>{
+    try{
+        const res = await axiosInstance.get(`${process.env.REACT_APP_URL}/admin/user/list`,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+        console.log(err);
+        throw err;
+    }
+}

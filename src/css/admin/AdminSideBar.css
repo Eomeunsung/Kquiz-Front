@@ -1,0 +1,54 @@
+.admin-sidebar {
+    width: 220px;
+    background-color: #f1f3f5;
+    min-height: 100vh; /* 콘텐츠 길이에 따라 높이 유연하게 */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    position: relative; /* ✅ fixed 제거해서 스크롤 시 따라 내려오도록 */
+    flex-shrink: 0; /* 좌측 레이아웃 줄어들지 않게 */
+}
+
+
+.sidebar-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 12px;
+}
+
+.sidebar-menu li a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sidebar-menu li a:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar.css */
+
+.sidebar-button {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    color: #4b5563; /* Tailwind 기준 text-gray-700 */
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.sidebar-button:hover {
+    background-color: #f3f4f6; /* Tailwind 기준 bg-gray-100 */
+}
