@@ -31,6 +31,7 @@ axiosInstance.interceptors.request.use(
             }
             return config;
     },(error)=>{
+        console.log("에러 "+error)
         return Promise.reject(error); //에러 반환
     }
 )
@@ -40,6 +41,7 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (err)=>{
+        console.log("에러 "+JSON.stringify(err))
         if (err.response.status === 401 ) {
             localStorage.removeItem("token");
             localStorage.removeItem("name");
@@ -48,7 +50,7 @@ axiosInstance.interceptors.response.use(
         }else if (err.response.status === 403) {
             alert("권한이 없습니다.")
         }
-
+        throw err;
     }
 )
 

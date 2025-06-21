@@ -36,9 +36,10 @@ function App() {
                 <Route path="/signUp" element={<SignUp></SignUp>} />
                 <Route path="/signIn" element={<SignIn></SignIn>} />
                 <Route path="/myProfile" element={<Myprofile></Myprofile>}/>
-                <Route path="/admin/quiz/list" element={<AdminQuizList></AdminQuizList>}/>
-                <Route path="/admin/user/list" element={<AdminUserList></AdminUserList>}/>
-                <Route path="/admin/dashboard" element={<AdminDashboard></AdminDashboard>}/>
+                <Route path="/admin" element={<AdminDashboard></AdminDashboard>}>
+                    <Route path="quiz/list" element={<AdminQuizList></AdminQuizList>}/>
+                    <Route path="user/list" element={<AdminUserList></AdminUserList>}/>
+                </Route>
             </Routes>
         </div>
 

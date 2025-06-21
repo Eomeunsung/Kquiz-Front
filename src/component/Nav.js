@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "./../css/Nav.css"
 import {useNavigate} from "react-router-dom";
 import QuizCreateModal from "./quiz/QuizCreateModal";
-import {roleGet} from "./../api/role/RoleApi"
+import {userRoleGet} from "./../api/role/RoleApi"
 
 function Nav(props) {
     let navigate = useNavigate();
@@ -26,12 +26,12 @@ function Nav(props) {
     }
 
     const hnadleMyprofile = () => {
-        roleGet()
+        userRoleGet()
             .then((res)=>{
                 console.log(res.data.roles)
                 const roles =res.data.roles.includes("ROLE_ADMIN")
                 if(roles){
-                    navigate("/admin/dashboard")
+                    navigate("/admin")
                 }else{
                     navigate("/myProfile")
                 }

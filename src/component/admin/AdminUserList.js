@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {userList} from "./../../api/admin/AdminApi"
 import "../../css/admin/AdminUserList.css"
+import AdminUserDetail from "./AdminUserDetail";
 function AdminUserList(props) {
     const [users, setUsers] = useState([]);
     const [detailFlag, setDetailFlag] = useState(false);
+    const [userId, setUserId] = useState(0);
 
     useEffect(() => {
         userList()
@@ -14,6 +16,15 @@ function AdminUserList(props) {
 
             })
     },[])
+
+    const handleDetail = (id) => {
+        setUserId(id)
+        setDetailFlag(!detailFlag);
+    }
+
+    const handleDetailClose = () => {
+        setDetailFlag(false);
+    }
     return (
         <div>
             <h2 className="admin-title">👨‍💼 관리자 - 회원 관리</h2>
@@ -22,7 +33,9 @@ function AdminUserList(props) {
                     <ul className="user-list">
                         {users.map((user) => (
                             <li key={user.id} className="user-item" >
-                                <div className="user-summary">
+                                <div className="user-summary" onClick={()=>{
+                                    handleDetail(user.id);
+                                }}>
                                     <span>📧 {user.email}</span>
                                     <span>가입일: {user.localDate || '알 수 없음'}</span>
                                     {user.roles ? (
@@ -39,8 +52,7 @@ function AdminUserList(props) {
                         ))}
                     </ul>
                 ) : (
-                    // <DetailUser data={userId} close={handleCloseDetail}></DetailUser>
-                    <></>
+                    <AdminUserDetail id={userId} close={handleDetailClose}></AdminUserDetail>
                 )
             }
         </div>

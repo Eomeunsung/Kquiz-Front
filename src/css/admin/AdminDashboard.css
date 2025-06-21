@@ -1,15 +1,14 @@
+/* AdminDashboard.css */
+
 .admin-layout {
     display: flex;
+    height: 100vh;
+    background-color: #f0f2f5;
 }
 
-.container {
-    /*padding: 40px;*/
-    /*max-width: 800px;*/
-    /*margin: 0 auto;*/
-    /* ✅ 완전한 가운데 정렬 (화면 정중앙) */
-    /*position: absolute;*/
-    /*top: 15%;*/
-    /*left: 25%;*/
-    /*transform: translate(-50%, -50%);*/
-    /*font-family: 'Segoe UI', sans-serif;*/
+.admin-layout .container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fff;
 }
