@@ -11,12 +11,14 @@ function AdminUserDetail({id, close}) {
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
     const [checkRoles, setCheckRoles] = useState([]);
+    const [checkEnabled, setCheckEnabled] = useState(true);
 
 
     useEffect(() => {
         userGet(id)
             .then((res)=>{
                 setUserInfo(res.data)
+                setCheckEnabled(res.data.enabled)
             })
             .catch((err)=>{
 
@@ -53,10 +55,12 @@ function AdminUserDetail({id, close}) {
     const handleUserSave = ()=>{
         // userInfo.id,
         // editEmail ? editEmail : userInfo.email,
+        console.log("계정 활성화 "+checkEnabled)
         const data= {
             userId: userInfo.id,
             email: editEmail ? editEmail : userInfo.email,
             nickName: editName ? editName : userInfo.nickName,
+            enabled: checkEnabled,
             roles: checkRoles
         }
         userUpdate(data)
@@ -100,6 +104,11 @@ function AdminUserDetail({id, close}) {
                                     className="editable-input"
                                 />
                             </div>
+                            <div>
+                                <h4 className="section-subtitle">📌 계정 활성화(체크 시 활성화)</h4>
+                                <input type="checkbox" checked={checkEnabled} onChange={(e) => setCheckEnabled(e.target.checked)}/>
+
+                            </div>
 
                             <div className="form-section">
                                 <h4 className="section-subtitle">📌 권한 선택</h4>
@@ -137,6 +146,7 @@ function AdminUserDetail({id, close}) {
                                     <p><strong>이름:</strong> {userInfo.nickName}</p>
                                     <p><strong>이메일:</strong> {userInfo.email}</p>
                                     <p><strong>가입일:</strong> {userInfo.createAt}</p>
+                                    <p><strong>계정 상태:</strong> {userInfo.enabled ? "활성화": "정지 상태"}</p>
                                     <p><strong>권한 목록:</strong></p>
                                     <div className="role-badge-group">
                                         {userInfo.roles?.map((r, idx) => (
