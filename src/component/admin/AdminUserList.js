@@ -30,27 +30,23 @@ function AdminUserList(props) {
             <h2 className="admin-title">👨‍💼 관리자 - 회원 관리</h2>
             {
                 !detailFlag ? (
-                    <ul className="user-list">
+                    <div className="user-list">
                         {users.map((user) => (
-                            <li key={user.id} className="user-item" >
-                                <div className="user-summary" onClick={()=>{
-                                    handleDetail(user.id);
-                                }}>
+                            <div key={user.id} className="user-item" onClick={() => handleDetail(user.id)}>
+                                <div className="user-summary">
                                     <span>📧 {user.email}</span>
-                                    <span>가입일: {user.localDate || '알 수 없음'}</span>
-                                    {user.roles ? (
-                                        <span>
-                                            {user.roles.map((role, index) => (
-                                            <span key={index} className="user-role">{role}</span>
-                                            ))}
-                                        </span>
-                                    ) : (
-                                        <></>
-                                    )}
+                                    <span>가입일: {user.createAt || '알 수 없음'}</span>
                                 </div>
-                            </li>
+                                {user.roles && user.roles.length > 0 && (
+                                    <div className="user-roles">
+                                        {user.roles.map((role, index) => (
+                                            <span key={index} className="user-role">{role}</span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 ) : (
                     <AdminUserDetail id={userId} close={handleDetailClose}></AdminUserDetail>
                 )

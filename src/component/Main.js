@@ -20,44 +20,20 @@ function Main(props) {
             });
     }, []);
 
-    const handleQuizClick = (quizId) => {
-        navigate("/quiz", {state: quizId});
-    }
 
     const previewQuiz = (quizId) => {
         navigate("/preview", {state: quizId});
-    }
-
-    const handleGameCreate = (quizId) => {
-        navigate("/lobby", {state: quizId});
     }
 
     const toggleModal = () => {
         setModalFlag(!modalFlag);
     };
 
-    const handleModal = () =>{
-        setModalFlag(!modalFlag);
-    }
     const openModalQuizId = (id) => {
         setQuizId(id);
         setModalFlag(true);
     };
 
-    const handleDelete = (id) => {
-        quizDelete(id)
-            .then((res)=>{
-                getQuizList()
-                    .then((res)=>{
-                        setQuizzes(res.data)
-                    })
-                    .catch((err)=>{
-
-                    });
-            }).catch((err)=>{
-
-        })
-    }
     return (
         <div className="main-container">
             {!modalFlag ? (
@@ -73,6 +49,9 @@ function Main(props) {
                                         <h3 className="quiz-title">{quiz.title}</h3>
                                         <p className="quiz-date">
                                             작성일: {new Date(quiz.updateAt).toLocaleDateString()}
+                                        </p>
+                                        <p className="quiz-date">
+                                            만든이: {quiz.nickName}
                                         </p>
                                         {quiz.thumbnail && (
                                             <img

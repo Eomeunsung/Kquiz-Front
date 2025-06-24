@@ -63,7 +63,7 @@ function ListPage(props) {
                                         <div className="quiz-info" onClick={() => previewQuiz(quiz.id)}>
                                             <h3 className="quiz-title">{quiz.title}</h3>
                                             <p className="quiz-date">작성일: {new Date(quiz.updateAt).toLocaleDateString()}</p>
-                                            <p className="quiz-date">민든이 </p>
+                                            <p className="quiz-date">민든이: {quiz.nickName}</p>
                                             {/*{quiz.thumbnail && (*/}
                                             {/*    <img*/}
                                             {/*        className="quiz-thumbnail"*/}

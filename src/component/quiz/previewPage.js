@@ -21,7 +21,7 @@ function PreviewPage() {
             });
     }, [quizId]);
 
-    if (!quiz) return <div className="loading">퀴즈 정보를 불러오는 중...</div>;
+    if (!quiz) return <div className="loading"></div>;
 
     const currentQuestion = quiz.questions[currentIndex];
 
