@@ -23,6 +23,9 @@ function AdminQuizList(props) {
         navigate("/preview", {state: quizId});
     }
 
+    const quizUpdate = (data) => {
+        navigate("/quiz", {state: data});
+    }
 
     const handleModal = () =>{
         setModalFlag(!modalFlag);
@@ -74,8 +77,18 @@ function AdminQuizList(props) {
                                             openModalQuizId(quiz.id)
                                         }}>방 만들기
                                         </button>
-                                        <button className="preview-button" onClick={()=>{previewQuiz(quiz.id)}}>미리 보기</button>
-                                        <button className="preview-button" onClick={()=>{handleDelete(quiz.id)}}>삭제</button>
+                                        <button className="preview-button" onClick={() => {
+                                            previewQuiz(quiz.id)
+                                        }}>미리 보기
+                                        </button>
+                                        <button className="preview-button" onClick={() => {
+                                            quizUpdate(quiz.id)
+                                        }}>수정
+                                        </button>
+                                        <button className="preview-button" onClick={() => {
+                                            handleDelete(quiz.id)
+                                        }}>삭제
+                                        </button>
                                     </li>
                                 ))}
                             </ul>
