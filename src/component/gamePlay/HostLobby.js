@@ -103,7 +103,7 @@ function HostLobby(props) {
         console.log("강퇴할 id "+playerId);
         if (stompClient.current && stompClient.current.connected) {
             stompClient.current.publish({
-                destination: "/app/kick",
+                destination: `/app/kick/${data.gameId}`,
                 body: JSON.stringify({
                     gameId: data.gameId,
                     userId: playerId,
