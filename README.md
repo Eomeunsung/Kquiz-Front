@@ -1,4 +1,32 @@
----
+# 키득퀴즈(Kquiz)
+
+개인 프로젝트로 개발한 **React + Spring Boot** 기반 블로그 웹 애플리케이션 입니다.
+실시간으로 여러 사용자가 함께 참여하여 퀴즈를 풀 수 있도록한 웹 기반 퀴즈 게임 플랫폼 입니다.
+"Kahoot"을 벤치마킹 하여 개발 하였습니다.
+
+## 주요 기능 
+- **실시간 퀴즈 진행(WebSocket 기반)**
+- **퀴즈 생성 및 수정 기능 (이미지 포함)**
+- **실시간 참가자 입장 및 퇴장 관리**
+- **게임 종료 후 순위 확인**
+- **사용자 인증 / 인가 (JWT 기반)** 로그인 / 회원가입 / 권한 관리
+- **REST API 설계 및 구현**
+
+## 기술 스택
+- **Frontend**: React, React Router, Axios
+- **Backend**: Spring Boot, Spring Data JPA, Spring Security, JWT WebSocket, MariaDB, Redis
+- **Version Control**: Git, GitHub
+
+## 프로젝트 후기
+처음으로 프론트엔드와 백엔드 전반을 혼자서 개발한 프로젝트입니다.
+백엔드는 Spring Boot 기반으로 직접 REST API 및 WebSocket 기반 채팅 기능을 설계하고 구현하였고,
+CSS는 많이 어려움을 겪어 AI를 활용하여 개발 하였습니다.
+
+
+
+
+
+
 
 ## 프로젝트 결과물
 <img width="1404" height="807" alt="메인화면" src="https://github.com/user-attachments/assets/4bbca513-707c-49dc-adac-1ffd46ecd0b4" />
@@ -55,4 +83,5 @@
 
 - **참여자/호스트 로비 화면**
 ---
+
 
