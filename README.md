@@ -22,13 +22,13 @@
 다만 서술형 문제 구현은 아직 기술과 지식이 부족한 탓에 앞으로 더 개선해 나가야 할 것 같았습니다. 또한 CSS 및 디자인 역량이 아직 많이 부족해 AI를 활용하여 보완하였습니다.
 
 ## ERD다이어그램
-<img width="1161" height="543" alt="ER다이어그램" src="https://github.com/user-attachments/assets/855dff02-ee6e-46a0-9a70-6f23e7440f65" />
+<img width="1161" height="543" alt="ERD" src="https://github.com/user-attachments/assets/855dff02-ee6e-46a0-9a70-6f23e7440f65" />
 
 
 ## 흐름도
 <table>
   <tr>
-    <td><img width="448" height="663" alt="퀴즈 생성" src="https://github.com/user-attachments/assets/8c7419fa-5dbd-47d0-ab3d-8bd0cf377674" /></td>
+    <td><img width="448" height="663" alt="quiz create" src="https://github.com/user-attachments/assets/8c7419fa-5dbd-47d0-ab3d-8bd0cf377674" /></td>
     <td><img width="335" height="585" alt="스크린샷 2025-07-23 13 29 40" src="https://github.com/user-attachments/assets/c4b038e0-1cfb-4676-a365-07e188ed3832" /></td>
   </tr>
   <tr>
@@ -38,7 +38,7 @@
 
   <tr>
     <td><img width="392" height="629" alt="스크린샷 2025-07-23 13 25 31" src="https://github.com/user-attachments/assets/67dfd1ad-45aa-4f4a-b3d0-50c81f991320" /></td>
-    <td><img width="448" height="712" alt="게임 생성" src="https://github.com/user-attachments/assets/74633bfd-fd83-44bf-b8af-fdda7b99bdbe" /></td>
+    <td><img width="448" height="712" alt="game create" src="https://github.com/user-attachments/assets/74633bfd-fd83-44bf-b8af-fdda7b99bdbe" /></td>
   </tr>
   <tr>
     <td align="center">Quiz 삭제(아직 반영 안함)</td>
@@ -48,61 +48,62 @@
 </table>
 
 ## 프로젝트 결과물
-<img width="1404" height="807" alt="메인화면" src="https://github.com/user-attachments/assets/4bbca513-707c-49dc-adac-1ffd46ecd0b4" />
+<img width="1404" height="807" alt="main" src="https://github.com/user-attachments/assets/4bbca513-707c-49dc-adac-1ffd46ecd0b4" />
 
 - **메인화면**
 ---
   
-<img width="1404" height="807" alt="로그인" src="https://github.com/user-attachments/assets/c66a5589-c96d-4a51-a7c4-89f37e2c3f6b" />
+<img width="1404" height="807" alt="signUp" src="https://github.com/user-attachments/assets/c66a5589-c96d-4a51-a7c4-89f37e2c3f6b" />
 
 - **회원가입 화면**
 ---
 
-<img width="1404" height="807" alt="로그인" src="https://github.com/user-attachments/assets/90a24e79-355f-4b8b-b9c3-70c92f3467bb" />
+<img width="1404" height="807" alt="signIn" src="https://github.com/user-attachments/assets/90a24e79-355f-4b8b-b9c3-70c92f3467bb" />
 
 - **로그인 화면**
 ---
 
-<img width="1404" height="807" alt="퀴즈 생성 화면" src="https://github.com/user-attachments/assets/e8f849de-144a-4f84-9b3d-f261c5834d6b" />
+<img width="1404" height="807" alt="quiz create" src="https://github.com/user-attachments/assets/e8f849de-144a-4f84-9b3d-f261c5834d6b" />
 
 - **퀴즈 생성 화면**
 ---
 
-<img width="1404" height="807" alt="퀴즈 제작 화면" src="https://github.com/user-attachments/assets/b3b78e4f-b32f-4cd1-a79b-80c166396a5b" />
+<img width="1404" height="807" alt="quiz create2" src="https://github.com/user-attachments/assets/b3b78e4f-b32f-4cd1-a79b-80c166396a5b" />
 
 - **퀴즈 제작 화면(AI 힌트 사용)**
 ---
 
-<img width="1404" height="807" alt="퀴즈 제작 화면2" src="https://github.com/user-attachments/assets/36d90d86-43f2-4d5a-9572-e26b1f15f2d5" />
+<img width="1404" height="807" alt="quiz create3" src="https://github.com/user-attachments/assets/36d90d86-43f2-4d5a-9572-e26b1f15f2d5" />
 
 
 - **퀴즈 제작 화면2**
 ---
 
-<img width="1404" height="807" alt="퀴즈 생성 후 메인 화면" src="https://github.com/user-attachments/assets/5544d4f4-127c-43f2-96cc-a87535ca1a94" />
+<img width="1404" height="807" alt="quiz create main" src="https://github.com/user-attachments/assets/5544d4f4-127c-43f2-96cc-a87535ca1a94" />
 
 - **개인 채팅 화면**
 ---
 
-<img width="1404" height="807" alt="게임 생성 화면" src="https://github.com/user-attachments/assets/3aba3557-e23c-41bd-b184-7799363c2abf" />
+<img width="1404" height="807" alt="game create" src="https://github.com/user-attachments/assets/3aba3557-e23c-41bd-b184-7799363c2abf" />
 
 - **게임 생성 화면**
 ---
 
-<img width="1404" height="807" alt="로비 화면" src="https://github.com/user-attachments/assets/491a9122-2f0a-494b-b128-0ff42ac689cb" />
+<img width="1404" height="807" alt="lobby" src="https://github.com/user-attachments/assets/491a9122-2f0a-494b-b128-0ff42ac689cb" />
 
 - **호스트 로비 화면**
 ---
 
-<img width="1404" height="807" alt="참여자 게임 참여 화면" src="https://github.com/user-attachments/assets/491a9122-2f0a-494b-b128-0ff42ac689cb" />
+<img width="1404" height="807" alt="lobby2" src="https://github.com/user-attachments/assets/491a9122-2f0a-494b-b128-0ff42ac689cb" />
 
 - **참여자 게임 참여 화면**
 ---
 
-<img width="1404" height="807" alt="참여자/호스트 로비 화면" src="https://github.com/user-attachments/assets/09ac8ff7-4513-48fa-b98d-8e7362203774" />
+<img width="1404" height="807" alt="lobby3" src="https://github.com/user-attachments/assets/09ac8ff7-4513-48fa-b98d-8e7362203774" />
 
 - **참여자/호스트 로비 화면**
 ---
+
 
 
 
