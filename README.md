@@ -22,11 +22,35 @@
 백엔드는 Spring Boot 기반으로 직접 REST API 및 WebSocket 기반 채팅 기능을 설계하고 구현하였고,
 CSS는 많이 어려움을 겪어 AI를 활용하여 개발 하였습니다.
 
+## 프로젝트 후기
+개인 역량을 키우고 부족했던 부분을 보완하기 위해 졸업작품을 혼자서 다시 프로젝트를 설계하고 개발하게 되었습니다. 혼자서 모든 과정을 책임지며 시행착오도 많았지만, 덕분에 많은 것을 배우고 성장할 수 있었던 것 같습니다.
+다만 서술형 문제 구현은 아직 기술과 지식이 부족한 탓에 앞으로 더 개선해 나가야 할 것 같았습니다.
+
+## ERD다이어그램
+<img width="1161" height="543" alt="ER 다이어그램" src="https://github.com/user-attachments/assets/ac2fe872-1db4-4844-b0c4-628bdd4929e2" />
 
 
+## 흐름도
+<table>
+  <tr>
+    <td><img width="448" height="663" alt="퀴즈 생성" src="https://github.com/user-attachments/assets/8c7419fa-5dbd-47d0-ab3d-8bd0cf377674" /></td>
+    <td><img width="335" height="585" alt="스크린샷 2025-07-23 13 29 40" src="https://github.com/user-attachments/assets/c4b038e0-1cfb-4676-a365-07e188ed3832" /></td>
+  </tr>
+  <tr>
+    <td align="center">Quiz 생성</td>
+    <td align="center">Quiz 수정(아직 반영 안함)</td>
+  </tr>
 
+  <tr>
+    <td><img width="392" height="629" alt="스크린샷 2025-07-23 13 25 31" src="https://github.com/user-attachments/assets/67dfd1ad-45aa-4f4a-b3d0-50c81f991320" /></td>
+    <td><img width="448" height="712" alt="게임 생성" src="https://github.com/user-attachments/assets/74633bfd-fd83-44bf-b8af-fdda7b99bdbe" /></td>
+  </tr>
+  <tr>
+    <td align="center">Quiz 삭제(아직 반영 안함)</td>
+    <td align="center">게임 생성</td>
+  </tr>
 
-
+</table>
 
 ## 프로젝트 결과물
 <img width="1404" height="807" alt="메인화면" src="https://github.com/user-attachments/assets/4bbca513-707c-49dc-adac-1ffd46ecd0b4" />
@@ -83,5 +107,6 @@ CSS는 많이 어려움을 겪어 AI를 활용하여 개발 하였습니다.
 
 - **참여자/호스트 로비 화면**
 ---
+
 
 
