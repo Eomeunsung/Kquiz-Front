@@ -22,7 +22,7 @@
 다만 서술형 문제 구현은 아직 기술과 지식이 부족한 탓에 앞으로 더 개선해 나가야 할 것 같았습니다. 또한 CSS 및 디자인 역량이 아직 많이 부족해 AI를 활용하여 보완하였습니다.
 
 ## ERD다이어그램
-<img width="1161" height="543" alt="ER 다이어그램" src="https://github.com/user-attachments/assets/ac2fe872-1db4-4844-b0c4-628bdd4929e2" />
+<img width="1161" height="543" alt="ER다이어그램" src="https://github.com/user-attachments/assets/855dff02-ee6e-46a0-9a70-6f23e7440f65" />
 
 
 ## 흐름도
@@ -103,6 +103,7 @@
 
 - **참여자/호스트 로비 화면**
 ---
+
 
 
 
