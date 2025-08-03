@@ -20,8 +20,15 @@ function GamePlayHost(props) {
 
     const [selectedChoiceId, setSelectedChoiceId] = useState([]); //선택지 id
     const [hasSubmitted, setHasSubmitted] = useState(false); // 중복 제출 방지
+    const [score, setScore] = useState(0);
 
     const [rank, setRank] = useState(null);
+    const headerinit = {
+        userId: localStorage.getItem("userId"),
+        roomId: location.state.gameId,
+        name: localStorage.getItem("name"),
+        type:"GAME"
+    }
     useEffect(() => {
         if (!location.state || !location.state.gameId) {
             // 렌더링 전에 조건 처리
@@ -39,17 +46,14 @@ function GamePlayHost(props) {
         stompClient.current = new Client({
             webSocketFactory: () => socket,
             connectHeaders: {
-                userId: localStorage.getItem("userId"),
-                roomId: location.state.gameId,
-                name: localStorage.getItem("name"),
-                type:"GAME"
+                headerinit
             },
 
             onConnect: () => {
                 console.log("연결 완료 - 전체 문제 수신 대기");
                 // 전체 문제 목록 구독
                 stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
-                    console.log("구독 성공 "+JSON.stringify(message.body));
+                    console.log("게임 끝 받은 점수 "+JSON.stringify(message.body));
                     const data = JSON.parse(message.body);
                     if(data.type==="SCORE") {
                         setRank(data.scores);
@@ -57,6 +61,14 @@ function GamePlayHost(props) {
                     }
                     // setMessage(data.content);
                 });
+
+                stompClient.current.subscribe(`/topic/game/${headerinit.userId}`, (message) => {
+                    console.log("구독 성공 "+JSON.stringify(message.body));
+                    const data = JSON.parse(message.body);
+                    setScore(data);
+                    // setMessage(data.content);
+                });
+
                 stompClient.current.subscribe(`/topic/quiz/${location.state.gameId}`, (message) => {
                     // console.log("quiz가져오기 성공 "+message.body);
                     const quizData = JSON.parse(message.body);
@@ -91,33 +103,6 @@ function GamePlayHost(props) {
     }, [location.state]);
 
 
-
-    //초이스 보내기
-    const handleChoiceId = (id) =>{
-        setHasSubmitted(true);
-        console.log("초이스 "+question.choices)
-
-        const selectedChoice = question.choices.find((choice) => choice.id === id);
-        if(selectedChoice){
-            const isCorrect = selectedChoice.isCorrect;
-            console.log("선택한 선택지 ID:", id);
-            console.log("정답 여부:", isCorrect);
-            console.log("배점 "+question.option.score)
-            if(isCorrect){
-                if (stompClient.current && stompClient.current.connected) {
-                    stompClient.current.publish({
-                        destination: `/app/game/${location.state.gameId}`,
-                        body: JSON.stringify({
-                            score: question.option.score,
-                            userId: localStorage.getItem("userId"),
-                            type:"SCORE"
-                        }),
-                    });
-                }
-            }
-        }
-    }
-
     //includes 이미 ID가 배열에 있을 경우 filter로 그 ID 해제 아니면 추가
     const toggleChoice = (choiceId) => {
         if(hasSubmitted){return}
@@ -127,6 +112,7 @@ function GamePlayHost(props) {
         );
     }
 
+    //초이스 보내기
     const handeChoiceSubmit = (choice) => {
         setHasSubmitted(true)
         const isCorrect = question.choices.filter(choice => choice.isCorrect).map(choice => choice.id);
@@ -173,6 +159,7 @@ function GamePlayHost(props) {
                         <h2>{question.title}</h2>
                         <div className="game-header">
                             <div className="timer-box">{remainingTime}초</div>
+                            <div className="score-box">점수 {score}</div>
                         </div>
                         <div
                             className="question-content"

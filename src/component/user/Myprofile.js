@@ -43,7 +43,7 @@ function Myprofile(props) {
         };
         titleUpdate(data)
             .then((res)=>{
-                console.log("타이틀 업데이트 성공 "+res)
+                console.log("타이틀 업데이트 성공 "+JSON.stringify(res))
                 const updateList = quizList.map(quiz =>
                     quiz.id === titleId ? { ...quiz, title: title } : quiz
                 );

@@ -54,21 +54,41 @@ body {
 
 .game-header {
     display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #ffffff;
+    border-bottom: 2px solid #e0e0e0;
 }
 
 .timer-box {
-    background-color: var(--accent);
-    color: #fff;
-    font-weight: bold;
-    padding: 12px 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 40px;
     font-size: 20px;
-    border-radius: 30px;
-    box-shadow: 0 0 8px var(--accent);
-    text-align: center;
-    min-width: 100px;
+    font-weight: 600;
+    color: #2c3e50;
+    background-color: #f0f0f0;
+    border-radius: 8px;
 }
+
+.score-box {
+    padding: 6px 14px;
+    background-color: #1f2937;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+.score-box:hover {
+    transform: scale(1.05);
+}
+
 
 .question-content {
     background-color: var(--bg-box);

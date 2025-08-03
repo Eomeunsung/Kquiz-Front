@@ -13,7 +13,10 @@ function Main(props) {
     useEffect(() => {
         getQuizList()
             .then((res)=>{
-                setQuizzes(res.data)
+                if(res.data){
+                    setQuizzes(res.data)
+                }
+
             })
             .catch((err)=>{
 

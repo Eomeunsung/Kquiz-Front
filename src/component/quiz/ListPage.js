@@ -13,7 +13,10 @@ function ListPage(props) {
     useEffect(() => {
         getQuizList()
             .then((res)=>{
-                setQuizzes(res.data)
+                if(res.data){
+                    setQuizzes(res.data)
+                }
+
             })
             .catch((err)=>{
 
@@ -34,27 +37,13 @@ function ListPage(props) {
         setModalFlag(true);
     };
 
-    const handleDelete = (id) => {
-        quizDelete(id)
-            .then((res)=>{
-                getQuizList()
-                    .then((res)=>{
-                        setQuizzes(res.data)
-                    })
-                    .catch((err)=>{
-
-                    });
-            }).catch((err)=>{
-
-        })
-    }
     return (
         <div>
             {
                 !modalFlag ? (
                     <div className="list-page">
                         <h2 className="list-title">퀴즈 목록</h2>
-                        {quizzes.length === 0 ? (
+                        {quizzes.length === 0 || !quizzes ? (
                             <p className="no-quiz">퀴즈가 없습니다.</p>
                         ) : (
                             <ul className="quiz-list">

@@ -40,7 +40,10 @@ function AdminQuizList(props) {
             .then((res)=>{
                 quizList()
                     .then((res)=>{
-                        setQuizzes(res.data)
+                        setQuizzes([]); // 상태 초기화
+                        if(res.data){
+                            setQuizzes(res.data)
+                        }
                     })
                     .catch((err)=>{
 
@@ -55,7 +58,7 @@ function AdminQuizList(props) {
                 !modalFlag ? (
                     <div className="list-page">
                         <h2 className="list-title">퀴즈 목록</h2>
-                        {quizzes.length === 0 ? (
+                        {quizzes.length === 0 || !quizzes ? (
                             <p className="no-quiz">퀴즈가 없습니다.</p>
                         ) : (
                             <ul className="quiz-list">
