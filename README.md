@@ -73,9 +73,10 @@
 - **퀴즈 제작 화면(AI 힌트 사용)**
 ---
 
-<img width="1404" height="807" alt="퀴즈 제작 화면2" src="https://github.com/user-attachments/assets/3ca110a4-7614-4c4f-bbb3-e49277e8ea46" />
+<img width="1404" height="807" alt="퀴즈 제작 화면2" src="https://github.com/user-attachments/assets/36d90d86-43f2-4d5a-9572-e26b1f15f2d5" />
 
-- **퀴즈 제작 화면**
+
+- **퀴즈 제작 화면2**
 ---
 
 <img width="1404" height="807" alt="퀴즈 생성 후 메인 화면" src="https://github.com/user-attachments/assets/5544d4f4-127c-43f2-96cc-a87535ca1a94" />
@@ -102,6 +103,7 @@
 
 - **참여자/호스트 로비 화면**
 ---
+
 
 
 
