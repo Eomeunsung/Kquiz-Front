@@ -44,14 +44,6 @@ function Lobby(props) {
                 stompClient.current.subscribe(`/topic/chat/${gameId}`, (message) => {
                     if (message.body) {
                         const body = JSON.parse(message.body);
-                        // ✅ 바로 받은 body.userId로 강퇴 구독 실행
-                        stompClient.current.subscribe(`/topic/kick/${body.userId}`, () => {
-                            alert("호스트에 의해 강퇴당했습니다.");
-                            console.log("강퇴 당함")
-                            stompClient.current.deactivate();
-                            navigate("/");
-                        });
-
                         if(body.type === "KICK"){
                             const rawList = body.userList;
                             setPlayers(Object.values(rawList));  // 플레이어 배열 업데이트
@@ -89,6 +81,20 @@ function Lobby(props) {
             stompClient.current.deactivate();
         };
     },[gameId])
+
+    useEffect(() => {
+        if(!gameId || !userId){
+            return;
+        }
+        const sub = stompClient.current.subscribe(`/topic/kick/${gameId}/${userId}`, (message) => {
+            console.log("연결된 킥 "+`/topic/kick/${gameId}/${userId}`)
+            alert("호스트에 의해 강퇴당했습니다.");
+            console.log("강퇴 당함")
+            stompClient.current.deactivate();
+            navigate("/");
+        })
+        return () => sub.unsubscribe();
+    }, [gameId, userId]);
 
 
     return (
