@@ -14,10 +14,12 @@ function HostLobby(props) {
     const [messages, setMessages] = useState("");
     const [role,setRole] = useState("HOST");
     console.log("호스트 로비 "+JSON.stringify(data))
+
     useEffect(() => {
         if (!data.gameId) return;
         console.log("게임 아이디 "+data.gameId)
         setQuizInfo(data.quizInfo);
+        setUserId(data.userId);
 
         const socket = new SockJS("http://localhost:8080/ws");
         stompClient.current = new Client({
@@ -26,7 +28,7 @@ function HostLobby(props) {
                 userId: userId,
                 roomId: data.gameId,
                 name: "HOST", // 호스트 이름 고정 또는 입력받기
-                type: "CHAT",
+                type: "LOBBY",
             },
             onConnect: () => {
                 console.log("웹소켓 연결됨 (호스트)");
@@ -38,8 +40,6 @@ function HostLobby(props) {
                         // console.log("📦 Parsed body:", body);
                         // console.log("호스트 이름 아이디 "+body.name+" "+body.userId);
                         // console.log("CHAT 타입 "+body.type);
-                        localStorage.setItem("name", body.name);
-                        localStorage.setItem("userId", body.userId);
                         if(body.type === "KICK"){
                             const rawList = body.userList;
                             // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
@@ -57,7 +57,6 @@ function HostLobby(props) {
                             }
 
                         }else{
-                            setUserId(body.userId);
                             const rawList = body.userList;
 
                             // 플레이어 배열을 id와 name을 포함한 객체로 업데이트

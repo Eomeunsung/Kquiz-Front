@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import "./../../css/Participation.css"
-import {participation} from "../../api/game/ParticipationApi"
+import {gameJoin} from "./../../api/game/GameApi"
+
 function Participation(props) {
     const navigate = useNavigate();
     const [gameId, setGameId] = useState('');
@@ -13,12 +14,23 @@ function Participation(props) {
             setError("이름을 입력하세요")
             return
         }
-        participation(gameId)
+        if(!gameId){
+            setError("게임 아이디를 입력하세요")
+            return
+        }
+        const data = {
+            gameId:gameId,
+            name: userName
+
+        }
+        gameJoin(data)
             .then((res)=>{
                 const data = {
                     gameId:gameId,
                     name : userName,
                 }
+                localStorage.setItem("userId", res.data)
+                localStorage.setItem("name", userName)
                 navigate("/lobby", {state: data});
             })
             .catch((err)=>{

@@ -18,6 +18,8 @@ function GameCreateModal({quizId, modalFlag}) {
                     gameId: result.data.gameId,
                     quizInfo: result.data.quizGetDto
                 };
+                localStorage.setItem("userId", result.data.userId);
+                localStorage.setItem("name", "HOST");
                 navigate("/hostLobby", {state: data});
             })
             .catch((err) => {})

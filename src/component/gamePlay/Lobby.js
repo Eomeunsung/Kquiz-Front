@@ -24,6 +24,8 @@ function Lobby(props) {
         setUserName(data.name);
         localStorage.setItem("name", data.name);
         setGameId(data.gameId);
+        setUserId(localStorage.getItem("userId"));
+        setUserName(localStorage.getItem("name"));
 
     },[])
     useEffect(() => {
@@ -36,7 +38,7 @@ function Lobby(props) {
                 userId: userId,
                 roomId: gameId,
                 name: userName,
-                type: "CHAT",
+                type: "LOBBY",
             },
             onConnect: () => {
                 console.log("연결 됨");
@@ -55,17 +57,20 @@ function Lobby(props) {
                                 navigate("/gamePlay", { state: data });
                             }
                         }else{
-                            console.log("📦 Parsed body:", body);
-                            setUserId(body.userId);
+                            console.log("📦 Parsed body:", body.userList);
                             const rawList = body.userList;
                             setPlayers(Object.values(rawList));
                             setMessages(body.content);
-                            localStorage.setItem("name", body.name);
-                            localStorage.setItem("userId", body.userId);
-                            console.log("user아이디 " + body.userId);
                         }
                     }
                 });
+                stompClient.current.subscribe(`/topic/kick/${gameId}/${userId}`, (message) => {
+                    console.log("연결된 킥 "+`/topic/kick/${gameId}/${userId}`)
+                    alert("호스트에 의해 강퇴당했습니다.");
+                    console.log("강퇴 당함")
+                    stompClient.current.deactivate();
+                    navigate("/");
+                })
 
             },
             onDisconnect: () => {
@@ -80,21 +85,7 @@ function Lobby(props) {
         return () => {
             stompClient.current.deactivate();
         };
-    },[gameId])
-
-    useEffect(() => {
-        if(!gameId || !userId){
-            return;
-        }
-        const sub = stompClient.current.subscribe(`/topic/kick/${gameId}/${userId}`, (message) => {
-            console.log("연결된 킥 "+`/topic/kick/${gameId}/${userId}`)
-            alert("호스트에 의해 강퇴당했습니다.");
-            console.log("강퇴 당함")
-            stompClient.current.deactivate();
-            navigate("/");
-        })
-        return () => sub.unsubscribe();
-    }, [gameId, userId]);
+    },[gameId, userId])
 
 
     return (
