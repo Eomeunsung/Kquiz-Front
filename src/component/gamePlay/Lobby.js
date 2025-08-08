@@ -43,19 +43,20 @@ function Lobby(props) {
             onConnect: () => {
                 console.log("연결 됨");
                 // ✅ 채팅 구독
-                stompClient.current.subscribe(`/topic/chat/${gameId}`, (message) => {
+                stompClient.current.subscribe(`/topic/lobby/${gameId}`, (message) => {
                     if (message.body) {
+                        console.log("")
                         const body = JSON.parse(message.body);
                         if(body.type === "KICK"){
                             const rawList = body.userList;
                             setPlayers(Object.values(rawList));  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
                         }else if(body.type==="GAME") {
-                            if(role==="HOST"){
-                                navigate("/gamePlay/Host", { state: data });
-                            }else if(role==="PLAYER"){
-                                navigate("/gamePlay", { state: data });
-                            }
+                            // if(role==="HOST"){
+                            //     navigate("/gamePlay/Host", { state: data });
+                            // }else if(role==="PLAYER"){
+                            navigate("/gamePlay", { state: data });
+                            // }
                         }else{
                             console.log("📦 Parsed body:", body.userList);
                             const rawList = body.userList;
@@ -95,7 +96,7 @@ function Lobby(props) {
             <p className="room-code">방 코드: {gameId}</p>
             <h2>참가자 목록</h2>
             <ul className="player-list">
-                {players.slice(1).map((p, idx) => (
+                {players.slice(0).map((p, idx) => (
                     <li key={idx}>{p}</li>
                 ))}
             </ul>

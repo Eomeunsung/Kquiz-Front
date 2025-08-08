@@ -34,7 +34,7 @@ function HostLobby(props) {
                 console.log("웹소켓 연결됨 (호스트)");
 
                 // 참가자 연결 감지
-                stompClient.current.subscribe(`/topic/chat/${data.gameId}`, (message) => {
+                stompClient.current.subscribe(`/topic/lobby/${data.gameId}`, (message) => {
                     if (message.body) {
                         const body = JSON.parse(message.body);
                         // console.log("📦 Parsed body:", body);
@@ -50,11 +50,11 @@ function HostLobby(props) {
                             setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
                         }else if(body.type==="GAME"){
-                            if(role==="HOST"){
-                                navigate("/gamePlay/Host", { state: data });
-                            }else if(role==="PLAYER"){
-                                navigate("/gamePlay", { state: data });
-                            }
+                            // if(role==="HOST"){
+                            navigate("/gamePlay/Host", { state: data });
+                            // }else if(role==="PLAYER"){
+                            //     navigate("/gamePlay", { state: data });
+                            // }
 
                         }else{
                             const rawList = body.userList;
@@ -71,8 +71,6 @@ function HostLobby(props) {
                         console.log("❌ message.body 없음");
                     }
                 });
-                // // 구독 직후 초기 데이터 요청 보내기
-                // stompClient.current.send("/app/init", {}, JSON.stringify({ gameId: data.gameId }));
             },
             onDisconnect: () => {
                 console.log("연결 종료됨 (호스트)");
@@ -90,7 +88,7 @@ function HostLobby(props) {
     const handleGameStart = ()=>{
         if(stompClient.current && stompClient.current.connected) {
             stompClient.current.publish({
-                destination: `/app/chat/${data.gameId}`,
+                destination: `/app/lobby/${data.gameId}`,
                 body: JSON.stringify({
                     content: "GAME"
                 }),
@@ -120,7 +118,7 @@ function HostLobby(props) {
 
             <h4>참가자 목록</h4>
             <ul className="player-list">
-                {players.slice(1).map((p, idx) => (
+                {players.slice(0).map((p, idx) => (
                     <li key={p.id} className="player-item">
                         <span>{idx + 1}. {p.name}</span>
                         <button className="kick-button" onClick={() => handleKick(p.id)}>강퇴</button>
