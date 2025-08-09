@@ -19,7 +19,7 @@ function GameCreateModal({quizId, modalFlag}) {
                 };
                 localStorage.setItem("userId", result.data.userId);
                 localStorage.setItem("name", "HOST");
-                navigate("/hostLobby", {state: data});
+                // navigate("/hostLobby", {state: data});
             })
             .catch((err) => {})
     }

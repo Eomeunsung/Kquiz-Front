@@ -34,10 +34,6 @@ function GamePlayHost(props) {
         setQuizInfo(location.state.quizInfo.questions);
         console.log("게임플레이 "+location.state.quizInfo)
     },[location.state])
-    //
-    // console.log(quizInfo)
-    // console.log("게임 시작 주소 "+location.state.gameId);
-
 
     useEffect(() => {
         const socket = new SockJS("http://localhost:8080/ws");
