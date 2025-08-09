@@ -28,8 +28,9 @@ function Participation(props) {
                 const data = {
                     gameId:gameId,
                     name : userName,
+                    quizTitle: res.data.quizTitle,
                 }
-                localStorage.setItem("userId", res.data)
+                localStorage.setItem("userId", res.data.userId)
                 localStorage.setItem("name", userName)
                 navigate("/lobby", {state: data});
             })

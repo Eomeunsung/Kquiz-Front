@@ -10,7 +10,7 @@ function Lobby(props) {
     const location = useLocation();
     const data = location.state;
     const [players, setPlayers] = useState([]);
-    const [quizInfo, setQuizInfo] = useState({});
+    const [quizTitle, setQuizTitle] = useState("");
     const [gameId, setGameId] = useState(null);
     const stompClient = useRef(null);
     const [messages, setMessages] = useState("");
@@ -26,6 +26,7 @@ function Lobby(props) {
         setGameId(data.gameId);
         setUserId(localStorage.getItem("userId"));
         setUserName(localStorage.getItem("name"));
+        setQuizTitle(data.quizTitle);
 
     },[])
     useEffect(() => {
@@ -91,7 +92,7 @@ function Lobby(props) {
 
     return (
         <div className="lobby-page">
-            <h2>퀴즈 {quizInfo.title}</h2>
+            <h2>{quizTitle}</h2>
             <h2>퀴즈 대기실</h2>
             <p className="room-code">방 코드: {gameId}</p>
             <h2>참가자 목록</h2>

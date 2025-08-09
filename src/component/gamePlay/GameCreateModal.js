@@ -5,8 +5,6 @@ import {useNavigate} from "react-router-dom";
 
 function GameCreateModal({quizId, modalFlag}) {
     const navigate = useNavigate();
-    const [quizInfo, setQuizInfo] = useState({});
-    const [gameId, setGameId] = useState(null);
     console.log("퀴즈 아이디 "+quizId);
 
 
@@ -16,7 +14,8 @@ function GameCreateModal({quizId, modalFlag}) {
             .then((result) => {
                 const data = {
                     gameId: result.data.gameId,
-                    quizInfo: result.data.quizGetDto
+                    quizTitle: result.data.quizTitle,
+                    questionSize: result.data.questionSize,
                 };
                 localStorage.setItem("userId", result.data.userId);
                 localStorage.setItem("name", "HOST");

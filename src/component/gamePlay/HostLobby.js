@@ -8,7 +8,7 @@ function HostLobby(props) {
     const navigate = useNavigate();
     const data = location.state;
     const [players, setPlayers] = useState([]);
-    const [quizInfo, setQuizInfo] = useState({ title: "퀴즈 제목 예시" }); // 필요 시 API 연동
+    const [quizTitle, setQuizTitle] = useState(""); // 필요 시 API 연동
     const stompClient = useRef(null);
     const [userId, setUserId] = useState(null);
     const [messages, setMessages] = useState("");
@@ -18,7 +18,7 @@ function HostLobby(props) {
     useEffect(() => {
         if (!data.gameId) return;
         console.log("게임 아이디 "+data.gameId)
-        setQuizInfo(data.quizInfo);
+        setQuizTitle(data.quizTitle);
         setUserId(data.userId);
 
         const socket = new SockJS("http://localhost:8080/ws");
@@ -112,7 +112,7 @@ function HostLobby(props) {
 
     return (
         <div className="lobby-page">
-            <h2>{quizInfo.title}</h2>
+            <h2>{quizTitle}</h2>
             <h2>호스트 대기실</h2>
             <p className="room-code">방 코드: {data.gameId}</p>
 
