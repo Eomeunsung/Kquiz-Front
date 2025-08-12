@@ -9,10 +9,10 @@ function HostLobby(props) {
     const data = location.state;
     const [players, setPlayers] = useState([]);
     const [quizTitle, setQuizTitle] = useState(""); // 필요 시 API 연동
-    const stompClient = useRef(null);
     const [userId, setUserId] = useState(null);
     const [messages, setMessages] = useState("");
-    const [role,setRole] = useState("HOST");
+    const [questionSize, setQuestionSize] = useState(null);
+    const stompClient = useRef(null);
     console.log("호스트 로비 "+JSON.stringify(data))
 
     useEffect(() => {
@@ -20,6 +20,7 @@ function HostLobby(props) {
         console.log("게임 아이디 "+data.gameId)
         setQuizTitle(data.quizTitle);
         setUserId(data.userId);
+        setQuestionSize(data.questionSize);
 
         const socket = new SockJS("http://localhost:8080/ws");
         stompClient.current = new Client({
@@ -35,9 +36,10 @@ function HostLobby(props) {
 
                 // 참가자 연결 감지
                 stompClient.current.subscribe(`/topic/lobby/${data.gameId}`, (message) => {
+
                     if (message.body) {
                         const body = JSON.parse(message.body);
-                        // console.log("📦 Parsed body:", body);
+                        console.log("📦 Parsed body:", body);
                         // console.log("호스트 이름 아이디 "+body.name+" "+body.userId);
                         // console.log("CHAT 타입 "+body.type);
                         if(body.type === "KICK"){
@@ -49,7 +51,8 @@ function HostLobby(props) {
                             }));
                             setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
-                        }else if(body.type==="GAME"){
+                        }else if(body.typeEnum==="GAME"){
+
                             // if(role==="HOST"){
                             navigate("/gamePlay/Host", { state: data });
                             // }else if(role==="PLAYER"){
