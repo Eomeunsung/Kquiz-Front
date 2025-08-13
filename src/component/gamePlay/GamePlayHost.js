@@ -53,7 +53,7 @@ function GamePlayHost(props) {
                 stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
                    console.log("구독 성공 "+JSON.stringify(message.body));
                    const data = JSON.parse(message.body);
-                   if(data.typeEnum==="SCORE"){
+                   if(data.type==="SCORE"){
                        setRank(data.scores);
                    }
                 });
@@ -62,9 +62,12 @@ function GamePlayHost(props) {
                     // console.log("quiz가져오기 성공 "+message.body);
                     const quizData = JSON.parse(message.body);
                     console.log("퀘스천 웹 소켓 "+JSON.stringify(quizData));
-                    if(quizData.typeEnum==="QUESTION") {
+                    if(quizData.type==="QUESTION") {
                         setQuestionInfo(quizData.question)
-                        setStatus("QUESTION")
+                        setTimer(quizData.question.option.time);
+                        setStatus("QUESTION_TIMER")
+                        setQuestionIndex(questionIndex+1);
+                        console.log("받아온 퀘스천 인덱스 "+questionIndex)
                     }
                 });
                 stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
@@ -73,11 +76,21 @@ function GamePlayHost(props) {
                     if(data.type==="READY_COUNT"){
                         setStatus(data.type)
                         setTimer(data.timer);
-                    }else if(data.typeEnum==="START"){
+                    }else if(data.type==="START"){
                         setStatus(data.type)
                         setIsReady(false)
-                    }else if(data.typeEnum==="QUESTION_TIMER"){
+                    }else if(data.type==="QUESTION_TIMER"){
                         setTimer(data.timer);
+                    }else if(data.type==="QUESTION"){
+                        setStatus(data.type)
+                    }
+                });
+
+                stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
+                    const data = JSON.parse(message.body);
+                    console.log("GAME 연결 콘솔 "+JSON.stringify(data));
+                    if(data.type==="GAME_OVER"){
+                        console.log("게임 종료")
                         setStatus(data.type)
                     }
                 });
@@ -95,26 +108,34 @@ function GamePlayHost(props) {
 
     //퀘스천 Timer
     useEffect(()=>{
-        if(status==="QUESTION"){
+        if(status==="QUESTION_TIMER"){
             if (stompClient.current?.connected) {
                 stompClient.current.publish({
                     destination: `/app/timer/${location.state.gameId}`,
                     body: JSON.stringify({
-                        questionKey : questionIndex,
+                        type:"QUESTION_TIMER",
                         time: timer
                     }),
                 });
             }
         }
-    },[status])
+    },[status, timer])
 
     // 문제 받아오기
     useEffect(() => {
-        if(questionIndex<=location.state.questionSize && (status === "START" || status === "QUESTION")){
+        console.log("현재 문제 번호 "+questionIndex+" 퀘스천 문제 갯수 "+location.state.questionSize);
+        if(questionIndex<location.state.questionSize && (status === "START" || status === "QUESTION")){
             if (stompClient.current?.connected) {
                 stompClient.current.publish({
                     destination: `/app/quiz/${location.state.gameId}`,
                     body: JSON.stringify({ questionKey : questionIndex}),
+                });
+            }
+        }else if(questionIndex===location.state.questionSize-1){
+            if (stompClient.current?.connected) {
+                stompClient.current.publish({
+                    destination: `/app/game/${location.state.gameId}`,
+                    body: JSON.stringify({ type : "GAME_OVER"}),
                 });
             }
         }
