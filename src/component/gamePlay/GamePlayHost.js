@@ -10,7 +10,6 @@ function GamePlayHost(props) {
     // 상태 변수들 초기화
     const [message, setMessage] = useState("");
 
-
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
     const stompClient = useRef(null);
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
@@ -65,8 +64,10 @@ function GamePlayHost(props) {
                     if(quizData.type==="QUESTION") {
                         setQuestionInfo(quizData.question)
                         setTimer(quizData.question.option.time);
-                        setStatus("QUESTION_TIMER")
-                        setQuestionIndex(questionIndex+1);
+                        if(status !== "QUESTION_LAST_TIMER"){
+                            setStatus("QUESTION_TIMER")
+                        }
+                        setQuestionIndex(prev=>prev+1);
                         console.log("받아온 퀘스천 인덱스 "+questionIndex)
                     }
                 });
@@ -91,6 +92,7 @@ function GamePlayHost(props) {
                     console.log("GAME 연결 콘솔 "+JSON.stringify(data));
                     if(data.type==="GAME_OVER"){
                         console.log("게임 종료")
+                        setIsGameOver(prev=>!prev)
                         setStatus(data.type)
                     }
                 });
@@ -118,26 +120,40 @@ function GamePlayHost(props) {
                     }),
                 });
             }
-        }
-    },[status, timer])
+        }else if(status==="QUESTION_LAST_TIMER"){
+            if (stompClient.current?.connected) {
+                stompClient.current.publish({
+                    destination: `/app/timer/${location.state.gameId}`,
+                    body: JSON.stringify({
+                        type:"QUESTION_LAST_TIMER",
+                        time: timer
+                    }),
+                });
+            }
+
+        }    },[status, timer])
 
     // 문제 받아오기
     useEffect(() => {
         console.log("현재 문제 번호 "+questionIndex+" 퀘스천 문제 갯수 "+location.state.questionSize);
-        if(questionIndex<location.state.questionSize && (status === "START" || status === "QUESTION")){
-            if (stompClient.current?.connected) {
-                stompClient.current.publish({
-                    destination: `/app/quiz/${location.state.gameId}`,
-                    body: JSON.stringify({ questionKey : questionIndex}),
-                });
+        if(questionIndex<location.state.questionSize && (status === "START" || status === "QUESTION")) {
+            if(questionIndex===location.state.questionSize-1){
+                if (stompClient.current?.connected) {
+                    stompClient.current.publish({
+                        destination: `/app/quiz/${location.state.gameId}`,
+                        body: JSON.stringify({questionKey: questionIndex}),
+                    });
+                    setStatus("QUESTION_LAST_TIMER");
+                }
+            }else{
+                if (stompClient.current?.connected) {
+                    stompClient.current.publish({
+                        destination: `/app/quiz/${location.state.gameId}`,
+                        body: JSON.stringify({questionKey: questionIndex}),
+                    });
+                }
             }
-        }else if(questionIndex===location.state.questionSize-1){
-            if (stompClient.current?.connected) {
-                stompClient.current.publish({
-                    destination: `/app/game/${location.state.gameId}`,
-                    body: JSON.stringify({ type : "GAME_OVER"}),
-                });
-            }
+
         }
     }, [status]);
 
@@ -234,8 +250,6 @@ function GamePlayHost(props) {
                     </div>
                 )}
             </div>
-
-
         </div>
     );
 }
