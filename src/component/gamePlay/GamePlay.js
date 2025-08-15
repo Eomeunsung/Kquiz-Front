@@ -10,25 +10,21 @@ function GamePlayHost(props) {
 
     // 상태 변수들 초기화
     const [message, setMessage] = useState("");
-    const [question, setQuestion] = useState(null); //question 정보
-    const [remainingTime, setRemainingTime] = useState(0);  // 남은 시간
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
     const stompClient = useRef(null);
 
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
-    const [readyTime, setReadyTime] = useState(10); // 10초 준비 시간
 
     const [selectedChoiceId, setSelectedChoiceId] = useState([]); //선택지 id
     const [hasSubmitted, setHasSubmitted] = useState(false); // 중복 제출 방지
     const [score, setScore] = useState(0);
 
     const [rank, setRank] = useState(null);
-    const headerinit = {
-        userId: localStorage.getItem("userId"),
-        roomId: location.state.gameId,
-        name: localStorage.getItem("name"),
-        type:"GAME"
-    }
+
+    const [questionInfo, setQuestionInfo] = useState(null);
+    const [timer, setTimer] = useState(0); //남은 시간
+    const [status, setStatus] = useState("READY");
+
     useEffect(() => {
         if (!location.state || !location.state.gameId) {
             // 렌더링 전에 조건 처리
@@ -46,7 +42,10 @@ function GamePlayHost(props) {
         stompClient.current = new Client({
             webSocketFactory: () => socket,
             connectHeaders: {
-                headerinit
+                userId: localStorage.getItem("userId"),
+                roomId: location.state.gameId,
+                name: localStorage.getItem("name"),
+                type:"GAME_START"
             },
 
             onConnect: () => {
@@ -62,7 +61,7 @@ function GamePlayHost(props) {
                     // setMessage(data.content);
                 });
 
-                stompClient.current.subscribe(`/topic/game/${headerinit.userId}`, (message) => {
+                stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
                     console.log("구독 성공 "+JSON.stringify(message.body));
                     const data = JSON.parse(message.body);
                     setScore(data);
@@ -70,28 +69,31 @@ function GamePlayHost(props) {
                 });
 
                 stompClient.current.subscribe(`/topic/quiz/${location.state.gameId}`, (message) => {
-                    // console.log("quiz가져오기 성공 "+message.body);
                     const quizData = JSON.parse(message.body);
-                    if(quizData.type==="QUESTION"){
-                        setSelectedChoiceId([]);
-                        setQuestion(quizData.question);
-                        setHasSubmitted(false);
-                        setIsReady(false)
+                    console.log("퀘스천 웹 소켓 "+JSON.stringify(quizData));
+                    if(quizData.type==="QUESTION") {
+                        setQuestionInfo(quizData.question)
+                        setTimer(quizData.question.option.time);
+                        if(status !== "QUESTION_LAST_TIMER"){
+                            setStatus("QUESTION_TIMER")
+                        }
                     }
                 });
 
                 //timer 계산
                 stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
-                    const timerData = JSON.parse(message.body);
-                    console.log(JSON.stringify(timerData))
-                    if(timerData.type==="READY"){
-                        setReadyTime(timerData.time);
-                        setIsReady(timerData.flag);
-                    }else if(timerData.type==="START"){
-                        setIsReady(timerData.flag);
-                        setRemainingTime(timerData.time);
-                    }else if(timerData.type==="TIMER"){
-                        setRemainingTime(timerData.time);
+                    const data = JSON.parse(message.body);
+                    console.log("Timer 연결 콘솔 "+JSON.stringify(data));
+                    if(data.type==="READY_COUNT"){
+                        setStatus(data.type)
+                        setTimer(data.timer);
+                    }else if(data.type==="START"){
+                        setStatus(data.type)
+                        setIsReady(false)
+                    }else if(data.type==="QUESTION_TIMER"){
+                        setTimer(data.timer);
+                    }else if(data.type==="QUESTION"){
+                        setStatus(data.type)
                     }
                 })
             },
@@ -115,13 +117,13 @@ function GamePlayHost(props) {
     //초이스 보내기
     const handeChoiceSubmit = (choice) => {
         setHasSubmitted(true)
-        const isCorrect = question.choices.filter(choice => choice.isCorrect).map(choice => choice.id);
+        const isCorrect = questionInfo.choices.filter(choice => choice.isCorrect).map(choice => choice.id);
         if(isCorrect){
             if (stompClient.current && stompClient.current.connected) {
                 stompClient.current.publish({
                     destination: `/app/game/${location.state.gameId}`,
                     body: JSON.stringify({
-                        score: question.option.score,
+                        score: questionInfo.option.score,
                         userId: localStorage.getItem("userId"),
                         type:"SCORE"
                     }),
@@ -133,8 +135,7 @@ function GamePlayHost(props) {
     }
 
     // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
-    if (isReady) return <div className="loading">{isReady ? (<div>{readyTime}</div>):<div>{message}</div> }</div>;
-    if(!question) return <div>퀴즈가 없음</div>
+    if (isReady) return <div className="loading">{isReady ? (<div>{timer}</div>):<div>{message}</div> }</div>;
     return (
         <div className="game-host-layout">
             <div className="game-main">
@@ -156,17 +157,17 @@ function GamePlayHost(props) {
                     </div>
                 ) : (
                     <div className="game-box">
-                        <h2>{question.title}</h2>
+                        <h2>{questionInfo.title}</h2>
                         <div className="game-header">
-                            <div className="timer-box">{remainingTime}초</div>
+                            <div className="timer-box">{timer}초</div>
                             <div className="score-box">점수 {score}</div>
                         </div>
                         <div
                             className="question-content"
-                            dangerouslySetInnerHTML={{__html: question.content}}
+                            dangerouslySetInnerHTML={{__html: questionInfo.content}}
                         ></div>
                         <div className="choices-container">
-                            {question.choices.map((choice, idx) => (
+                            {questionInfo.choices.map((choice, idx) => (
                                 <div className={`choice-card ${selectedChoiceId.includes(choice.id) ? 'selected' : ''}`}
                                      key={choice.id} onClick={() => toggleChoice(choice.id)}>
                                     <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
@@ -177,8 +178,7 @@ function GamePlayHost(props) {
                         {
                             hasSubmitted ?
                                 (<div className="text-submit"> 제출 되었습니다.</div>)
-                                : (<button className="choice-submit" onClick={handeChoiceSubmit
-                                }>제출하기
+                                : (<button className="choice-submit" onClick={handeChoiceSubmit}>제출하기
                                 </button>)
                         }
 
@@ -186,10 +186,10 @@ function GamePlayHost(props) {
                 )}
             </div>
 
-            {question.option.useAiFeedBack && (
+            {questionInfo.option.useAiFeedBack && (
                 <div className="hint-sidebar">
                 <h3>힌트</h3>
-                    <p>{question.option.aiQuestion}</p>
+                    <p>{questionInfo.option.aiQuestion}</p>
                 </div>
             )}
         </div>

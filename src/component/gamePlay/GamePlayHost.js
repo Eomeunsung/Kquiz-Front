@@ -54,6 +54,10 @@ function GamePlayHost(props) {
                    const data = JSON.parse(message.body);
                    if(data.type==="SCORE"){
                        setRank(data.scores);
+                   }else if(data.type==="GAME_OVER"){
+                       console.log("게임 종료")
+                       setIsGameOver(prev=>!prev)
+                       setStatus(data.type)
                    }
                 });
                 // Question 받아오기
@@ -87,15 +91,15 @@ function GamePlayHost(props) {
                     }
                 });
 
-                stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
-                    const data = JSON.parse(message.body);
-                    console.log("GAME 연결 콘솔 "+JSON.stringify(data));
-                    if(data.type==="GAME_OVER"){
-                        console.log("게임 종료")
-                        setIsGameOver(prev=>!prev)
-                        setStatus(data.type)
-                    }
-                });
+                // stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
+                //     const data = JSON.parse(message.body);
+                //     console.log("GAME 연결 콘솔 "+JSON.stringify(data));
+                //     if(data.type==="GAME_OVER"){
+                //         console.log("게임 종료")
+                //         setIsGameOver(prev=>!prev)
+                //         setStatus(data.type)
+                //     }
+                // });
 
             },
         });
