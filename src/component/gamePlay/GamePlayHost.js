@@ -30,9 +30,6 @@ function GamePlayHost(props) {
         }
     }, [location.state, navigate]);
 
-    // useEffect(()=>{
-    //     setQuestionIndex(location.state.questionSize)
-    // },[location.state])
 
     useEffect(() => {
         const socket = new SockJS("http://localhost:8080/ws");
@@ -50,13 +47,14 @@ function GamePlayHost(props) {
                 console.log("연결 완료 - 전체 문제 수신 대기");
                 // 전체 문제 목록 구독 | 게임 스코어 및 스코어 반환
                 stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
-                   console.log("구독 성공 "+JSON.stringify(message.body));
+                   console.log("구독 성공 "+message.body);
                    const data = JSON.parse(message.body);
                    if(data.type==="SCORE"){
                        setRank(data.scores);
                    }else if(data.type==="GAME_OVER"){
                        console.log("게임 종료")
                        setIsGameOver(prev=>!prev)
+                       setRank(data.scores);
                        setStatus(data.type)
                    }
                 });

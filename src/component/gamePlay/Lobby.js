@@ -52,7 +52,7 @@ function Lobby(props) {
                             const rawList = body.userList;
                             setPlayers(Object.values(rawList));  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
-                        }else if(body.type==="GAME") {
+                        }else if(body.typeEnum==="GAME") {
                             // if(role==="HOST"){
                             //     navigate("/gamePlay/Host", { state: data });
                             // }else if(role==="PLAYER"){

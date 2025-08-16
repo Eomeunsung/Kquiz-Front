@@ -3,19 +3,21 @@ import {useLocation, useNavigate} from "react-router-dom";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import "./../../css/GamePlayHost.css"
+import loading from "../../img/loading.png"
+
 function GamePlayHost(props) {
     // useLocation 훅을 통해, URL에서 전달된 게임 정보 가져오기
     const location = useLocation();
     const navigate = useNavigate();
+    const stompClient = useRef(null);
 
     // 상태 변수들 초기화
     const [message, setMessage] = useState("");
     const [isGameOver, setIsGameOver] = useState(false);  // 게임 종료 여부
-    const stompClient = useRef(null);
-
+    const [playerScore, setPlayerScore] = useState(0);
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
 
-    const [selectedChoiceId, setSelectedChoiceId] = useState([]); //선택지 id
+    const [selectedChoiceId, setSelectedChoiceId] = useState([]);
     const [hasSubmitted, setHasSubmitted] = useState(false); // 중복 제출 방지
     const [score, setScore] = useState(0);
 
@@ -55,8 +57,12 @@ function GamePlayHost(props) {
                     console.log("게임 끝 받은 점수 "+JSON.stringify(message.body));
                     const data = JSON.parse(message.body);
                     if(data.type==="SCORE") {
+                        setPlayerScore(data.score)
+                    }else if(data.type==="GAME_OVER"){
+                        console.log("게임 종료")
+                        setIsGameOver(prev=>!prev)
+                        setStatus(data.type)
                         setRank(data.scores);
-                        setIsGameOver(true)
                     }
                     // setMessage(data.content);
                 });
@@ -70,8 +76,10 @@ function GamePlayHost(props) {
 
                 stompClient.current.subscribe(`/topic/quiz/${location.state.gameId}`, (message) => {
                     const quizData = JSON.parse(message.body);
-                    console.log("퀘스천 웹 소켓 "+JSON.stringify(quizData));
+                    // console.log("퀘스천 웹 소켓 "+JSON.stringify(quizData));
                     if(quizData.type==="QUESTION") {
+                        setSelectedChoiceId([])
+                        setHasSubmitted(false)
                         setQuestionInfo(quizData.question)
                         setTimer(quizData.question.option.time);
                         if(status !== "QUESTION_LAST_TIMER"){
@@ -83,7 +91,7 @@ function GamePlayHost(props) {
                 //timer 계산
                 stompClient.current.subscribe(`/topic/timer/${location.state.gameId}`, (message) => {
                     const data = JSON.parse(message.body);
-                    console.log("Timer 연결 콘솔 "+JSON.stringify(data));
+                    // console.log("Timer 연결 콘솔 "+JSON.stringify(data));
                     if(data.type==="READY_COUNT"){
                         setStatus(data.type)
                         setTimer(data.timer);
@@ -112,13 +120,20 @@ function GamePlayHost(props) {
             prev.includes(choiceId) ? prev.filter((id)=> id !== choiceId)
                 : [...prev, choiceId]
         );
+        console.log("선택된 초이스 "+selectedChoiceId)
     }
 
     //초이스 보내기
-    const handeChoiceSubmit = (choice) => {
+    const handeChoiceSubmit = () => {
         setHasSubmitted(true)
-        const isCorrect = questionInfo.choices.filter(choice => choice.isCorrect).map(choice => choice.id);
+        let isCorrect = false
+        const choiceIsCorrect = questionInfo.choices.filter(choice => choice.isCorrect).map(choice => choice.id)
+
+        if(choiceIsCorrect.length === selectedChoiceId.length){
+           isCorrect = choiceIsCorrect.every(id => selectedChoiceId.includes(id))
+        }
         if(isCorrect){
+            console.log("정답")
             if (stompClient.current && stompClient.current.connected) {
                 stompClient.current.publish({
                     destination: `/app/game/${location.state.gameId}`,
@@ -130,12 +145,11 @@ function GamePlayHost(props) {
                 });
             }
         }
-
-
     }
 
     // quiz가 아직 로드되지 않으면 로딩 중 화면 표시
     if (isReady) return <div className="loading">{isReady ? (<div>{timer}</div>):<div>{message}</div> }</div>;
+    if (!questionInfo) return <div><img src={loading} alt='loading' height='100px' width='200px' /> </div>
     return (
         <div className="game-host-layout">
             <div className="game-main">
@@ -160,7 +174,7 @@ function GamePlayHost(props) {
                         <h2>{questionInfo.title}</h2>
                         <div className="game-header">
                             <div className="timer-box">{timer}초</div>
-                            <div className="score-box">점수 {score}</div>
+                            <div className="score-box">점수 {playerScore}</div>
                         </div>
                         <div
                             className="question-content"
