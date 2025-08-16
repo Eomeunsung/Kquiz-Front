@@ -56,9 +56,7 @@ function GamePlayHost(props) {
                 stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
                     console.log("게임 끝 받은 점수 "+JSON.stringify(message.body));
                     const data = JSON.parse(message.body);
-                    if(data.type==="SCORE") {
-                        setPlayerScore(data.score)
-                    }else if(data.type==="GAME_OVER"){
+                    if(data.type==="GAME_OVER"){
                         console.log("게임 종료")
                         setIsGameOver(prev=>!prev)
                         setStatus(data.type)
@@ -67,10 +65,10 @@ function GamePlayHost(props) {
                     // setMessage(data.content);
                 });
 
-                stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
+                stompClient.current.subscribe(`/topic/game/${localStorage.getItem("userId")}`, (message) => {
                     console.log("구독 성공 "+JSON.stringify(message.body));
                     const data = JSON.parse(message.body);
-                    setScore(data);
+                    setPlayerScore(data);
                     // setMessage(data.content);
                 });
 
@@ -174,7 +172,7 @@ function GamePlayHost(props) {
                         <h2>{questionInfo.title}</h2>
                         <div className="game-header">
                             <div className="timer-box">{timer}초</div>
-                            <div className="score-box">점수 {playerScore}</div>
+                            <div className="score-box">누적 점수 {playerScore}</div>
                         </div>
                         <div
                             className="question-content"
