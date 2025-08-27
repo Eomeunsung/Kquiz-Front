@@ -15,7 +15,6 @@ function GamePlayHost(props) {
     const [isReady, setIsReady] = useState(true);  // 준비 시간 상태
     const [rank, setRank] = useState(null);
 
-
     const [status, setStatus] = useState("READY");
     const [questionIndex, setQuestionIndex] = useState(0);  // 현재 질문 번호
     const [questionInfo, setQuestionInfo] = useState(null);
@@ -88,16 +87,6 @@ function GamePlayHost(props) {
                         setStatus(data.type)
                     }
                 });
-
-                // stompClient.current.subscribe(`/topic/game/${location.state.gameId}`, (message) => {
-                //     const data = JSON.parse(message.body);
-                //     console.log("GAME 연결 콘솔 "+JSON.stringify(data));
-                //     if(data.type==="GAME_OVER"){
-                //         console.log("게임 종료")
-                //         setIsGameOver(prev=>!prev)
-                //         setStatus(data.type)
-                //     }
-                // });
 
             },
         });
@@ -240,7 +229,6 @@ function GamePlayHost(props) {
                                     ))}
                                 </div>
                             </div>
-
                             {/* 오른쪽 AI 힌트 */}
                             {questionInfo.option.useAiFeedBack && (
                                 <div className="hint-sidebar">

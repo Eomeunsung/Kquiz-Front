@@ -169,41 +169,53 @@ function GamePlayHost(props) {
                     </div>
                 ) : (
                     <div className="game-box">
-                        <h2>{questionInfo.title}</h2>
-                        <div className="game-header">
-                            <div className="timer-box">{timer}초</div>
-                            <div className="score-box">누적 점수 {playerScore}</div>
-                        </div>
-                        <div
-                            className="question-content"
-                            dangerouslySetInnerHTML={{__html: questionInfo.content}}
-                        ></div>
-                        <div className="choices-container">
-                            {questionInfo.choices.map((choice, idx) => (
-                                <div className={`choice-card ${selectedChoiceId.includes(choice.id) ? 'selected' : ''}`}
-                                     key={choice.id} onClick={() => toggleChoice(choice.id)}>
-                                    <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
-                                    {choice.content}
+                        <div className="game-box-inner">
+                            {/* 왼쪽 사용자 힌트 */}
+                            {questionInfo.option.useCommentary && (
+                                <div className="commentary-box">
+                                    <h3>사용자 힌트</h3>
+                                    <p>{questionInfo.option.commentary}</p>
                                 </div>
-                            ))}
-                        </div>
-                        {
-                            hasSubmitted ?
-                                (<div className="text-submit"> 제출 되었습니다.</div>)
-                                : (<button className="choice-submit" onClick={handeChoiceSubmit}>제출하기
-                                </button>)
-                        }
+                            )}
+                            {/* 가운데 문제 내용 */}
+                            <div className="question-main">
+                                <h2>{questionInfo.title}</h2>
+                                <div className="game-header">
+                                    <div className="timer-box">{timer}초</div>
+                                    <div className="score-box">누적 점수 {playerScore}</div>
+                                </div>
+                                <div
+                                    className="question-content"
+                                    dangerouslySetInnerHTML={{__html: questionInfo.content}}
+                                ></div>
+                                <div className="choices-container">
+                                    {questionInfo.choices.map((choice, idx) => (
+                                        <div className={`choice-card ${selectedChoiceId.includes(choice.id) ? 'selected' : ''}`}
+                                             key={choice.id} onClick={() => toggleChoice(choice.id)}>
+                                            <span className="choice-label">{String.fromCharCode(65 + idx)}</span>
+                                            {choice.content}
+                                        </div>
+                                    ))}
+                                </div>
+                                {
+                                    hasSubmitted ?
+                                        (<div className="text-submit"> 제출 되었습니다.</div>)
+                                        : (<button className="choice-submit" onClick={handeChoiceSubmit}>제출하기
+                                        </button>)
+                                }
 
+                            </div>
+                            {/* 오른쪽 AI 힌트 */}
+                            {questionInfo.option.useAiFeedBack && (
+                                <div className="hint-sidebar">
+                                    <h3>AI 힌트</h3>
+                                    <p>{questionInfo.option.aiQuestion}</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>
-
-            {questionInfo.option.useAiFeedBack && (
-                <div className="hint-sidebar">
-                <h3>힌트</h3>
-                    <p>{questionInfo.option.aiQuestion}</p>
-                </div>
-            )}
         </div>
     );
 }
