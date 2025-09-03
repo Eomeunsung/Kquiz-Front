@@ -40,8 +40,6 @@ function HostLobby(props) {
                     if (message.body) {
                         const body = JSON.parse(message.body);
                         console.log("📦 Parsed body:", body);
-                        // console.log("호스트 이름 아이디 "+body.name+" "+body.userId);
-                        // console.log("CHAT 타입 "+body.type);
                         if(body.type === "KICK"){
                             const rawList = body.userList;
                             // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
@@ -52,16 +50,18 @@ function HostLobby(props) {
                             setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
                             setMessages(body.content);  // 강퇴 메시지 표시
                         }else if(body.typeEnum==="GAME"){
-
-                            // if(role==="HOST"){
                             navigate("/gamePlay/Host", { state: data });
-                            // }else if(role==="PLAYER"){
-                            //     navigate("/gamePlay", { state: data });
-                            // }
-
+                        }else if(body.type==="LEAVE"){
+                            const rawList = body.userList;
+                            // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
+                            const updatedPlayers = Object.keys(rawList).map(key => ({
+                                id: key,
+                                name: rawList[key],
+                            }));
+                            setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
+                            setMessages(body.content);
                         }else{
                             const rawList = body.userList;
-
                             // 플레이어 배열을 id와 name을 포함한 객체로 업데이트
                             const updatedPlayers = Object.keys(rawList).map(key => ({
                                 id: key,

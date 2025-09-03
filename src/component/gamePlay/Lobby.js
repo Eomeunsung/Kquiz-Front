@@ -48,10 +48,10 @@ function Lobby(props) {
                     if (message.body) {
                         console.log("")
                         const body = JSON.parse(message.body);
-                        if(body.type === "KICK"){
+                        if(body.type === "KICK" || body.type === "LEAVE"){
                             const rawList = body.userList;
                             setPlayers(Object.values(rawList));  // 플레이어 배열 업데이트
-                            setMessages(body.content);  // 강퇴 메시지 표시
+                            setMessages(body.content);  // 강퇴 및 퇴장 메시지 표시
                         }else if(body.typeEnum==="GAME") {
                             // if(role==="HOST"){
                             //     navigate("/gamePlay/Host", { state: data });
@@ -90,6 +90,20 @@ function Lobby(props) {
     },[gameId, userId])
 
 
+    const exitRoom = () => {
+        if(stompClient.current && stompClient.current.connected || !gameId) {
+            stompClient.current.publish({
+                destination: `/app/leave/${gameId}/${localStorage.getItem("userId")}`,
+                body: JSON.stringify({
+
+                })
+
+            })
+            stompClient.current.deactivate(); // 서버로 DISCONNECT 프레임 전송
+            // 페이지 이동
+            window.location.href = "/";
+        }
+    }
     return (
         <div className="lobby-page">
             <h2>{quizTitle}</h2>
@@ -105,6 +119,11 @@ function Lobby(props) {
             <div className="messages">
                 {messages}
             </div>
+
+            {/* 나가기 버튼 */}
+            <button className="exit-button" onClick={exitRoom}>
+                나가기
+            </button>
         </div>
     );
 }

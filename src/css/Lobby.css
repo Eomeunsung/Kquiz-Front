@@ -185,3 +185,24 @@ button.kick-button:hover {
 button.kick-button:active {
     background-color: #c7563c;
 }
+
+button.exit-button {
+    background-color: #b0bec5;  /* 차분한 회색 */
+    color: #2e3b4e;
+    font-size: 18px;
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 30px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+button.exit-button:hover {
+    background-color: #90a4ae;
+}
+
+button.exit-button:active {
+    background-color: #607d8b;
+}
