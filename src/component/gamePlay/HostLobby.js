@@ -60,6 +60,7 @@ function HostLobby(props) {
                             }));
                             setPlayers(updatedPlayers);  // 플레이어 배열 업데이트
                             setMessages(body.content);
+
                         }else{
                             const rawList = body.userList;
                             // 플레이어 배열을 id와 name을 포함한 객체로 업데이트

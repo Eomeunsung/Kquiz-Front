@@ -17,6 +17,7 @@ import Myprofile from "./component/user/Myprofile";
 import AdminQuizList from "./component/admin/AdminQuizList";
 import AdminDashboard from "./component/admin/AdminDashboard";
 import AdminUserList from "./component/admin/AdminUserList";
+import AdminAuthorization from "./component/admin/AdminAuthorization";
 function App() {
   return (
     <div className="App">
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/admin" element={<AdminDashboard></AdminDashboard>}>
                     <Route path="quiz/list" element={<AdminQuizList></AdminQuizList>}/>
                     <Route path="user/list" element={<AdminUserList></AdminUserList>}/>
+                    <Route path="access/control" element={<AdminAuthorization></AdminAuthorization>}/>
                 </Route>
             </Routes>
         </div>

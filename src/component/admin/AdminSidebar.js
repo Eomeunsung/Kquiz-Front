@@ -10,6 +10,7 @@ function AdminSidebar(props) {
             <ul className="sidebar-menu">
                 <li><button className="sidebar-button" onClick={()=>{navigate("/admin/user/list")}}>👥 유저 설정</button></li>
                 <li><button  className="sidebar-button" onClick={()=>{navigate("/admin/quiz/list")}}>✅ 퀴즈 리스트</button></li>
+                <li><button className="sidebar-button" onClick={()=>{navigate("/admin/access/control")}}>권한 설정</button> </li>
             </ul>
         </div>
     );

@@ -75,3 +75,48 @@ export const userUpdate = async (data) =>{
         throw err;
     }
 }
+
+export const rolesGet = async () =>{
+    try{
+        const res = await axiosInstance.get(`${process.env.REACT_APP_URL}/admin/role/list`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+        console.log("유저 업데이트 에러 "+err);
+        throw err;
+    }
+}
+
+export const resourcesGet = async () =>{
+    try{
+        const res = await axiosInstance.get(`${process.env.REACT_APP_URL}/admin/resource/list`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+        console.log("유저 업데이트 에러 "+err);
+        throw err;
+    }
+}
+
+export const resourceRoleMappingGet = async () =>{
+    try{
+        const res = await axiosInstance.get(`${process.env.REACT_APP_URL}/admin/mapping/list`, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+        console.log("유저 업데이트 에러 "+err);
+        throw err;
+    }
+}
