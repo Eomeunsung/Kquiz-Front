@@ -120,3 +120,34 @@ export const resourceRoleMappingGet = async () =>{
         throw err;
     }
 }
+
+export const resourceCreate = async (data) =>{
+    console.log("받은 데이터 "+JSON.stringify(data))
+    try{
+        const res = await axiosInstance.post(`${process.env.REACT_APP_URL}/admin/resource/create`, data,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+
+        throw err.response.data;
+    }
+}
+
+export const roleCreate = async (data) =>{
+    try{
+        const res = await axiosInstance.post(`${process.env.REACT_APP_URL}/admin/role/create`, data,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+
+        throw err.response.data;
+    }
+}

@@ -11,7 +11,10 @@ function AdminQuizList(props) {
     useEffect(() => {
         quizList()
             .then((res)=>{
-                setQuizzes(res.data)
+                if(res.data){
+                    setQuizzes(res.data)
+                }
+
             })
             .catch((err)=>{
 
