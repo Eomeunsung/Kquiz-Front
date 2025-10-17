@@ -3,6 +3,7 @@ import {rolesGet, resourcesGet, resourceRoleMappingGet} from "../../api/admin/Ad
 import "./../../css/admin/AdminAuthorization.css"
 import ResourceAddModal from "./ResourceAddModal";
 import RoleAddModal from "./RoleAddModal";
+import MappingModal from "./MappingModal";
 
 function AdminAuthorization(props) {
     const [roles, setRoles] = useState([]);
@@ -10,6 +11,7 @@ function AdminAuthorization(props) {
     const [resourceRoleMapping, setResourceRoleMapping] = useState([]);
     const [resourceModal, setResourceModal] = useState(false);
     const [roleModal, setRoleModal] = useState(false);
+    const [mappingModal, setMappingModal] = useState(false);
     useEffect(() => {
         resourcesGet()
             .then(res=>{
@@ -31,7 +33,6 @@ function AdminAuthorization(props) {
         }).catch(err=>{
 
         })
-
     }, [roleModal]);
 
     useEffect(() => {
@@ -44,13 +45,17 @@ function AdminAuthorization(props) {
             .catch(err=>{
 
             })
-    },[])
+    },[mappingModal])
     const handleResourceModal=()=>{
         setResourceModal(!resourceModal);
     }
 
     const handleRoleModal=()=>{
         setRoleModal(!roleModal);
+    }
+
+    const handleMappingModal=()=>{
+        setMappingModal(!mappingModal);
     }
 
     return (
@@ -100,7 +105,7 @@ function AdminAuthorization(props) {
             {/* 매핑 설정 */}
             <section>
                 <h3>Resource Access Rules 리소스 권한 매핑</h3>
-                <button className="add-btn">+ 추가</button>
+                <button className="add-btn" onClick={handleMappingModal}>+ 추가</button>
                 {
                     resourceRoleMapping.length===0 || !roles ? (
                         <p className="no-roles">권한 목록이 없습니다.</p>
@@ -134,6 +139,11 @@ function AdminAuthorization(props) {
             {
                 roleModal ? (
                     <RoleAddModal close={handleRoleModal}></RoleAddModal>
+                ):null
+            }
+            {
+                mappingModal ? (
+                    <MappingModal close={handleMappingModal} mappings={resourceRoleMapping} role={roles} resource={resources}></MappingModal>
                 ):null
             }
         </div>
