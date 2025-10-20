@@ -1,0 +1,152 @@
+/* ✅ 모달 전체 배경 (어두운 반투명 오버레이) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+/* ✅ 모달 박스 */
+.modal-content {
+    background: #ffffff;
+    padding: 30px 35px;
+    border-radius: 16px;
+    width: 420px;
+    max-width: 90%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+/* ✅ 모달 제목 */
+.modal-content h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ✅ 폼 요소 */
+form label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    transition: border 0.2s ease;
+}
+
+select:focus {
+    border-color: #5b8def;
+    outline: none;
+}
+
+/* ✅ 권한 체크박스 리스트 */
+.role-checkbox-list {
+    margin-bottom: 20px;
+    background: #fafafa;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.role-checkbox-list p {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.checkbox-item input {
+    margin-right: 8px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+/* ✅ 에러 메시지 */
+.input-error {
+    color: #d9534f;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* ✅ 성공 메시지 */
+.input-success {
+    color: #007bff; /* 🔹 빨간색 → 파란색 계열로 변경 */
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* ✅ 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.save-btn,
+.cancel-btn {
+    flex: 1;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.save-btn {
+    background: #5b8def;
+    color: white;
+    margin-right: 10px;
+}
+
+.save-btn:hover {
+    background: #4676d7;
+    transform: translateY(-1px);
+}
+
+.cancel-btn {
+    background: #e9e9e9;
+    color: #333;
+}
+
+.cancel-btn:hover {
+    background: #d6d6d6;
+    transform: translateY(-1px);
+}
+
+/* ✅ 모달 애니메이션 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

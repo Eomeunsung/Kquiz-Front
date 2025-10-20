@@ -151,3 +151,19 @@ export const roleCreate = async (data) =>{
         throw err.response.data;
     }
 }
+
+export const mappingUpdate = async (data) =>{
+    console.log(data);
+    try{
+        const res = await axiosInstance.put(`${process.env.REACT_APP_URL}/admin/mapping/update`, data,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+
+        throw err.response.data;
+    }
+}

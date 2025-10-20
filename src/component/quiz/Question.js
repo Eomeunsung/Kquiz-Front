@@ -32,43 +32,7 @@ function Question({questionGet, updateQuestion}) {
         setOption(questionGet.option);
     },[questionGet])
 
-    // const saveQuestion = () => {
-    //     const data = {
-    //         id: question.id,
-    //         title: question.title,
-    //         content: question.content,
-    //         choices: choices,
-    //         option: option,
-    //     }
-    //
-    //     const { updatedContent, newUrlimgList, newNameimg } = changeImg(question.content)
-    //     if(!newUrlimgList){
-    //         return
-    //     }
-    //     if(newUrlimgList.length > 0){
-    //         newUrlimgList.forEach((file) => {
-    //             formData.append("files", file); // 여러 개의 파일 추가
-    //         });
-    //         setImgFlag(true)
-    //     }
-    //
-    //     if(imgFlag){
-    //         data.content = updatedContent
-    //         fileUpload(formData)
-    //             .then((res)=>{
-    //
-    //                 questionUpdate(data)
-    //                     .then((result) => {
-    //                         updateQuestion(result.data)
-    //                     }).catch((err) => {})
-    //             })
-    //             .catch((err)=>{
-    //                 console.log("이미지 업로드 에러 "+err)
-    //             })
-    //     }
-    //
-    //
-    // }
+
 
     useEffect(() => {
         if(!question || !choices || !option){

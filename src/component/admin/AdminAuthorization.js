@@ -143,7 +143,7 @@ function AdminAuthorization(props) {
             }
             {
                 mappingModal ? (
-                    <MappingModal close={handleMappingModal} mappings={resourceRoleMapping} role={roles} resource={resources}></MappingModal>
+                    <MappingModal close={handleMappingModal} mapping={resourceRoleMapping} role={roles} resource={resources}></MappingModal>
                 ):null
             }
         </div>
