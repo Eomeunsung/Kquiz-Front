@@ -167,3 +167,67 @@ export const mappingUpdate = async (data) =>{
         throw err.response.data;
     }
 }
+
+export const resourceDelete = async (data) =>{
+    console.log(data);
+    try{
+        const res = await axiosInstance.delete(`${process.env.REACT_APP_URL}/admin/resource/delete/${data}`,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+
+        throw err.response.data;
+    }
+}
+
+export const roleUpdate = async (data) =>{
+    console.log(data);
+    try{
+        const res = await axiosInstance.patch(`${process.env.REACT_APP_URL}/admin/role/update`,data,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+
+        throw err.response.data;
+    }
+}
+
+export const resourceUpdate = async (data) =>{
+    console.log(data);
+    try{
+        const res = await axiosInstance.patch(`${process.env.REACT_APP_URL}/admin/resource/update`,data,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+
+        throw err.response.data;
+    }
+}
+
+export const roleDelete = async (data) =>{
+    console.log(data);
+    try{
+        const res = await axiosInstance.patch(`${process.env.REACT_APP_URL}/admin/role/delete/${data}`,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(res.data);
+        return res.data;
+    }catch (err){
+
+        throw err.response.data;
+    }
+}

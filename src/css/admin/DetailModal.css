@@ -1,0 +1,150 @@
+/* 모달 배경 오버레이 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+/* 모달 본체 */
+.modal-content {
+    background: #ffffff;
+    width: 420px;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+    padding: 25px 30px;
+    animation: slideUp 0.25s ease-out;
+}
+
+/* 제목 */
+.modal-content h2 {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e0e7ff;
+    padding-bottom: 10px;
+}
+
+/* 내용 */
+.role-detail {
+    margin-bottom: 25px;
+}
+
+.role-detail p {
+    font-size: 0.95rem;
+    color: #333;
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+.role-detail strong {
+    color: #1e40af;
+}
+
+/* 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* 공통 버튼 스타일 */
+.modal-buttons button {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+/* 수정 버튼 */
+.edit-btn {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #1d4ed8;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+    background-color: #ef4444;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #dc2626;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.close-btn:hover {
+    background-color: #d1d5db;
+}
+
+/* 등장 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+
+/* 편집 컨테이너 */
+.edit-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* input과 버튼 사이 간격 */
+    margin-top: 10px;
+}
+
+/* 입력창 스타일 */
+.edit-input {
+    flex: 1; /* 버튼 제외하고 가능한 넓이 차지 */
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.edit-input:focus {
+    border-color: #007bff; /* 파란색 강조 */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* 버튼 스타일 */
+.save-btn {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #0056b3;
+}

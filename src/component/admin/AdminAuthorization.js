@@ -4,7 +4,8 @@ import "./../../css/admin/AdminAuthorization.css"
 import ResourceAddModal from "./ResourceAddModal";
 import RoleAddModal from "./RoleAddModal";
 import MappingModal from "./MappingModal";
-
+import RoleDetailModal from "./RoleDetailModal";
+import ResourceDetailModal from "./ResourceDetailModal";
 function AdminAuthorization(props) {
     const [roles, setRoles] = useState([]);
     const [resources, setResources] = useState([]);
@@ -12,6 +13,13 @@ function AdminAuthorization(props) {
     const [resourceModal, setResourceModal] = useState(false);
     const [roleModal, setRoleModal] = useState(false);
     const [mappingModal, setMappingModal] = useState(false);
+
+    const [roleDetailModal, setRoleDetailModal] = useState(false);
+    const [roleDetail, setRoleDetail] = useState(null);
+
+    const [resourceDetailModal, setResourceDetailModal] = useState(false);
+    const [resourceDetail, setResourceDetail] = useState(null);
+
     useEffect(() => {
         resourcesGet()
             .then(res=>{
@@ -22,7 +30,7 @@ function AdminAuthorization(props) {
             .catch(err=>{
 
             })
-    }, [resourceModal]);
+    }, [resourceModal, resourceDetailModal]);
     useEffect(() => {
         rolesGet()
             .then(res=>{
@@ -33,7 +41,7 @@ function AdminAuthorization(props) {
         }).catch(err=>{
 
         })
-    }, [roleModal]);
+    }, [roleModal, roleDetailModal]);
 
     useEffect(() => {
         resourceRoleMappingGet()
@@ -45,7 +53,7 @@ function AdminAuthorization(props) {
             .catch(err=>{
 
             })
-    },[mappingModal])
+    },[mappingModal, roleDetailModal, resourceDetailModal])
     const handleResourceModal=()=>{
         setResourceModal(!resourceModal);
     }
@@ -58,6 +66,13 @@ function AdminAuthorization(props) {
         setMappingModal(!mappingModal);
     }
 
+    const handleRoleDetailModal=()=>{
+        setRoleDetailModal(!roleDetailModal);
+    }
+
+    const handleResourceDetailModal=()=>{
+        setResourceDetailModal(!resourceDetailModal);
+    }
     return (
         <div>
             <h2>Authorization Settings</h2>
@@ -72,7 +87,7 @@ function AdminAuthorization(props) {
                     ):(
                         <ul className="role-list">
                             {resources.map((resource, index) => (
-                                <li key={resource.id || index}>
+                                <li key={resource.id || index} onClick={()=>{setResourceDetail(resource); handleResourceDetailModal()}}>
                                     <strong>{resource.resource}</strong>
                                 </li>
                             ))}
@@ -91,7 +106,7 @@ function AdminAuthorization(props) {
                     ):(
                         <ul className="role-list">
                             {roles.map((role, index) => (
-                                <li key={role.id || index}>
+                                <li key={role.id || index}  onClick={()=>{setRoleDetail(role); handleRoleDetailModal()}}>
                                     <strong>{role.role}</strong>
                                     {role.description && <span> — {role.description}</span>}
                                 </li>
@@ -144,6 +159,16 @@ function AdminAuthorization(props) {
             {
                 mappingModal ? (
                     <MappingModal close={handleMappingModal} mapping={resourceRoleMapping} role={roles} resource={resources}></MappingModal>
+                ):null
+            }
+            {
+                roleDetailModal ? (
+                    <RoleDetailModal close={handleRoleDetailModal} role={roleDetail}></RoleDetailModal>
+                ):null
+            }
+            {
+                resourceDetailModal ? (
+                    <ResourceDetailModal close={handleResourceDetailModal} resource={resourceDetail}></ResourceDetailModal>
                 ):null
             }
         </div>
