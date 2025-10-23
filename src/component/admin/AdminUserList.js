@@ -15,7 +15,7 @@ function AdminUserList(props) {
             .catch((err)=>{
 
             })
-    },[])
+    },[detailFlag])
 
     const handleDetail = (id) => {
         setUserId(id)

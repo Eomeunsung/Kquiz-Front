@@ -4,7 +4,7 @@ import "./../../css/admin/AdminUserDetail.css"
 import {roleGet} from "../../api/role/RoleApi";
 import {userUpdate} from "./../../api/admin/AdminApi"
 function AdminUserDetail({id, close}) {
-    const [userInfo, setUserInfo] = React.useState({});
+    const [userInfo, setUserInfo] = React.useState([]);
     const [updateFlag, setUpdateFlag] = React.useState(false);
     const [error, setError] = useState('');
     const [roleData, setRoleData] = useState([]);
@@ -31,7 +31,7 @@ function AdminUserDetail({id, close}) {
         setUpdateFlag(!updateFlag);
         await roleGet()
             .then((res)=>{
-                setRoleData(res.data.roles)
+                setRoleData(res.data)
                 setCheckRoles(userInfo.roles)
         }).catch((err)=>{
 
@@ -118,10 +118,10 @@ function AdminUserDetail({id, close}) {
                                             <label key={idx} className="checkbox-label">
                                                 <input
                                                     type="checkbox"
-                                                    checked={checkRoles.includes(item)} //roles 배열에 내가 가지고 있는 권한이 있으면 체크 안되어 있으면 노체크
-                                                    onChange={() => handleRoleCheck(item)}
+                                                    checked={checkRoles.includes(item.role)} //roles 배열에 내가 가지고 있는 권한이 있으면 체크 안되어 있으면 노체크
+                                                    onChange={() => handleRoleCheck(item.role)}
                                                 />
-                                                {item}
+                                                {item.role}
                                             </label>
                                         ))}
                                     </div>
