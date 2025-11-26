@@ -14,7 +14,8 @@ function ListPage(props) {
         getQuizList()
             .then((res)=>{
                 if(res.data){
-                    setQuizzes(res.data)
+                    setQuizzes(res.data.dtoList)
+
                 }
 
             })
@@ -43,7 +44,7 @@ function ListPage(props) {
                 !modalFlag ? (
                     <div className="list-page">
                         <h2 className="list-title">퀴즈 목록</h2>
-                        {quizzes.length === 0 || !quizzes ? (
+                        {!quizzes || quizzes.length === 0  ? (
                             <p className="no-quiz">퀴즈가 없습니다.</p>
                         ) : (
                             <ul className="quiz-list">

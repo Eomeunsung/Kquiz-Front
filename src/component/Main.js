@@ -3,20 +3,22 @@ import "./../css/Main.css"
 import GameCreateModal from "./gamePlay/GameCreateModal";
 import {useNavigate} from "react-router-dom";
 import {getQuizList, quizDelete} from "../api/quiz/QuizApi";
+import Page from "./common/Page";
 
 function Main(props) {
     const navigate = useNavigate();
     const [quizzes, setQuizzes] = useState([]);
     const [modalFlag, setModalFlag] = useState(false);
     const [quizId, setQuizId] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
         getQuizList()
             .then((res)=>{
                 if(res.data){
-                    setQuizzes(res.data)
+                    setQuizzes(res.data.dtoList)
+                    setTotalPages()
                 }
-
             })
             .catch((err)=>{
 
@@ -79,6 +81,7 @@ function Main(props) {
                             ))}
                         </ul>
                     )}
+                    <Page></Page>
                 </div>
             ) : (
                 <GameCreateModal quizId={quizId} modalFlag={toggleModal}/>

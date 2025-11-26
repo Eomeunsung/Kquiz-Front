@@ -17,9 +17,10 @@ export const quizCreate = async (data) => {
         throw err;
     }
 }
-export const getQuizList = async () =>{
+export const getQuizList = async (data) =>{
     try{
         const res = await axios.get(`${process.env.REACT_APP_URL}/quiz/list`,{
+            params: data,
             headers: {
                 "Content-Type": "application/json"
             }
