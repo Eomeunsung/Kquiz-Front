@@ -27,8 +27,6 @@ function App() {
             <RouterProvider router={root}/>
             {/*<Routes>*/}
             {/*    <Route path="/quiz/modal" element={<QuizCreateModal></QuizCreateModal>} />*/}
-            {/*    <Route path="/gamePlay/Host" element={<GamePlayHost></GamePlayHost>}/>*/}
-            {/*    <Route path="/gamePlay" element={<GamePlay></GamePlay>}/>*/}
             {/*</Routes>*/}
         </div>
 
