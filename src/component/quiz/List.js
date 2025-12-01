@@ -4,7 +4,7 @@ import {getQuizList, quizDelete} from "../../api/quiz/QuizApi";
 import {useNavigate} from "react-router-dom";
 import GameCreateModal from "../gamePlay/GameCreateModal";
 
-function ListPage(props) {
+function List(props) {
     let navigate = useNavigate();
     const [quizzes, setQuizzes] = useState([]);
     const [modalFlag, setModalFlag] = useState(false);
@@ -79,4 +79,4 @@ function ListPage(props) {
     );
 }
 
-export default ListPage;
+export default List;

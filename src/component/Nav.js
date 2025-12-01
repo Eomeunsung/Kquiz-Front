@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import "./../css/Nav.css"
-import {useNavigate} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import QuizCreateModal from "./quiz/QuizCreateModal";
 import {userRoleGet} from "./../api/role/RoleApi"
 
-function Nav(props) {
+function Nav({children}) {
     let navigate = useNavigate();
     const [quizFlag, setQuizFlag] = React.useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -85,6 +85,10 @@ function Nav(props) {
                 </ul>
                 {/* 퀴즈 만들기 모달 */}
                 {quizFlag && <QuizCreateModal onClose={handleCreateQuiz}/>}
+            </div>
+            {/* 자식 라우트 렌더링 */}
+            <div className="main-container">
+                <Outlet />
             </div>
         </div>
 

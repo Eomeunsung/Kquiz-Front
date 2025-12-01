@@ -5,7 +5,7 @@ import {titleUpdate, quizDelete} from "./../../api/quiz/QuizApi"
 import {useNavigate} from "react-router-dom";
 import QuizTitleEditor from "../quiz/QuizTitleEditor";
 import GameCreateModal from "../gamePlay/GameCreateModal";
-function Myprofile(props) {
+function MyProfile(props) {
     const navigate = useNavigate();
     const [profile, setProfile] = React.useState(null);
     const [quizList, setQuizList] = React.useState(null);
@@ -147,4 +147,4 @@ function Myprofile(props) {
     );
 }
 
-export default Myprofile;
+export default MyProfile;
