@@ -17,10 +17,12 @@ export const quizCreate = async (data) => {
         throw err;
     }
 }
-export const getQuizList = async (data) =>{
+export const getQuizList = async (pageParam) =>{
     try{
+        const {page, size} = pageParam
+        console.log("리스트 페이지 "+page+" 사이즈 "+size)
         const res = await axios.get(`${process.env.REACT_APP_URL}/quiz/list`,{
-            params: data,
+            params: {page:page, size:size},
             headers: {
                 "Content-Type": "application/json"
             }

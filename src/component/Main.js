@@ -3,7 +3,6 @@ import "./../css/Main.css"
 import GameCreateModal from "./gamePlay/GameCreateModal";
 import {useNavigate} from "react-router-dom";
 import {getQuizList, quizDelete} from "../api/quiz/QuizApi";
-import Page from "./common/Page";
 
 function Main(props) {
     const navigate = useNavigate();
@@ -81,7 +80,6 @@ function Main(props) {
                             ))}
                         </ul>
                     )}
-                    <Page></Page>
                 </div>
             ) : (
                 <GameCreateModal quizId={quizId} modalFlag={toggleModal}/>

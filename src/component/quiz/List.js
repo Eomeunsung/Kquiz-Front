@@ -3,26 +3,40 @@ import "./../../css/ListPage.css"
 import {getQuizList, quizDelete} from "../../api/quiz/QuizApi";
 import {useNavigate} from "react-router-dom";
 import GameCreateModal from "../gamePlay/GameCreateModal";
+import useCustomMove from "../../common/useCustomMove";
+import PageComponent from "../../common/PageComponent";
 
+const initialState = {
+    dtoList:[],
+    pageNumList:[],
+    pageRequestDTO: null,
+    prev:false,
+    next:false,
+    totalCount:0,
+    prevPage: 0,
+    nextPage: 0,
+    totalPage: 0,
+    current:0
+}
 function List(props) {
     let navigate = useNavigate();
+    const {page, size, moveToList} = useCustomMove()
     const [quizzes, setQuizzes] = useState([]);
     const [modalFlag, setModalFlag] = useState(false);
     const [quizId, setQuizId] = useState(0);
-
+    const [serverData, setServerData] = useState(initialState);
     useEffect(() => {
-        getQuizList()
+        getQuizList({page, size})
             .then((res)=>{
                 if(res.data){
                     setQuizzes(res.data.dtoList)
-
+                    setServerData(res.data)
                 }
-
             })
             .catch((err)=>{
 
             });
-    }, []);
+    }, [page, size]);
 
 
     const previewQuiz = (quizId) => {
@@ -69,6 +83,7 @@ function List(props) {
                                 ))}
                             </ul>
                         )}
+                        <PageComponent serverData={serverData} movePage={moveToList}></PageComponent>
                     </div>
                 ):(
                     <GameCreateModal quizId={quizId} modalFlag={handleModal}/>
