@@ -19,10 +19,10 @@ export const quizCreate = async (data) => {
 }
 export const getQuizList = async (pageParam) =>{
     try{
-        const {page, size} = pageParam
+        const {page, size, search} = pageParam
         console.log("리스트 페이지 "+page+" 사이즈 "+size)
         const res = await axios.get(`${process.env.REACT_APP_URL}/quiz/list`,{
-            params: {page:page, size:size},
+            params: {page:page, size:size, search:search},
             headers: {
                 "Content-Type": "application/json"
             }

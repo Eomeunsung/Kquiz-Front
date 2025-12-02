@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import GameCreateModal from "../gamePlay/GameCreateModal";
 import useCustomMove from "../../common/useCustomMove";
 import PageComponent from "../../common/PageComponent";
+import { FaSearch } from "react-icons/fa";
 
 const initialState = {
     dtoList:[],
@@ -20,13 +21,16 @@ const initialState = {
 }
 function List(props) {
     let navigate = useNavigate();
-    const {page, size, moveToList} = useCustomMove()
+    const {page, size, moveToList, moveToSearchList} = useCustomMove()
     const [quizzes, setQuizzes] = useState([]);
     const [modalFlag, setModalFlag] = useState(false);
     const [quizId, setQuizId] = useState(0);
     const [serverData, setServerData] = useState(initialState);
+    const [search, setSearch] = useState("");
+    const [searchFlag ,setSearchFlag] = useState(true);
+
     useEffect(() => {
-        getQuizList({page, size})
+        getQuizList({page, size, search})
             .then((res)=>{
                 if(res.data){
                     setQuizzes(res.data.dtoList)
@@ -36,13 +40,18 @@ function List(props) {
             .catch((err)=>{
 
             });
-    }, [page, size]);
+    }, [page, size, searchFlag]);
+
+
+    const handleSearch = () => {
+        moveToSearchList(search);
+        setSearchFlag(!searchFlag);
+    };
 
 
     const previewQuiz = (quizId) => {
         navigate("/preview", {state: quizId});
     }
-
 
     const handleModal = () =>{
         setModalFlag(!modalFlag);
@@ -57,7 +66,21 @@ function List(props) {
             {
                 !modalFlag ? (
                     <div className="list-page">
+
                         <h2 className="list-title">퀴즈 목록</h2>
+                        <div className="search-box">
+                            <input
+                                className="search"
+                                placeholder="Search"
+                                onChange={(e) => setSearch(e.target.value)}
+                                onKeyDown={(e)=>{
+                                    if(e.key==="Enter"){
+                                        handleSearch()
+                                    }
+                                }}
+                            />
+                            <FaSearch className="search-icon" onClick={()=>{ handleSearch()}}/>
+                        </div>
                         {!quizzes || quizzes.length === 0  ? (
                             <p className="no-quiz">퀴즈가 없습니다.</p>
                         ) : (

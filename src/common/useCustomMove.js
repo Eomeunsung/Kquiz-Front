@@ -1,5 +1,4 @@
 import {createSearchParams, useNavigate, useSearchParams} from "react-router-dom";
-import {useState} from "react";
 
 const getNum = (param, defaultValue) => {
     if(!param){
@@ -9,12 +8,11 @@ const getNum = (param, defaultValue) => {
 }
 const useCustomMove = () =>{
     const navigate = useNavigate();
-    const [refresh, setRefresh] = useState(false);
     const [queryParams] = useSearchParams();
 
     const page = getNum(queryParams.get('page'), 1);
     const size = getNum(queryParams.get('size'), 10);
-
+    const search = queryParams.get('search')??"";
     const queryDefault = createSearchParams({page, size}).toString();
 
     const moveToList = (pageParam) => {
@@ -23,21 +21,31 @@ const useCustomMove = () =>{
             const pageNum = getNum(pageParam.page, 1);
             const sizeNum = getNum(pageParam.size, 10);
 
-            queryStr = createSearchParams({page:pageNum, size: sizeNum}).toString();
+            queryStr = createSearchParams({
+                page:pageNum,
+                size: sizeNum,
+                ...(search && { search }) // 검색어가 있을 경우 유지
+                }).toString();
         }else{
             queryStr = queryDefault
         }
 
-        setRefresh(!refresh);
         navigate({pathname:'../list', search:queryStr});
     }
 
-    const moveToModify = (num) => {
+    const moveToSearchList = (keyword) => {
+        let queryStr = ""
+            queryStr = createSearchParams({
+            page:1,
+            size: size,
+            search:keyword,
+            }).toString();
+
         console.log(queryDefault)
-        navigate({pathname:'../list', search:queryDefault})
+        navigate({pathname:'../list', search:queryStr})
     }
 
-    return {moveToList, page, size}
+    return {moveToList, moveToSearchList, page, size}
 }
 
 export default useCustomMove;

@@ -84,3 +84,55 @@
 .preview-button:hover {
     background-color: #005fa3;
 }
+
+
+/* 검색 박스 컨테이너 */
+.search-box {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto 25px auto;
+}
+
+/* 검색 input + 아이콘 나란히 */
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* input과 아이콘 사이 간격 */
+    width: 100%;
+    margin: 0 auto 25px auto;
+    max-width: 350px;
+}
+
+/* input 스타일 */
+.search {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.25s ease;
+    background-color: #fafafa;
+}
+
+/* input focus 시 효과 */
+.search:focus {
+    border-color: #007acc;
+    box-shadow: 0 0 8px rgba(0, 122, 204, 0.35);
+    background-color: #ffffff;
+}
+
+/* 아이콘 스타일 */
+.search-icon {
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* hover 시 아이콘 색 변화 */
+.search-icon:hover {
+    color: #007acc;
+}
