@@ -35,6 +35,21 @@ export const getQuizList = async (pageParam) =>{
     }
 }
 
+export const quizTodayList = async () =>{
+    try{
+        const res = await axios.get(`${process.env.REACT_APP_URL}/quiz/today`,{
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        console.log(res.data);
+        return res.data;
+    }catch(err){
+        console.log(err);
+        throw err;
+    }
+}
+
 export const quizGet = async (id) =>{
     try{
         const res = await axios.get(`${process.env.REACT_APP_URL}/quiz/get/${id}`,{

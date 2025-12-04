@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "./../css/Main.css"
 import GameCreateModal from "./gamePlay/GameCreateModal";
 import {useNavigate} from "react-router-dom";
-import {getQuizList, quizDelete} from "../api/quiz/QuizApi";
+import {getQuizList, quizDelete, quizTodayList} from "../api/quiz/QuizApi";
 
 function Main(props) {
     const navigate = useNavigate();
@@ -12,10 +12,10 @@ function Main(props) {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        getQuizList()
+        quizTodayList()
             .then((res)=>{
                 if(res.data){
-                    setQuizzes(res.data.dtoList)
+                    setQuizzes(res.data)
                     setTotalPages()
                 }
             })
