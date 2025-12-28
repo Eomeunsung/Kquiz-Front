@@ -22,7 +22,7 @@ function HostLobby(props) {
         setUserId(data.userId);
         setQuestionSize(data.questionSize);
 
-        const socket = new SockJS("http://localhost:8080/ws");
+        const socket = new SockJS(`${process.env.REACT_APP_WS_URL}`);
         stompClient.current = new Client({
             webSocketFactory: () => socket,
             connectHeaders: {

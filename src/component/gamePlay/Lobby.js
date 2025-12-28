@@ -32,7 +32,7 @@ function Lobby(props) {
     useEffect(() => {
         if(!gameId || !userName){return;}
 
-        const socket = new SockJS("http://localhost:8080/ws");
+        const socket = new SockJS(`${process.env.REACT_APP_WS_URL}`);
         stompClient.current = new Client({
             webSocketFactory: () => socket,
             connectHeaders: {

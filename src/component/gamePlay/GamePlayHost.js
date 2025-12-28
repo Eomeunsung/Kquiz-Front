@@ -31,7 +31,7 @@ function GamePlayHost(props) {
 
 
     useEffect(() => {
-        const socket = new SockJS("http://localhost:8080/ws");
+        const socket = new SockJS(`${process.env.REACT_APP_WS_URL}`);
         console.log("방 번호 "+location.state.gameId);
         stompClient.current = new Client({
             webSocketFactory: () => socket,

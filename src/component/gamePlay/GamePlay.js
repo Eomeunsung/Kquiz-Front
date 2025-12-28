@@ -39,7 +39,7 @@ function GamePlayHost(props) {
     // console.log("게임 시작 주소 "+location.state.gameId);
     useEffect(() => {
         if (!location.state || !location.state.gameId) return;
-        const socket = new SockJS("http://localhost:8080/ws");
+        const socket = new SockJS(`${process.env.REACT_APP_WS_URL}`);
 
         stompClient.current = new Client({
             webSocketFactory: () => socket,
