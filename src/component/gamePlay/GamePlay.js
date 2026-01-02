@@ -5,7 +5,7 @@ import { Client } from "@stomp/stompjs";
 import "./../../css/GamePlayHost.css"
 import loading from "../../img/loading.png"
 
-function GamePlayHost(props) {
+function GamePlay(props) {
     // useLocation 훅을 통해, URL에서 전달된 게임 정보 가져오기
     const location = useLocation();
     const navigate = useNavigate();
@@ -220,4 +220,4 @@ function GamePlayHost(props) {
     );
 }
 
-export default GamePlayHost;
+export default GamePlay;
